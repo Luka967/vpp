@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Greška{% endblock %}
+{% block content %}
+    <h1>{{ errorTitle }}</h1>
+    <p>{{ errorDescription }}</p>
+    <p>Kod: {{ errorCode }}</p>
+    {% if linkBack != null %}
+        <a href="{{ linkBack.to }}">{{ linkBack.label }}</a>
+    {% else %}
+        <a class="nav-go-back pop">Nazad</a>
+    {% endif %}
+{% endblock %}

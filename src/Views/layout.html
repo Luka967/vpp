@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %}</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <link href="/vpp/public/style/main.css" rel="stylesheet">
+        <script src="/vpp/public/js/main.js"></script>
+        <script src="/vpp/public/js/nav.js"></script>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <header class="content">
+            <div class="left">
+                <div id="logo" class="logo">SKOP</div>
+                <nav class="hide-m--">
+                    <a href="/repertoar" class="pop">REPERTOAR</a>
+                    <a href="/cenovnik" class="pop">CENOVNIK</a>
+                    <a href="/kontakt" class="pop">O NAMA</a>
+                </nav>
+            </div>
+            <div class="right">
+                {% if loggedInUser == null %}
+                    <a href="/login" class="pop">
+                        <span class="icon"><i class="fa-solid fa-user"></i> Prijavi se</span>
+                    </a>
+                {% else %}
+
+                {% endif %}
+                <span id="mobile-hamburger" class="hide--td icon large">
+                    <i class="fa-solid fa-bars"></i>
+                    <img id="hamburger-img" src="img/burger.png">
+                </span>
+            </div>
+        </header>
+        <nav id="mobile-nav">
+            <a href="/repertoar" class="depress">REPERTOAR</a>
+            <a href="/cenovnik" class="depress">CENOVNIK</a>
+            <a href="/kontakt" class="depress">O NAMA</a>
+        </nav>
+        <main class="content">
+            <form id="login-form" action="/login" method="post">
+                <div id="login-full-name-row" class="row">
+                    <label for="username">PUNO IME I PREZIME</label>
+                    <span>
+                        <input name="first_name" type="text">
+                    </span>
+                    <span>
+                        <input name="last_name" type="text">
+                    </span>
+                </div>
+                <div class="row">
+                    <label for="username">KORISNIČKO IME</label><input name="username" type="text">
+                </div>
+                <div class="row">
+                    <label for="email">EMAIL</label><input name="email" type="email">
+                </div>
+                <div class="row">
+                    <label for="password">ŠIFRA</label><input name="password" type="password">
+                </div>
+                <div class="row">
+                    <label for="password_repeat">PONOVI ŠIFRU</label><input name="password_repeat" type="password">
+                </div>
+                <div class="row submit-row">
+                    <input class="pop" value="REGISTRUJ SE" type="submit">
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

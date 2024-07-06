@@ -1,0 +1,1274 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Anton&&family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=DejaVu+Sans+Mono&family=Fira+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --bg: black;
+    --text: white;
+    --translucent: rgba(0, 0, 0, 0.5);
+    --translucent-hard: rgba(0, 0, 0, 0.9);
+    --font-title: 'Anton', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font: 'Fira Sans', sans-serif;
+    --transition: 200ms ease-in-out;
+    --shadow-color: rgba(255, 255, 255, 0.3);
+    --shadow: 0px 5px 10px 0px var(--shadow-color);
+    --shadow-y: -2px;
+    --border: 1px solid var(--text);
+
+    --success: #9bff3d;
+    --danger: #ff6e00;
+    --problem: #ff0000;
+    --information: #006eff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    user-select: none;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+    background-color: var(--bg);
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--text);
+    border-radius: 6px;
+}
+
+.content {
+    margin: 0px auto;
+}
+.pop {
+    box-shadow: none;
+    cursor: pointer;
+    transition: box-shadow var(--transition),
+        transform var(--transition),
+        background-color var(--transition);
+}
+.pop:hover {
+    background-color: var(--translucent-hard);
+    box-shadow: var(--shadow);
+    transform: translateY(var(--shadow-y));
+}
+.pop:active {
+    transform: initial;
+}
+.depress {
+    transition: background-color var(--transition);
+}
+.depress:hover {
+    background-color: var(--translucent);
+}
+.depress:active {
+    background-color: var(--translucent-hard);
+}
+.a-bland {
+    color: inherit;
+    text-decoration: underline;
+}
+.a-bland:visited {
+    color: inherit;
+}
+
+.movie-prop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--radius);
+    border-radius: var(--radius);
+    font-size: calc(var(--radius) / 2);
+    margin-left: 1px;
+    margin-right: 1px;
+}
+.movie-prop:first-child {
+    margin-left: 0px;
+}
+.movie-prop:last-child {
+    margin-right: 0px;
+}
+.rating-prop {
+    width: var(--radius);
+    background-color: var(--problem);
+    color: var(--text);
+    font-weight: bold;
+}
+.meta-prop, .genre-prop, .date-prop {
+    padding: 0px calc(var(--radius) / 2);
+    color: var(--text);
+}
+.rating-prop-13, .date-prop {
+    background-color: var(--danger);
+}
+.meta-prop, .genre-prop {
+    background-color: var(--information);
+}
+.meta-prop {
+    font-weight: bold;
+}
+
+header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    padding: 0px 20px;
+    z-index: 100;
+    border-bottom: var(--border);
+    background-color: var(--translucent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+header > .left, header > .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+header > .left > .logo {
+    --offset: 4px;
+    position: relative;
+    margin-right: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    cursor: pointer;
+    color: var(--bg);
+    transform: translateX(var(--offset)) translateY(calc(var(--offset) * -1));
+}
+header > .left > .logo::after {
+    content: 'SKOP';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin-right: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--text);
+    transform: translateX(calc(var(--offset) * -2)) translateY(calc(var(--offset) * 2));
+}
+header > .left > .logo.current {
+    pointer-events: none;
+}
+nav {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+nav > a, header > .right > a {
+    font-size: 20px;
+    color: inherit;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+    /* border se ne računa u širinu elementa, tamo gde ga nema mora biti simuliran */
+    border: 1px solid transparent;
+}
+nav > a.current {
+    border-bottom: var(--border);
+    border-left: 1px solid var(--shadow-color);
+    border-right: 1px solid var(--shadow-color);
+    pointer-events: none;
+}
+nav > a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+header > .right {
+    column-gap: 20px;
+}
+header > .right > a > .icon {
+    font-size: 20px;
+    cursor: pointer;
+}
+header > .right > a > .icon.large {
+    font-size: 28px;
+}
+
+#hamburger-img {
+    width: 100px;
+    display: none;
+}
+#mobile-nav {
+    position: fixed;
+    top: 80px;
+    right: 5%;
+    opacity: 0%;
+    transition: transform var(--transition),
+        opacity var(--transition);
+    z-index: 101;
+    pointer-events: none;
+    background-color: var(--translucent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: 1px solid var(--bg);
+    border-left: var(--border);
+    border-bottom: var(--border);
+    border-right: var(--border);
+    flex-direction: column;
+}
+#mobile-nav > a.current {
+    border: none;
+    font-weight: bold;
+    text-decoration: underline;
+}
+#mobile-nav > a {
+    text-align: right;
+    border-radius: 0px;
+    padding: 20px;
+}
+#mobile-nav.show {
+    opacity: 100%;
+    /*
+        preklopi border od nava stranice tako da element izgleda kao da se stvorio i zakacio
+        Ostaje crni border, ali iskreno ne ubija previse oci
+        Ovo na Safari-u se uopste ne bluruje, cak skroz nestane.
+        U ostalim browserima izgleda da se bluruje
+    */
+    transform: translateY(-1px);
+    pointer-events: initial;
+}
+
+.hero {
+    position: relative;
+    width: 100%;
+    /*
+        padding % je od sirine.
+        visina kod 16:9 videa je proporcije 9:16 tj. 56.25%
+        ovim garantujemo da elementi hero-a imaju vec maksimalnu visinu
+    */
+    padding-top: 56.25%;
+    /* najmanja visina za mobilni */
+    min-height: 500px;
+}
+.hero > * {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.hero > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hero-content-wrapper {
+    width: 100%;
+    height: 100%;
+}
+.hero-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: background-color var(--transition);
+}
+.hero-row {
+    /* varijable mogu biti u okviru samog elementa, ne moraju biti :root! */
+    --padding: 10px;
+
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px var(--padding);
+}
+.hero-pop {
+    --padding: 10px;
+
+    padding: var(--padding) calc(var(--padding) * 2);
+    border-radius: var(--padding);
+}
+.hero-movie {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.hero-movie-rating {
+    margin-left: 10px;
+}
+.hero-movie-title {
+    font-family: var(--font-title);
+}
+
+.hero-movie-reservation {
+    display: flex;
+    flex-direction: column;
+}
+.hero-movie-reservation > * {
+    text-align: center;
+}
+.hero-movie-reservation > .tickets > i {
+    margin-left: 10px;
+}
+.hero-movie-reservation > .date {
+    font-size: 16px;
+    border-bottom: var(--border);
+    width: 100%;
+}
+.hero-movie-reservation > .date > b {
+    font-size: 24px;
+}
+
+.section-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+.section-title > span {
+    font-size: 36px;
+    border-bottom: var(--border);
+    margin-bottom: 10px;
+}
+
+.section-posters {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.movie-poster {
+    border-radius: 10px;
+    /* grid forsira da se produži a ne mora */
+    height: max-content;
+}
+.movie-poster-img {
+    /* posteri za filmove su proporcije 3:2 */
+    padding-top: 150%;
+    background-position: center;
+    background-size: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.movie-poster-props {
+    margin-top: 10px;
+    padding: 0px 10px;
+}
+.movie-poster-prop {
+    --radius: 24px;
+}
+.movie-poster-title {
+    width: 100%;
+    font-family: var(--font-title);
+    font-size: 24px;
+    text-align: center;
+    padding: 10px;
+    /* font je visok, u slučaju kada se naslov prelama na više redova, mora biti stisnut */
+    line-height: 115%;
+}
+
+.timetable-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.timetable-title {
+    margin-top: 20px;
+}
+.timetable-title > span {
+    border-bottom: none;
+}
+.timetable-title > span > .day {
+    font-size: 20px;
+}
+
+.timetable {
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+/* colgroupama kontrolišemo širinu naših kolona */
+.timetable > colgroup > .date {
+    width: 80px;
+}
+.timetable > colgroup > .time {
+    width: 70px;
+}
+.timetable > colgroup > .screen {
+    width: 60px;
+}
+.timetable > thead {
+    border-bottom: var(--border);
+    font-size: 20px;
+}
+.timetable > thead > tr > th {
+    font-weight: normal;
+}
+.timetable-date {
+    font-family: var(--font-mono);
+    text-align: right;
+    padding-right: 10px;
+}
+.timetable-time {
+    font-family: var(--font-mono);
+    text-align: left;
+}
+.timetable-screen {
+    text-align: center;
+}
+.timetable-movie {
+    font-family: var(--font-title);
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+.timetable-movie:hover {
+    text-decoration: underline;
+}
+.timetable-movie:active {
+    text-decoration: underline;
+    transform: translateY(2px);
+}
+.timetable-reservation > div {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* po default-u */
+    pointer-events: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 0px;
+    border-radius: 10px;
+}
+.timetable-reservation > div > i {
+    font-size: 24px;
+    margin-right: 5px;
+    transform: rotate(45deg);
+}
+.timetable-reservation > div.online > i {
+    color: var(--success);
+}
+.timetable-reservation > div.reception > i {
+    color: var(--danger);
+}
+.timetable-reservation > div.closed > i {
+    color: var(--problem);
+}
+.timetable-reservation > div.planned > i,
+.timetable-reservation > div.locked > i {
+    color: gray;
+}
+.timetable-reservation > div.online {
+    pointer-events: initial;
+}
+
+.timetable-explanation {
+    margin-bottom: 30px;
+}
+
+.pricing-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.pricing {
+    width: 100%;
+    height: fit-content;
+    border-collapse: collapse;
+}
+.ticket-pricing {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.pricing thead {
+    border-bottom: var(--border);
+}
+.pricing tbody {
+    user-select: text;
+}
+.pricing .price-custom {
+    text-align: center;
+}
+.pricing .price {
+    text-align: center;
+    font-family: var(--font-mono);
+}
+/* ponavljanje din. tako da ne moram non-stop da pišem span */
+.pricing .price::after {
+    content: ' din';
+    font-family: var(--font);
+}
+
+.movie-show-hero {
+    position: relative;
+    margin-top: 30px;
+}
+
+.movie-show-poster {
+    position: relative;
+}
+.movie-show-poster > div {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+.movie-show-poster > * {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.movie-show-poster-shade {
+    background-image: linear-gradient(180deg, transparent 0%, transparent 75%, var(--bg) 100%);
+}
+
+.movie-show-title {
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+}
+.movie-show-title > span {
+    text-align: center;
+    border-radius: 20px;
+    background-color: var(--translucent);
+    padding: 10px 20px;
+    font-family: var(--font-title);
+    font-size: 64px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+.movie-show-prop {
+    --radius: 32px;
+    font-family: var(--font);
+}
+.movie-show-information {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+.movie-show-information > article {
+    flex: 3;
+}
+.movie-show-information > aside {
+    flex: 2;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.movie-show-tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 2px;
+}
+
+#movie-show-premiere {
+    font-size: 24px;
+}
+#movie-show-runtime {
+    font-size: 24px;
+}
+#movie-show-runtime:not(:empty):after {
+    content: 'min';
+    font-size: 18px;
+    margin-left: 5px;
+}
+#movie-show-director > div {
+    font-size: 20px;
+}
+
+.movie-show-information .cast {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 10px;
+    row-gap: 2px;
+    margin-bottom: 5px;
+}
+.movie-show-information .header {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.movie-show-information .header > span {
+    border-bottom: var(--border);
+}
+.movie-show-information .header.reservation-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.movie-show-information .header.reservation-cta > span {
+    border-bottom: none;
+}
+.movie-show-information .text.muted {
+    color: #aaa;
+}
+.movie-show-information .cast > .text.muted {
+    text-align: right;
+}
+
+.reservation-form {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    column-gap: 40px;
+    margin-top: 30px;
+}
+.reservation-form > .left {
+    overflow-x: hidden;
+}
+.seating-overflow {
+    width: 100%;
+    overflow-x: auto;
+}
+.reservation-form > .left .projector {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+.reservation-form .projector > span {
+    background-color: var(--translucent);
+    border-radius: 10px;
+    padding: 10px;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    border: var(--border);
+}
+.reservation-form .projector::before {
+    position: absolute;
+    bottom: 18px;
+    left: 0px;
+    content: '';
+    width: 100%;
+    border-bottom: 7px solid white;
+}
+
+.seat {
+    position: relative;
+    cursor: pointer;
+    transform-origin: center;
+    transition: transform var(--transition);
+}
+.seat.empty {
+    cursor: default;
+    pointer-events: none;
+}
+.seat:hover {
+    transform: scale(105%);
+}
+.seat:active {
+    transform: scale(90%);
+}
+.seat > * {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+.seat.s i, .seating-legend > .item.s > i {
+    color: aquamarine;
+}
+.seat.v i, .seating-legend > .item.v > i {
+    color: yellow;
+}
+.seat.l i, .seating-legend > .item.l > i {
+    color: pink;
+}
+.seat > .number {
+    font-family: var(--font-mono);
+    color: var(--bg);
+}
+.seat.picked i {
+    color: var(--information);
+}
+.seat.picked > .number {
+    color: var(--text);
+}
+.seating-legend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+.seating-legend > .item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+}
+.seating-legend > .item > i {
+    font-size: 24px;
+}
+
+#reservation-movie {
+    margin: 0px auto;
+    max-width: 400px;
+    text-align: center;
+    font-family: var(--font-title);
+    font-size: 32px;
+    margin-bottom: -10px;
+}
+.reservation-slot {
+    margin: 0px auto;
+    max-width: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.reservation-slot #reservation-date {
+    font-size: 32px;
+}
+.reservation-slot #reservation-time {
+    font-size: 24px;
+}
+.reservation-form form {
+    display: flex;
+    flex-direction: column;
+}
+.reservation-form form .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+.reservation-form form .row label {
+    width: 80px;
+    margin-right: 10px;
+    text-align: right;
+}
+#reservation-form-price {
+    width: 150px;
+    height: 25px;
+    font-size: 28px;
+    font-family: var(--font-mono);
+    transform: translateY(-5px);
+}
+#reservation-form-price::after {
+    content: ' din';
+    font-size: 18px;
+    font-family: var(--font);
+}
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 150px;
+    background-color: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    border: none;
+    padding: 5px;
+    border-radius: 10px;
+}
+input[type="text"]:focus, input[type="tel"]:focus {
+    outline: none;
+}
+input[type="submit"] {
+    background-color: var(--text);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 18px;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background-color: var(--text);
+}
+.submit-row {
+    justify-content: center;
+}
+
+h1 a {
+    color: var(--text);
+    text-decoration: none;
+}
+h1 a:visited {
+    color: var(--text);
+    text-decoration: none;
+}
+h1 > .small {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 640px) {
+    .content {
+        width: 90%;
+    }
+    .content-m-- {
+        width: 90%;
+        margin: 0px auto;
+    }
+
+    .hide-m-- { display: none; }
+    .hide-mt- { display: none; }
+
+    .hero-row {
+        bottom: 10vw;
+    }
+    .hero-row, .hero-pop {
+        --padding: 5px;
+    }
+    .hero-movie-title {
+        font-size: 24px;
+    }
+    .hero-movie-rating {
+        --radius: 20px;
+    }
+    .hero-movie-reservation {
+        font-size: 18px;
+    }
+    .hero-movie-reservation > .date {
+        font-size: 14px;
+    }
+    .hero-movie-reservation > .date > b {
+        font-size: 14px;
+    }
+    .section-title > span {
+        font-size: 40px;
+    }
+    .section-posters {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .movie-poster-img {
+        padding-top: 75%;
+    }
+    .movie-poster-title {
+        font-size: 32px;
+    }
+
+    .timetable-grid, .pricing-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .timetable > colgroup > .reservation {
+        width: 60px;
+    }
+    .pricing > colgroup > .format {
+        width: 60px;
+    }
+    .pricing th {
+        font-size: 20px;
+    }
+    .pricing > tbody .name {
+        font-size: 16px;
+    }
+    .pricing > tbody .name > .small {
+        font-size: 12px;
+    }
+    .pricing .price {
+        font-size: 14px;
+    }
+    .pricing .price::after, .pricing .price-custom {
+        font-size: 12px;
+    }
+
+    .movie-show-poster {
+        height: 400px;
+    }
+    .movie-show-title > span {
+        font-size: 44px;
+    }
+    .movie-show-tags {
+        flex-direction: column;
+        align-items: center;
+    }
+    .movie-show-information {
+        flex-direction: column-reverse;
+        row-gap: 20px;
+    }
+    .movie-show-information > aside {
+        margin: 0px;
+    }
+    .aside-content {
+        width: 90%;
+        margin: 0px auto;
+        display: flex;
+        flex-direction: row;
+    }
+    .aside-content > .aside-left {
+        flex: 2;
+    }
+    .aside-content > .aside-right {
+        flex: 3;
+    }
+    #movie-show-premiere {
+        font-size: 16px;
+    }
+    #movie-show-runtime {
+        font-size: 16px;
+    }
+    #movie-show-runtime:not(:empty)::after {
+        font-size: 12px;
+    }
+    #movie-show-director > div {
+        font-size: 16px;
+    }
+    .movie-show-information .header {
+        font-size: 18px;
+    }
+    .movie-show-information .header.reservation-cta {
+        font-size: 28px;
+    }
+    .movie-show-information .text {
+        font-size: 14px;
+    }
+
+    .reservation-form {
+        flex-direction: column;
+    }
+    .reservation-form > .right {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    .seat {
+        width: 30px;
+        height: 30px;
+    }
+    .seat i {
+        font-size: 25px;
+    }
+    .seat .number {
+        font-size: 12px;
+        padding-bottom: 5px;
+    }
+}
+@media only screen and (min-width: 640px) and (max-width: 1024px) {
+    .content {
+        width: 90%;
+    }
+    .content-m-- {
+        width: 90%;
+        margin: 0px auto;
+    }
+
+    .hide-m-- { display: none; }
+    .hide-mt- { display: none; }
+
+    .hero-row {
+        bottom: 5vw;
+    }
+    .hero-row, .hero-pop {
+        --padding: 7px;
+    }
+    .hero-movie-title {
+        font-size: 32px;
+    }
+    .hero-movie-rating {
+        --radius: 20px;
+    }
+    .hero-movie-reservation {
+        font-size: 18px;
+    }
+    .hero-movie-reservation > .date {
+        font-size: 14px;
+    }
+    .hero-movie-reservation > .date > b {
+        font-size: 18px;
+    }
+    .section-title > span {
+        font-size: 48px;
+    }
+    .section-posters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .movie-poster-img {
+        padding-top: 100%;
+    }
+
+    .timetable-grid, .pricing-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .timetable > colgroup > .reservation {
+        width: 60px;
+    }
+    .pricing > colgroup > .format {
+        width: 80px;
+    }
+    .pricing th {
+        font-size: 24px;
+    }
+    .pricing > tbody .name {
+        font-size: 20px;
+    }
+    .pricing > tbody .name > .small {
+        font-size: 14px;
+    }
+    .pricing .price {
+        font-size: 16px;
+    }
+    .pricing .price::after, .pricing .price-custom {
+        font-size: 14px;
+    }
+
+    .movie-show-poster {
+        height: 500px;
+    }
+    .movie-show-title > span {
+        font-size: 44px;
+    }
+    .movie-show-tags {
+        flex-direction: column;
+        align-items: center;
+    }
+    .movie-show-information {
+        flex-direction: column-reverse;
+        row-gap: 20px;
+    }
+    .movie-show-information > aside {
+        margin: 0px;
+    }
+    .aside-content {
+        width: 80%;
+        margin: 0px auto;
+        display: flex;
+        flex-direction: row;
+    }
+    .aside-content > .aside-left {
+        flex: 2;
+    }
+    .aside-content > .aside-right {
+        flex: 5;
+    }
+    #movie-show-premiere {
+        font-size: 18px;
+    }
+    #movie-show-runtime {
+        font-size: 18px;
+    }
+    #movie-show-runtime:not(:empty)::after {
+        font-size: 14px;
+    }
+    #movie-show-director {
+        font-size: 18px;
+    }
+    .movie-show-information .header {
+        font-size: 18px;
+    }
+    .movie-show-information .header.reservation-cta {
+        font-size: 28px;
+    }
+
+    .reservation-form {
+        flex-direction: column;
+    }
+    .reservation-form > .right {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    .seat {
+        width: 35px;
+        height: 35px;
+    }
+    .seat i {
+        font-size: 30px;
+    }
+    .seat .number {
+        font-size: 14px;
+        padding-bottom: 8px;
+    }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+    .content {
+        width: 82.5%;
+    }
+    #mobile-nav {
+        display: none;
+    }
+
+    .hide--t- { display: none; }
+    .hide-mt- { display: none; }
+    .hide--td { display: none; }
+
+    .hero-row {
+        bottom: 2vw;
+    }
+    .hero-row, .hero-pop {
+        --padding: 9px;
+    }
+    .hero-movie-title {
+        font-size: 44px;
+    }
+    .hero-movie-rating {
+        --radius: 26px;
+    }
+    .hero-movie-reservation {
+        font-size: 34px;
+    }
+    .hero-movie-reservation > .date {
+        font-size: 16px;
+    }
+    .hero-movie-reservation > .date > b {
+        font-size: 20px;
+    }
+    .section-title > span {
+        font-size: 52px;
+    }
+    .section-posters {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .timetable-grid, .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .timetable > colgroup > .reservation {
+        width: 125px;
+    }
+
+    .pricing > colgroup > .format {
+        width: 100px;
+    }
+    .pricing th {
+        font-size: 28px;
+    }
+    .pricing > tbody .name {
+        font-size: 24px;
+    }
+    .pricing > tbody .name > .small {
+        font-size: 14px;
+    }
+    .pricing .price {
+        font-size: 20px;
+    }
+    .pricing .price::after, .pricing .price-custom {
+        font-size: 16px;
+    }
+
+    .movie-show-poster {
+        height: 600px;
+    }
+    .movie-show-information aside {
+        max-width: 240px;
+    }
+
+    .reservation-form > .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .seat {
+        width: 40px;
+        height: 40px;
+    }
+    .seat i {
+        font-size: 32px;
+    }
+    .seat .number {
+        font-size: 14px;
+        padding-bottom: 8px;
+    }
+}
+@media only screen and (min-width: 1366px) {
+    .content {
+        width: 65%;
+    }
+    #mobile-nav {
+        display: none;
+    }
+
+    .hide---d { display: none; }
+    .hide--td { display: none; }
+
+    .hero-row {
+        bottom: 1.1vw;
+    }
+    .hero-row, .hero-pop {
+        --padding: 10px;
+    }
+    .hero-movie-title {
+        font-size: 56px;
+    }
+    .hero-movie-rating {
+        --radius: 32px;
+    }
+    .hero-movie-reservation {
+        font-size: 40px;
+    }
+    .hero-movie-reservation > .date {
+        font-size: 18px;
+    }
+    .hero-movie-reservation > .date > b {
+        font-size: 24px;
+    }
+    .section-title > span {
+        font-size: 56px;
+    }
+    .section-posters {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .timetable-grid, .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .timetable > colgroup > .reservation {
+        width: 125px;
+    }
+
+    .pricing > colgroup > .format {
+        width: 100px;
+    }
+    .pricing th {
+        font-size: 32px;
+    }
+    .pricing > tbody .name {
+        font-size: 26px;
+    }
+    .pricing > tbody .name > .small {
+        font-size: 18px;
+    }
+    .pricing .price {
+        font-size: 24px;
+    }
+    .pricing .price::after, .pricing .price-custom {
+        font-size: 18px;
+    }
+
+    .movie-show-poster {
+        height: 600px;
+    }
+    .movie-show-information aside {
+        max-width: 240px;
+    }
+
+    .reservation-form > .right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .seat {
+        width: 45px;
+        height: 45px;
+    }
+    .seat i {
+        font-size: 35px;
+    }
+    .seat .number {
+        font-size: 16px;
+        padding-bottom: 8px;
+    }
+}

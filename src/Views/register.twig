@@ -1,0 +1,35 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Registracija{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="">
+{% endblock %}
+{% block content %}
+    <form id="login-form" class="content" action="/register" method="post">
+        <h1>Registracija</h1>
+        <div id="login-full-name-row" class="row">
+            <label for="username">IME I PREZIME</label>
+            <span>
+                <input name="first_name" type="text">
+            </span>
+            <span>
+                <input name="last_name" type="text">
+            </span>
+        </div>
+        <div class="row">
+            <label for="username">KORISNIČKO IME</label><input name="username" type="text">
+        </div>
+        <div class="row">
+            <label for="email">EMAIL</label><input name="email" type="email">
+        </div>
+        <div class="row">
+            <label for="password">ŠIFRA</label><input name="password" type="password">
+        </div>
+        <div class="row">
+            <label for="password_repeat">PONOVI ŠIFRU</label><input name="password_repeat" type="password">
+        </div>
+        <div class="row submit-row">
+            <input class="pop" value="REGISTRUJ SE" type="submit">
+        </div>
+    </form>
+{% endblock %}
