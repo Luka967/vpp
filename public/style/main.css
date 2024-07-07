@@ -621,6 +621,39 @@ header > .right > a > .icon.large {
     text-align: right;
 }
 
+input[type="text"], input[type="email"], input[type="password"] {
+    background-color: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    border: none;
+    padding: 5px;
+    border-radius: 10px;
+}
+input[type="text"]:focus, input[type="tel"]:focus {
+    outline: none;
+}
+input[type="submit"] {
+    background-color: var(--text);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 18px;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background-color: var(--text);
+}
+input[type="submit"].secondary {
+    background-color: var(--bg);
+    color: var(--text);
+    margin-left: 10px;
+}
+input[type="submit"].secondary:hover {
+    background-color: unset;
+}
+
 .reservation-form {
     display: flex;
     flex-direction: row-reverse;
@@ -772,34 +805,6 @@ header > .right > a > .icon.large {
     content: ' din';
     font-size: 18px;
     font-family: var(--font);
-}
-input[type="text"], input[type="email"], input[type="password"] {
-    width: 150px;
-    background-color: var(--text);
-    color: var(--bg);
-    font-family: var(--font-mono);
-    border: none;
-    padding: 5px;
-    border-radius: 10px;
-}
-input[type="text"]:focus, input[type="tel"]:focus {
-    outline: none;
-}
-input[type="submit"] {
-    background-color: var(--text);
-    color: var(--bg);
-    font-family: var(--font);
-    font-size: 18px;
-    border: none;
-    padding: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-}
-input[type="submit"]:hover {
-    background-color: var(--text);
-}
-.submit-row {
-    justify-content: center;
 }
 
 h1 a {

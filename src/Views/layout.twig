@@ -28,7 +28,9 @@
                         <span class="icon"><i class="fa-solid fa-user"></i> Prijavi se</span>
                     </a>
                 {% else %}
-
+                    <a href="/me" class="pop">
+                        <span class="icon"><i class="fa-solid fa-user"></i> {{ loggedInUser.first_name }}</span>
+                    </a>
                 {% endif %}
                 <span id="mobile-hamburger" class="hide--td icon large">
                     <i class="fa-solid fa-bars"></i>

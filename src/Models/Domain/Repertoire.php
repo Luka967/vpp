@@ -2,12 +2,12 @@
 
 namespace Skop\Models\Domain;
 
-use Skop\Core\Serializable;
+use Skop\Core\DomainObject;
 use DateTime;
 
 final class Repertoire
 {
-    use Serializable;
+    use DomainObject;
 
     public int $id;
     public int $movie_id;

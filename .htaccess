@@ -1,0 +1,21 @@
+# ovaj .htaccess treba da ide u webserver root
+
+Options -Indexes
+RewriteEngine On
+
+# ako je path /
+# L poslednje pravilo
+RewriteRule ^$ vpp/public/index.php [L]
+
+# ne proveravaj sledece pravilo ako pokusavamo ucitavati staticke fajlove
+# NC case-insensitive
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
+
+# ne proveravaj sledece pravilo ako su ovo vec postojeci fajlovi/folderi
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# ako je path /abc/def/?ghi
+# QSA preserve query string
+# L poslednje pravilo
+RewriteRule ^ vpp/public/index.php [QSA,L]

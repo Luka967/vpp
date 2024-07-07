@@ -28,4 +28,4 @@ $router->dispatch();
 // $creating->discount = 10;
 // // DiscountClubModel::insert_one($creating);
 
-// var_dump($creating->as_array());
+// var_dump($creating->asArray());

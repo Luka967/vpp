@@ -2,11 +2,11 @@
 
 namespace Skop\Models\Domain;
 
-use Skop\Core\Serializable;
+use Skop\Core\DomainObject;
 
 final class Genre
 {
-    use Serializable;
+    use DomainObject;
 
     public int $id;
     public string $name;

@@ -15,7 +15,7 @@ class MovieModel
             `id`, `title`, `original_title`, `producer_studio`, `release_date`, `synopsis`,
             `runtime`, `director`, `significant_cast_1`, `significant_cast_2`, `significant_cast_3`
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $q->execute($item->as_array());
+        return $q->execute($item->asArray());
     }
 
     public function delete(int $id): bool

@@ -30,7 +30,7 @@ class RepertoireModel
     public function insert(Repertoire $item): bool
     {
         $q = Db::instance()->prepare("INSERT INTO `repertoire` (`id`, `movie_id`, `theater_id`, `screening_start`) VALUES (?, ?, ?, ?)");
-        return $q->execute($item->as_array());
+        return $q->execute($item->asArray());
     }
 
     public function delete(int $id): bool

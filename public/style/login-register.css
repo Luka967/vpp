@@ -1,3 +1,9 @@
+h1 {
+    margin-bottom: 25px;
+}
+.submit-row {
+    margin-top: 20px;
+}
 form {
     display: flex;
     flex-direction: column;
@@ -6,11 +12,25 @@ form .row {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
     margin-bottom: 5px;
 }
 form .row label {
-    width: 80px;
+    width: 120px;
     margin-right: 10px;
     text-align: right;
+}
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 250px;
+}
+.form-error {
+    color: var(--problem);
+    padding-left: 10px;
+}
+
+#register-form-first-name {
+    width: 150px;
+    margin-right: 5px;
+}
+#register-form-last-name {
+    width: 200px;
 }

@@ -2,9 +2,9 @@
 
 namespace Skop\Core;
 
-trait Serializable
+trait DomainObject
 {
-    public function as_array(): array
+    public function asArray(): array
     {
         $ret = [];
         foreach ($this as $key => $value)

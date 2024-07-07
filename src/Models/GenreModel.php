@@ -12,7 +12,7 @@ class GenreModel
     public function insert(Genre $item): bool
     {
         $q = Db::instance()->prepare("INSERT INTO `genres` (`id`, `name`, `description`) VALUES (?, ?, ?)");
-        return $q->execute($item->as_array());
+        return $q->execute($item->asArray());
     }
 
     public function delete(int $id): bool

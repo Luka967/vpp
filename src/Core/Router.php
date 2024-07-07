@@ -31,6 +31,7 @@ final class Router
     public function dispatch()
     {
         $req = new Request();
+        $controller = null;
 
         // var_dump($_SERVER);
         // echo '<br><br>';
@@ -60,7 +61,9 @@ final class Router
             if (!method_exists($controller, $action))
                 throw new ErrorPageException(SKOP_ERROR_NO_CALLABLE);
 
-            $controller->fetchLoggedInUser();
+            $req->validatePostInput($route);
+
+            $controller->getLoggedInUser();
 
             if (isset($route['forceLoggedOut']) && $controller->loggedInUser != null)
                 throw new ErrorPageException(SKOP_ERROR_AUTH_LOGOUT);
@@ -71,8 +74,11 @@ final class Router
         }
         catch (ErrorPageException $ex)
         {
-            $errorController = new ErrorController($this->twigInstance, $req);
-            $errorController->showPage($ex);
+            if ($controller != null)
+                $controller = ErrorController::morph($controller);
+            else
+                $controller = new ErrorController($this->twigInstance, $req);
+            $controller->showPage($ex);
         }
     }
 }

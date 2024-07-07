@@ -2,12 +2,12 @@
 
 namespace Skop\Models\Domain;
 
-use Skop\Core\Serializable;
+use Skop\Core\DomainObject;
 use DateTime;
 
 final class Movie
 {
-    use Serializable;
+    use DomainObject;
 
     public int $id;
     public string $title;

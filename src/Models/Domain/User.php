@@ -2,11 +2,11 @@
 
 namespace Skop\Models\Domain;
 
-use Skop\Core\Serializable;
+use Skop\Core\DomainObject;
 
 final class User
 {
-    use Serializable;
+    use DomainObject;
 
     const PERMISSIONS_RESTRICTED = -1;
     const PERMISSIONS_NONE = null;
@@ -14,11 +14,10 @@ final class User
     const PERMISSIONS_ADMIN = 2;
 
     public int $id;
-    public string $username;
-    public ?int $permissions;
-    public ?int $discount_club_id;
     public string $email;
     public string $password;
+    public ?int $permissions;
+    public ?int $discount_club_id;
     public string $first_name;
     public ?string $last_name;
 }

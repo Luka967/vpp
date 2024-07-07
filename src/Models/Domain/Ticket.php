@@ -2,12 +2,12 @@
 
 namespace Skop\Models\Domain;
 
-use Skop\Core\Serializable;
+use Skop\Core\DomainObject;
 use DateTime;
 
 final class Ticket
 {
-    use Serializable;
+    use DomainObject;
 
     public int $id;
     public string $ticket_code;
