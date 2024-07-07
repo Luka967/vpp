@@ -9,15 +9,16 @@ class GenreModel
 {
     const CLASS_PATH = 'Skop\\Models\\Domain\\Genre';
 
-    public function insert(Genre $item): bool
+    public function insert(Genre $partial)
     {
-        $q = Db::instance()->prepare("INSERT INTO `genres` (`id`, `name`, `description`) VALUES (?, ?, ?)");
-        return $q->execute($item->asArray());
+        Db::instance()
+            ->prepare("INSERT INTO `genres` (`name`, `description`) VALUES (?, ?)")
+            ->execute([$partial->name, $partial->description]);
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id)
     {
-        return Db::instance()
+        Db::instance()
             ->prepare("DELETE FROM `genres` WHERE `id` = ?")
             ->execute([$id]);
     }

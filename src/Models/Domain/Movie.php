@@ -11,6 +11,8 @@ final class Movie
 
     public int $id;
     public string $title;
+    /** `ENUM('A', '13', 'R')` */
+    public string $rating;
     public string $original_title;
     public string $producer_studio;
     public DateTime $release_date;

@@ -33,6 +33,7 @@ CREATE TABLE `genres` (
 CREATE TABLE `movies` (
     `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `title` VARCHAR(127) NOT NULL,
+    `rating` ENUM('A', '13', 'R') NOT NULL,
     `original_title` VARCHAR(127) NOT NULL,
     `producer_studio` VARCHAR(127) NOT NULL,
     `release_date` DATE NOT NULL,

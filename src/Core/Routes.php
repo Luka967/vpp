@@ -36,5 +36,15 @@ return [
             'password' => [ 'type' => 'string', 'min' => 8, 'max' => 63],
             'password_repeat' => [ 'type' => 'string', 'min' => 8, 'max' => 63]
         ]
+    ],
+    'GET /me' => [
+        'controller' => 'UserController',
+        'action' => 'showMe',
+        'forceLoggedIn' => true
+    ],
+    'GET /logout' => [
+        'controller' => 'UserController',
+        'action' => 'doLogout',
+        'forceLoggedIn' => true
     ]
 ];

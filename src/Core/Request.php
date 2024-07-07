@@ -2,6 +2,8 @@
 
 namespace Skop\Core;
 
+use Error;
+
 function validateOne(array $source, string $key, array $restrictions)
 {
     if (!isset($source[$key]) || $source[$key] == null)
@@ -33,22 +35,17 @@ function validateOne(array $source, string $key, array $restrictions)
     }
 
     // Validacija veličine
-    $valueSize = null;
-    switch ($restrictions['type'])
+    $valueSize = match ($restrictions['type'])
     {
-    case 'string':
-    case 'string|email':
-        $valueSize = strlen($value);
-        break;
-    case 'int':
-    case 'float':
-        $valueSize = $value;
-        break;
-    }
+        'string', 'string|email' => strlen($value),
+        'int', 'float' => $value,
+        default => -INF
+    };
 
     switch ($restrictions['type'])
     {
     case 'string':
+    case 'string|email':
     case 'int':
     case 'float':
         if (isset($restrictions['min']) && $valueSize < $restrictions['min'])

@@ -1,0 +1,50 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/login-register.css">
+    <script src="{{ publicRoot }}js/login-register.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="hero">
+        <video autoplay muted loop playsinline>
+            <source src="{{ publicRoot }}img/movie-trailer/{{ heroMovie.id }}.mp4">
+        </video>
+        <div class="hero-content-wrapper">
+            <div class="hero-content">
+                <div class="hero-row">
+                    <div id="hero-movie-pop" class="hero-movie pop hero-pop">
+                        <span class="hero-movie-title">{{ heroMovie.title|upper }}</span>
+                        <span class="movie-prop hero-movie-rating rating-prop rating-prop-{{ heroMovie.rating }}"></span>
+                    </div>
+                    <div id="hero-movie-reservation-pop" class="hero-movie-reservation pop hero-pop">
+                        <div class="date">
+                            <b>{{ heroMovie.release_date|date('d. m.') }}</b> PREMIJERNO
+                        </div>
+                        <div class="tickets">
+                            KARTE
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-title">
+        <span>NA REPERTOARU</span>
+    </div>
+    <div id="current-repertoire" class="section-posters">
+        {% for movie in movies %}
+        <div class="movie-poster pop">
+            <div class="movie-poster-img" style="background-image: url(&quot;{{ movie.id }}.jpg&quot;);"></div>
+            <div class="movie-poster-props">
+                <span class="movie-prop movie-poster-prop rating-prop-{{ movie.rating }}"></span>
+                {% for genre in movie.genres %}
+                    <span class="movie-prop movie-poster-prop genre-prop">{{ genre|upper }}</span>
+                {% endfor %}
+            </div>
+            <div class="movie-poster-title">{{ movie.title|upper }}</div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

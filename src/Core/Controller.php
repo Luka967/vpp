@@ -37,6 +37,7 @@ abstract class Controller
     public function unsetLoggedInUser()
     {
         $this->loggedInUser = null;
+        unset($_SESSION[SKOP_SESSION_USERID_KEY]);
     }
     public function getLoggedInUser()
     {

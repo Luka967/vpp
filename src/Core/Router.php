@@ -77,7 +77,10 @@ final class Router
             if ($controller != null)
                 $controller = ErrorController::morph($controller);
             else
+            {
                 $controller = new ErrorController($this->twigInstance, $req);
+                $controller->getLoggedInUser();
+            }
             $controller->showPage($ex);
         }
     }

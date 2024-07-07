@@ -48,6 +48,10 @@ body {
 .content {
     margin: 0px auto;
 }
+a.pop {
+    display: inline-block;
+    text-decoration: none;
+}
 .pop {
     box-shadow: none;
     cursor: pointer;
@@ -102,11 +106,28 @@ body {
     color: var(--text);
     font-weight: bold;
 }
+.rating-prop-A {
+    display: none;
+}
+.rating-prop-13 {
+    background-color: var(--danger);
+    color: var(--bg);
+}
+.rating-prop-13::before {
+    content: "13";
+}
+.rating-prop-R {
+    background-color: var(--problem);
+    color: var(--text);
+}
+.rating-prop-R::before {
+    content: "R";
+}
 .meta-prop, .genre-prop, .date-prop {
     padding: 0px calc(var(--radius) / 2);
     color: var(--text);
 }
-.rating-prop-13, .date-prop {
+.date-prop {
     background-color: var(--danger);
 }
 .meta-prop, .genre-prop {
@@ -632,7 +653,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 input[type="text"]:focus, input[type="tel"]:focus {
     outline: none;
 }
-input[type="submit"] {
+input[type="submit"], .button {
     background-color: var(--text);
     color: var(--bg);
     font-family: var(--font);
@@ -642,15 +663,15 @@ input[type="submit"] {
     border-radius: 20px;
     cursor: pointer;
 }
-input[type="submit"]:hover {
+input[type="submit"]:hover, .button:hover {
     background-color: var(--text);
 }
-input[type="submit"].secondary {
+input[type="submit"].secondary, .button.secondary {
     background-color: var(--bg);
     color: var(--text);
     margin-left: 10px;
 }
-input[type="submit"].secondary:hover {
+input[type="submit"].secondary:hover, .button.secondary:hover {
     background-color: unset;
 }
 
