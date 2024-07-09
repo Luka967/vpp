@@ -1,0 +1,36 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Registracija{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/login-register.css">
+    <script src="{{ publicRoot }}js/login-register.js"></script>
+{% endblock %}
+{% block content %}
+    <form id="register-form" class="content" action="/register" method="post">
+        <h1>Registracija</h1>
+        <div id="login-full-name-row" class="row">
+            <label>PUNO IME</label>
+            <span><input id="register-form-first-name" name="first_name" type="text" minlength="2" maxlength="31" value="{{ persistentFormData.first_name ?? '' }}" required></span>
+            <span><input id="register-form-last-name" name="last_name" type="text" minlength="2" maxlength="31" value="{{ persistentFormData.last_name ?? '' }}" required></span>
+        </div>
+        <div class="row">
+            <label for="email">EMAIL</label><input name="email" type="email" minlength="8" maxlength="63" value="{{ persistentFormData.email ?? '' }}" required>
+            {% if emailError != null %}
+            <span class="form-error">{{ emailError }}</span>
+            {% endif %}
+        </div>
+        <div class="row">
+            <label for="password">ŠIFRA</label><input name="password" type="password" minlength="8" maxlength="63"> required
+        </div>
+        <div class="row">
+            <label for="password_repeat">PONOVI ŠIFRU</label><input name="password_repeat" type="password" minlength="8" maxlength="63" required>
+            {% if passwordError != null %}
+            <span class="form-error">{{ passwordError }}</span>
+            {% endif %}
+        </div>
+        <div class="row submit-row">
+            <input class="pop" value="REGISTRUJ SE" type="submit">
+            <input id="login-button" class="pop secondary" value="Već imate nalog?" type="submit">
+        </div>
+    </form>
+{% endblock %}

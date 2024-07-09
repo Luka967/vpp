@@ -3,6 +3,7 @@
 namespace Skop\Controllers;
 
 use Skop\Core\Controller;
+use Skop\Core\ErrorPageException;
 use Skop\Models\MovieModel;
 
 class HomeController extends Controller
@@ -14,6 +15,16 @@ class HomeController extends Controller
         $this->render('index.twig', [
             'heroMovie' => $heroMovie,
             'movies' => $movies
+        ]);
+    }
+
+    public function showMovie()
+    {
+        $movie = MovieModel::withId($this->req->query['id']);
+        if ($movie == null)
+            throw new ErrorPageException(SKOP_ERROR_UNKNOWN_MOVIE);
+        $this->render('view/movie.twig', [
+            'movie' => $movie
         ]);
     }
 }

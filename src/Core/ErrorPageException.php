@@ -82,7 +82,7 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Film ne postoji',
         'description' => 'Ovaj film više ne postoji.',
     ],
-    SKOP_ERROR_UNKNOWN_MOVIE => [
+    SKOP_ERROR_UNKNOWN_GENRE => [
         'title' => 'Žanr ne postoji',
         'description' => 'Ovaj žanr više ne postoji.',
     ]

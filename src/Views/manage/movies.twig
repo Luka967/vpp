@@ -31,6 +31,23 @@
                         <label for="poster_file">Poster</label>
                         <input type="file" id="poster_file" name="poster_file" accept="image/jpeg">
                     </div>
+                    <div class="row">
+                        <div></div>
+                        <fieldset>
+                            <legend>Žanrovi</legend>
+                            <div class="genres-fieldset">
+                                {% for genre in genres %}
+                                <div class="genre">
+                                    <input
+                                        type="checkbox" id="genre-{{ genre.id }}" name="genres[]" value="{{ genre.name }}"
+                                        {{ genre.name in (persistentFormData.genres ?? [])|map(v => v.name) ? 'checked' : '' }}
+                                    >
+                                    <label for="genre-{{ genre.id }}">{{ genre.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                    </div>
                 {% endblock %}
             {% endembed %}
         </div>

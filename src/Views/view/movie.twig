@@ -1,0 +1,57 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - {{ movie.title }}{% endblock %}
+{% block content %}
+<div class="movie-show-hero">
+    <div class="movie-show-poster">
+        <div id="movie-show-poster" style="background-image: url(&quot;{{ publicRoot }}img/movie-poster/{{ movie.id }}.jpg&quot;);"></div>
+        <div class="movie-show-poster-shade"></div>
+    </div>
+    <div class="movie-show-title">
+        <span id="movie-show-title">{{ movie.title|upper }}</span>
+    </div>
+</div>
+<div class="movie-show-information">
+    <article>
+        <div class="content">
+            <div class="header"><span>SINOPSIS</span></div>
+            <div id="movie-show-synopsis">{{ movie.synopsis }}</div>
+            <div class="header reservation-cta"><span>REZERVIŠI KARTU</span></div>
+            <div id="movie-show-slots-insert"></div>
+        </div>
+    </article>
+    <aside>
+        <div class="aside-content">
+            <div class="aside-left">
+                <div id="movie-show-tags" class="movie-show-tags">
+                    <span class="movie-prop movie-poster-prop movie-show-prop rating-prop-{{ movie.rating }}">{{ movie.rating }}</span>
+                    {% for genre in movie.genres %}
+                        <span class="movie-prop movie-poster-prop movie-show-prop genre-prop">{{ genre.name|upper }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="aside-right">
+                <div class="content-m--">
+                    <div class="header"><span>PREMIJERA</span></div>
+                    <div id="movie-show-premiere" class="text">{{ movie.release_date|date('d. m. Y.') }}</div>
+                    <div class="header"><span>TRAJANJE</span></div>
+                    <div id="movie-show-runtime" class="text">{{ movie.runtime }}</div>
+                    <div class="header"><span>REŽISER</span></div>
+                    <div id="movie-show-director" class="text">
+                        <div>{{ movie.director }}</div>
+                    </div>
+                    <div class="header"><span>IGRAJU</span></div>
+                    <div id="movie-show-cast-list">
+                        {% for idx in 1..3 %}
+                        <div class="cast">
+                            <div class="text">{{ attribute(movie, 'significant_cast_' ~ idx) }}</div>
+                            <div class="text muted">Uloga</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

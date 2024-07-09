@@ -20,6 +20,14 @@ return [
         'action' => 'showLanding'
     ],
 
+    'GET /movie' => [
+        'controller' => 'HomeController',
+        'action' => 'showMovie',
+        'dataQuery' => [
+            'id' => Movie::$columnTraits['id']
+        ]
+    ],
+
     'GET /login' => [
         'controller' => 'UserController',
         'action' => 'showLogin',
@@ -88,7 +96,11 @@ return [
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
             'id' => [ 'type' => 'ignore' ],
-            ...filterDomainObjectColumns(Movie::$columnTraits, false, true)
+            ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
+            'genres' => [
+                'type' => 'array|string|alphabetical', 'minArray' => 1, 'maxArray' => 3,
+                'min' => Genre::$columnTraits['name']['min'], 'max' => Genre::$columnTraits['name']['max']
+            ]
         ],
         'filesPost' => [
             'trailer_file' => [
@@ -108,7 +120,11 @@ return [
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
             ...filterDomainObjectColumns(Movie::$columnTraits, true, false),
-            ...filterDomainObjectColumns(Movie::$columnTraits, false, true)
+            ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
+            'genres' => [
+                'type' => 'array|string|alphabetical', 'minArray' => 1, 'maxArray' => 3,
+                'min' => Genre::$columnTraits['name']['min'], 'max' => Genre::$columnTraits['name']['max']
+            ]
         ],
         'filesPost' => [
             'trailer_file' => [
@@ -125,7 +141,7 @@ return [
     ],
     'GET /manage/movies/delete' => [
         'controller' => 'ManagerController',
-        'action' => 'doUpdateMovie',
+        'action' => 'doDeleteMovie',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataQuery' => [
@@ -149,7 +165,7 @@ return [
             ...filterDomainObjectColumns(Genre::$columnTraits, false, true)
         ],
     ],
-    'GET /manage/movies/delete' => [
+    'GET /manage/genres/delete' => [
         'controller' => 'ManagerController',
         'action' => 'doDeleteGenre',
         'forceLoggedIn' => true,

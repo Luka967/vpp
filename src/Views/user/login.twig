@@ -1,0 +1,30 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Prijavljivanje{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/login-register.css">
+    <script src="{{ publicRoot }}js/login-register.js"></script>
+{% endblock %}
+{% block content %}
+    <form id="login-form" class="content" action="/login" method="post">
+        <h1>Prijavljivanje</h1>
+        <div class="row">
+            <label for="email">EMAIL</label>
+            <input name="email" type="email" minlength="8" maxlength="63" value="{{ persistentFormData.email ?? '' }}" required>
+            {% if emailError != null %}
+            <span class="form-error">{{ emailError }}</span>
+            {% endif %}
+        </div>
+        <div class="row">
+            <label for="password">ŠIFRA</label>
+            <input name="password" type="password" minlength="8" maxlength="63" required>
+            {% if passwordError != null %}
+            <span class="form-error">{{ passwordError }}</span>
+            {% endif %}
+        </div>
+        <div class="row submit-row">
+            <input class="pop" value="PRIJAVI SE" type="submit">
+            <input id="register-button" class="pop secondary" value="Novi nalog" type="submit">
+        </div>
+    </form>
+{% endblock %}

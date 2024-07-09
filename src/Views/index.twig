@@ -14,7 +14,9 @@
             <div class="hero-content">
                 <div class="hero-row">
                     <div id="hero-movie-pop" class="hero-movie pop hero-pop">
-                        <span class="hero-movie-title">{{ heroMovie.title|upper }}</span>
+                        <a href="/movie?id={{ heroMovie.id }}">
+                            <span class="hero-movie-title">{{ heroMovie.title|upper }}</span>
+                        </a>
                         <span class="movie-prop hero-movie-rating rating-prop rating-prop-{{ heroMovie.rating }}">{{ heroMovie.rating }}</span>
                     </div>
                     <div id="hero-movie-reservation-pop" class="hero-movie-reservation pop hero-pop">
@@ -35,16 +37,16 @@
     </div>
     <div id="current-repertoire" class="section-posters">
         {% for movie in movies %}
-        <div class="movie-poster pop">
+        <a class="movie-poster pop" href="/movie?id={{ movie.id }}">
             <div class="movie-poster-img" style="background-image: url(&quot;{{ publicRoot }}img/movie-poster/{{ movie.id }}.jpg&quot;);"></div>
             <div class="movie-poster-props">
                 <span class="movie-prop movie-poster-prop rating-prop-{{ movie.rating }}">{{ movie.rating }}</span>
                 {% for genre in movie.genres %}
-                    <span class="movie-prop movie-poster-prop genre-prop">{{ genre|upper }}</span>
+                    <span class="movie-prop movie-poster-prop genre-prop">{{ genre.name|upper }}</span>
                 {% endfor %}
             </div>
             <div class="movie-poster-title">{{ movie.title|upper }}</div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 {% endblock %}

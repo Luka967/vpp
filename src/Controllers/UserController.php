@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function showLogin()
     {
-        $this->render('login.twig');
+        $this->render('user/login.twig');
     }
     public function doLogin()
     {
@@ -21,13 +21,17 @@ class UserController extends Controller
 
         $fetchedUser = UserModel::withEmail($this->req->data['email']);
         if ($fetchedUser == null)
-            $this->render('login.twig', [ 'emailError' => "Korisnik sa ovim e-mailom ne postoji" ]);
+            $this->render('user/login.twig', [ 'emailError' => "Korisnik sa ovim e-mailom ne postoji" ]);
 
         if (!password_verify($this->req->data['password'], $fetchedUser->password))
-            $this->render('login.twig', [ 'passwordError' => "Pogrešna šifra" ]);
+            $this->render('user/login.twig', [ 'passwordError' => "Pogrešna šifra" ]);
 
         $this->setLoggedInUser($fetchedUser);
         $this->redirect('/');
+    }
+    public function showRegister()
+    {
+        $this->render('user/register.twig');
     }
     public function doRegister()
     {
@@ -38,10 +42,10 @@ class UserController extends Controller
         ];
 
         if ($this->req->data['password'] != $this->req->data['password_repeat'])
-            $this->render('register.twig', [ 'passwordError' => "Ponovljena šifra nije ista" ]);
+            $this->render('user/register.twig', [ 'passwordError' => "Ponovljena šifra nije ista" ]);
 
         if (UserModel::withEmail($this->req->data['email']) != null)
-            $this->render('register.twig', [ 'emailError' => "Već postoji korisnik sa ovim email-om" ]);
+            $this->render('user/register.twig', [ 'emailError' => "Već postoji korisnik sa ovim email-om" ]);
 
         $createdUser = new User();
         $createdUser->first_name = $this->req->data['first_name'];
@@ -56,17 +60,13 @@ class UserController extends Controller
         $this->setLoggedInUser($createdUser);
         $this->redirect('/');
     }
-    public function showRegister()
-    {
-        $this->render('register.twig');
-    }
 
     public function showMe()
     {
         $discountClub = null;
         if ($this->loggedInUser->discount_club_id != null)
             $discountClub = DiscountClubModel::fromId($this->loggedInUser->discount_club_id);
-        $this->render('me.twig', [
+        $this->render('user/me.twig', [
             'discountClub' => $discountClub
         ]);
     }

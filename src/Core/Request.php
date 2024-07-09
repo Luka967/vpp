@@ -5,6 +5,29 @@ namespace Skop\Core;
 use DateMalformedStringException;
 use DateTime;
 
+function validateOneArray(string $key, array &$sourceArray, array $restrictions)
+{
+    $valueRestrictions = [...$restrictions, 'type' => str_replace('array|', '', $restrictions['type'])];
+    $valueCount = count($sourceArray);
+    if (isset($restrictions['arrayMin']) && $valueCount < $restrictions['arrayMin'])
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' array has too few values");
+    if (isset($restrictions['arrayMax']) && $valueCount > $restrictions['arrayMax'])
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' array has too many values");
+    try
+    {
+        for ($i = 0; $i < $valueCount; $i++)
+            validateOneValue($sourceArray, $i, $valueRestrictions);
+    }
+    catch (ErrorPageException $ex)
+    {
+        throw new ErrorPageException(
+            $ex->errorPageCode,
+            ($ex->extraDetails ?? 'No extra detail') . " while validating given '$key' array",
+            $ex
+        );
+    }
+}
+
 function validateOneValue(array &$source, string $key, array $restrictions)
 {
     if ($restrictions['type'] == 'ignore')
@@ -15,6 +38,13 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     if (!isset($source[$key]) || $source[$key] == null)
         if (!isset($restrictions['optional']))
             throw new ErrorPageException(SKOP_ERROR_INPUT_MISSING, "Source missing key '$key' or value was null");
+
+    if (str_starts_with($restrictions['type'], 'array|'))
+    {
+        // Ovaj input je niz
+        validateOneArray($key, $source[$key], $restrictions);
+        return;
+    }
 
     $value = trim($source[$key]);
 
