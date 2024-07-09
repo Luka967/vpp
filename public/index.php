@@ -8,6 +8,7 @@ $publicPath = str_replace(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '',
 if ($publicPath[strlen($publicPath) - 1] != '/')
     $publicPath .= '/';
 define('SKOP_PUBLIC_PATH', $publicPath);
+define('SKOP_PUBLIC_PATH_FILESYSTEM', $_SERVER['DOCUMENT_ROOT'] . $publicPath);
 
 define('SKOP_APPLICATION_PATH', substr(realpath(__DIR__), 0, -6).'src/');
 

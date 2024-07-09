@@ -46,7 +46,7 @@ abstract class Controller
             $this->loggedInUser = null;
             return;
         }
-        $this->loggedInUser = UserModel::getOneById($_SESSION[SKOP_SESSION_USERID_KEY]);
+        $this->loggedInUser = UserModel::withId($_SESSION[SKOP_SESSION_USERID_KEY]);
         if ($this->loggedInUser == null)
         {
             $this->unsetLoggedInUser();
@@ -56,18 +56,19 @@ abstract class Controller
 
     public function render(string $template, array $data = [])
     {
-        $mergedData = array_merge($data, [
+        echo $this->twigInstance->render($template, [
+            ...$data,
             'publicRoot' => SKOP_PUBLIC_PATH,
             'persistentFormData' => $this->persistentFormData,
-            'loggedInUser' => $this->loggedInUser
+            'loggedInUser' => $this->loggedInUser,
+            'req' => $this->req
         ]);
-        echo $this->twigInstance->render($template, $mergedData);
         exit;
     }
     public function redirect(string $to, int $httpStatus = 303)
     {
-        http_response_code($httpStatus);
         header("Location: $to");
+        http_response_code($httpStatus);
         exit;
     }
 }

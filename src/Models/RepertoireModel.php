@@ -3,10 +3,12 @@
 namespace Skop\Models;
 
 use Skop\Core\Db;
+use Skop\Core\Model;
 use Skop\Models\Domain\Repertoire;
 
-class RepertoireModel
+class RepertoireModel extends Model
 {
+    protected static string $tableName = '`repertoire`';
     const CLASS_PATH = 'Skop\\Models\\Domain\\Repertoire';
 
     public static function all(): array

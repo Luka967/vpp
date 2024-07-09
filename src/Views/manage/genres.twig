@@ -1,0 +1,27 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Menadžer{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/manager.css">
+{% endblock %}
+{% block content %}
+    <div class="object-list-row">
+        <div class="col">
+            {% embed '_parts/domainObjectTable.twig' with {
+                columns: [['name', 'Žanr']],
+                rows: genres,
+                notEditable: true
+            } %} {% endembed %}
+        </div>
+        <div class="col object-form">
+            {% embed '_parts/domainObjectInput.twig' with {
+                columns: genreObjectColumns,
+                modifying: (persistentFormData is not empty),
+                initialPath: '/manage/genres',
+                addPath: '/manage/genres/add',
+                editPath: '/manage/genres/edit',
+                objectName: 'žanr'
+            } %} {% endembed %}
+        </div>
+    </div>
+{% endblock %}

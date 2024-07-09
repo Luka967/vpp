@@ -3,25 +3,37 @@
 namespace Skop\Models;
 
 use Skop\Core\Db;
+use Skop\Core\Model;
 use Skop\Models\Domain\Movie;
 
-class MovieModel
+class MovieModel extends Model
 {
+    protected static string $tableName = '`movies`';
     const CLASS_PATH = 'Skop\\Models\\Domain\\Movie';
 
-    public function insert(Movie $item): bool
+    public static function all(): array
     {
-        $q = Db::instance()->prepare("INSERT INTO `movies` (
-            `id`, `title`, `original_title`, `producer_studio`, `release_date`, `synopsis`,
-            `runtime`, `director`, `significant_cast_1`, `significant_cast_2`, `significant_cast_3`
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $q->execute($item->asArray());
+        $q = Db::instance()->prepare("SELECT * FROM `movies`");
+        $q->execute();
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
     }
 
-    public function delete(int $id): bool
+    public static function withTitle(string $title): ?Movie
     {
-        $q = Db::instance()->prepare("DELETE FROM `movies` WHERE `id` = :id");
+        $q = Db::instance()->prepare("SELECT * FROM `movies` WHERE `title` = ?");
+        $q->execute([$title]);
+        if ($q->rowCount() == 0)
+            return null;
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
+    }
+
+    public static function withId(int $id): ?Movie
+    {
+        $q = Db::instance()->prepare("SELECT * FROM `movies` WHERE `id` = :id");
         $q->bindParam(':id', $id, \PDO::PARAM_INT);
-        return $q->execute();
+        $q->execute();
+        if ($q->rowCount() == 0)
+            return null;
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
     }
 }

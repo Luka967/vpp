@@ -4,11 +4,8 @@ namespace Skop\Models\Domain;
 
 use Skop\Core\DomainObject;
 
-final class TheaterSeating
+final class TheaterSeating extends DomainObject
 {
-    use DomainObject;
-
-    public int $id;
     public int $theater_id;
     public int $seat_type_id;
     public bool $active;

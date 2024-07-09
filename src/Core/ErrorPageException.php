@@ -11,9 +11,12 @@ define('SKOP_ERROR_NO_CONTROLLER'       , 101);
 define('SKOP_ERROR_NO_CALLABLE'         , 102);
 define('SKOP_ERROR_AUTH_LOGIN'          , 200);
 define('SKOP_ERROR_AUTH_LOGOUT'         , 201);
+define('SKOP_ERROR_AUTH_NOPERMS'        , 202);
 define('SKOP_ERROR_INPUT_MISSING'       , 300);
 define('SKOP_ERROR_INPUT_INVALID'       , 301);
-define('SKOP_ERROR_INPUT_UNKNOWN_USER'  , 400);
+define('SKOP_ERROR_UNKNOWN_USER'        , 400);
+define('SKOP_ERROR_UNKNOWN_MOVIE'       , 401);
+define('SKOP_ERROR_UNKNOWN_GENRE'       , 402);
 
 define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNCAUGHT => [500, 'Internal server error'],
@@ -22,9 +25,12 @@ define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_NO_CALLABLE => [404, 'No callable in controller'],
     SKOP_ERROR_AUTH_LOGIN => [401, 'Must be logged in'],
     SKOP_ERROR_AUTH_LOGOUT => [403, 'Must be logged out'],
+    SKOP_ERROR_AUTH_NOPERMS => [403, 'You have no permissions'],
     SKOP_ERROR_INPUT_MISSING => [400, 'Request has one or more missing inputs'],
     SKOP_ERROR_INPUT_INVALID => [400, 'Request has one or more invalid inputs'],
-    SKOP_ERROR_INPUT_UNKNOWN_USER => [404, 'This user does not exist'],
+    SKOP_ERROR_UNKNOWN_USER => [404, 'This user does not exist'],
+    SKOP_ERROR_UNKNOWN_MOVIE => [404, 'This movie does not exist'],
+    SKOP_ERROR_UNKNOWN_GENRE => [404, 'This movie does not exist'],
 ]);
 
 define('SKOP_ERROR_PAGES_LANG', [
@@ -56,6 +62,10 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Morate se odjaviti',
         'description' => 'Ova stranica nije dostupna za korisnike koji su se već prijavili.',
     ],
+    SKOP_ERROR_AUTH_NOPERMS => [
+        'title' => 'Pristup zabranjen',
+        'description' => 'Ova stranica Vama nije dostupna.',
+    ],
     SKOP_ERROR_INPUT_MISSING => [
         'title' => 'Pokušajte ponovo',
         'description' => 'Akcija koju ste upravo izvršili nije bila ispravna. Vratite se nazad i pokušajte ponovo.',
@@ -64,9 +74,17 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Pokušajte ponovo',
         'description' => 'Akcija koju ste upravo izvršili nije bila ispravna. Vratite se nazad i pokušajte ponovo.',
     ],
-    SKOP_ERROR_INPUT_UNKNOWN_USER => [
+    SKOP_ERROR_UNKNOWN_USER => [
         'title' => 'Korisnik ne postoji',
-        'description' => 'Korisnik pod ovaj ID ili e-mail ne postoji.',
+        'description' => 'Ovaj korisnik više ne postoji.',
+    ],
+    SKOP_ERROR_UNKNOWN_MOVIE => [
+        'title' => 'Film ne postoji',
+        'description' => 'Ovaj film više ne postoji.',
+    ],
+    SKOP_ERROR_UNKNOWN_MOVIE => [
+        'title' => 'Žanr ne postoji',
+        'description' => 'Ovaj žanr više ne postoji.',
     ]
 ]);
 

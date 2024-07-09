@@ -24,8 +24,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `genres` (
     `id` SMALLINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(31) NOT NULL,
-    `description` TINYTEXT NOT NULL,
+    `name` VARCHAR(31) NOT NULL
 
     UNIQUE (`name`)
 );
@@ -42,7 +41,9 @@ CREATE TABLE `movies` (
     `director` VARCHAR(127) NOT NULL,
     `significant_cast_1` VARCHAR(127) NOT NULL,
     `significant_cast_2` VARCHAR(127) NOT NULL,
-    `significant_cast_3` VARCHAR(127) NOT NULL
+    `significant_cast_3` VARCHAR(127) NOT NULL,
+
+    UNIQUE (`title`)
 );
 
 CREATE TABLE `movie_genres` (
@@ -58,20 +59,9 @@ CREATE TABLE `movie_genres` (
         ON DELETE CASCADE
 );
 
-CREATE TABLE `locations` (
-    `id` TINYINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `city` VARCHAR(31) NOT NULL,
-    `address` VARCHAR(127) NOT NULL
-);
-
 CREATE TABLE `theaters` (
-    `id` SMALLINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `location_id` TINYINT UNSIGNED NOT NULL,
-    `name` VARCHAR(63) NOT NULL,
-
-    FOREIGN KEY (`location_id`) REFERENCES `locations`(`id`)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
+    `id` TINYINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(63) NOT NULL
 );
 
 CREATE TABLE `screening_features` (
@@ -82,7 +72,7 @@ CREATE TABLE `screening_features` (
 CREATE TABLE `repertoire` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `movie_id` INT UNSIGNED NOT NULL,
-    `theater_id` SMALLINT UNSIGNED NOT NULL,
+    `theater_id` TINYINT UNSIGNED NOT NULL,
     `screening_start` DATETIME NOT NULL,
 
     INDEX (`movie_id`),
@@ -119,7 +109,7 @@ CREATE TABLE `theater_seat_types` (
 
 CREATE TABLE `theater_seating` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `theater_id` SMALLINT UNSIGNED NOT NULL,
+    `theater_id` TINYINT UNSIGNED NOT NULL,
     `seat_type_id` TINYINT UNSIGNED NOT NULL,
     `active` TINYINT NOT NULL DEFAULT 1,
     `row` SMALLINT NOT NULL,

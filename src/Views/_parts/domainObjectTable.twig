@@ -1,0 +1,32 @@
+<table class="object-list">
+    <thead>
+        <tr>
+            <th>ID</th>
+            {% for column in columns %}
+            <th>{{ column[1] }}</th>
+            {% endfor %}
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <th>{{ row.id }}</th>
+            {% for column in columns %}
+            <td>{{ attribute(row, column[0]) }}</td>
+            {% endfor %}
+            <td>
+                {% if not notEditable %}
+                <a class="button pop" href="/manage/movies/edit?id={{ row.id }}">Izmeni</a>
+                {% else %}
+                {% endif %}
+                <a class="button pop" href="/manage/movies/delete?id={{ row.id }}">Obriši</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="{{ (2 + column|length) }}">Baza podataka je prazna</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

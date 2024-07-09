@@ -3,23 +3,28 @@
 namespace Skop\Models;
 
 use Skop\Core\Db;
+use Skop\Core\Model;
 use Skop\Models\Domain\Genre;
 
-class GenreModel
+class GenreModel extends Model
 {
+    protected static string $tableName = '`genres`';
     const CLASS_PATH = 'Skop\\Models\\Domain\\Genre';
 
-    public function insert(Genre $partial)
+    public static function all(): array
     {
-        Db::instance()
-            ->prepare("INSERT INTO `genres` (`name`, `description`) VALUES (?, ?)")
-            ->execute([$partial->name, $partial->description]);
+        $q = Db::instance()->prepare("SELECT * FROM `genres`");
+        $q->execute();
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
     }
 
-    public function delete(int $id)
+    public static function withId(int $id): ?Genre
     {
-        Db::instance()
-            ->prepare("DELETE FROM `genres` WHERE `id` = ?")
-            ->execute([$id]);
+        $q = Db::instance()->prepare("SELECT * FROM `genres` WHERE `id` = :id");
+        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->execute();
+        if ($q->rowCount() == 0)
+            return null;
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
     }
 }

@@ -1,0 +1,58 @@
+<h1>
+    {% if modifying %} Izmeni postojeći {% else %} Novi {% endif %} {{ objectName }}
+</h1>
+<form class="object-form" method="POST" enctype="multipart/form-data">
+    {% for name, traits in columns %}
+    <div class="row">
+        {% if traits.type != 'string|movierating' and traits.type != 'int|permissions' %}
+        <label for="{{ name }}">{{ name }}</label>
+        {% else %}
+        <div></div>
+        {% endif %}
+        {% if traits.type == 'string' or traits.type == 'string|alphabetic' %}
+            {% if traits.max <= 255 %}
+            <input type="text" id="{{ name }}" name="{{ name }}" minlength="{{ traits.min }}" maxlength="{{ traits.max }}" value="{{ attribute(persistentFormData, name) }}">
+            {% else %}
+            <textarea name="{{ name }}" minlength="{{ traits.min }}" maxlength="{{ traits.max }}">{{ attribute(persistentFormData, name) }}</textarea>
+            {% endif %}
+        {% elseif traits.type == 'string|email' %}
+        <input type="email" id="{{ name }}" name="{{ name }}" value="{{ attribute(persistentFormData, name) }}">
+        {% elseif traits.type == 'string|password' %}
+        <input type="password" id="{{ name }}" name="{{ name }}" minlength="{{ traits.min }}" maxlength="{{ traits.max }}" value="{{ attribute(persistentFormData, name) }}">
+        {% elseif traits.type == 'int' %}
+        <input type="number" id="{{ name }}" name="{{ name }}" min="{{ traits.min }}" max="{{ traits.max }}" value="{{ attribute(persistentFormData, name) }}">
+        {% elseif traits.type == 'date' %}
+        <input type="date" id="{{ name }}" name="{{ name }}" value="{{ attribute(persistentFormData, name) }}">
+        {% elseif traits.type == 'int|permissions' %}
+        <fieldset>
+            <legend>{{ name }}</legend>
+            <input type="radio" id="restricted" name="{{ name }}" value="-2" {{ attribute(persistentFormData, name) == '-2' ? 'checked' : '' }}> <label for="restricted">Banovan</label>
+            <input type="radio" id="normal" name="{{ name }}" value="0" {{ attribute(persistentFormData, name) == '0' ? 'checked' : '' }}> <label for="normal">Običan korisnik</label>
+            <input type="radio" id="manager" name="{{ name }}" value="1" {{ attribute(persistentFormData, name) == '1' ? 'checked' : '' }}> <label for="manager">Menadžer</label>
+            <input type="radio" id="admin" name="{{ name }}" value="2" {{ attribute(persistentFormData, name) == '2' ? 'checked' : '' }}> <label for="admin">Administrator</label>
+        </fieldset>
+        {% elseif traits.type == 'string|movierating' %}
+        <fieldset>
+            <legend>{{ name }}</legend>
+            <input type="radio" id="A" name="{{ name }}" value="A" {{ attribute(persistentFormData, name) == 'A' ? 'checked' : '' }}> <label for="A">A</label>
+            <input type="radio" id="13" name="{{ name }}" value="13" {{ attribute(persistentFormData, name) == '13' ? 'checked' : '' }}> <label for="13">13</label>
+            <input type="radio" id="R" name="{{ name }}" value="R" {{ attribute(persistentFormData, name) == 'R' ? 'checked' : '' }}> <label for="R">R</label>
+        </fieldset>
+        {% else %}
+        Error
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% block formExtra %}
+    {% endblock %}
+    <div class="action-row">
+        {% if modifying %}
+        <input class="object-form-add pop" type="submit" formaction="{{ editPath }}" value="Potvrdi izmene">
+        <a class="button pop secondary" href="{{ initialPath }}">Dodaj novi</a>
+        {% else %}
+        <input class="object-form-add pop" type="submit" formaction="{{ addPath }}" value="Dodaj novi">
+        {% endif %}
+        {% block actionExtra %}
+        {% endblock %}
+    </div>
+</form>

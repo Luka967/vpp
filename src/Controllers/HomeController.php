@@ -2,30 +2,18 @@
 
 namespace Skop\Controllers;
 
-use DateTime;
 use Skop\Core\Controller;
+use Skop\Models\MovieModel;
 
 class HomeController extends Controller
 {
     public function showLanding()
     {
+        $movies = MovieModel::all();
+        $heroMovie = $movies[random_int(0, count($movies) - 1)];
         $this->render('index.twig', [
-            'heroMovie' => [
-                'id' => 1,
-                'title' => 'Brzina metka',
-                'rating' => 'R',
-                'release_date' => new DateTime('2024-07-12'),
-                'genres' => ['Akcija', 'Avantura']
-            ],
-            'movies' => [
-                [
-                    'id' => 2,
-                    'title' => 'Suzume',
-                    'rating' => 'A',
-                    'release_date' => new DateTime('2024-07-10'),
-                    'genres' => ['Anime']
-                ]
-            ]
+            'heroMovie' => $heroMovie,
+            'movies' => $movies
         ]);
     }
 }

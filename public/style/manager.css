@@ -1,0 +1,41 @@
+table.object-list {
+    width: 100%;
+}
+
+table.object-list th {
+    font-size: 20px;
+}
+table.object-list td {
+    font-size: 20px;
+}
+
+.object-list-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.object-list-row > .col {
+    flex: 1;
+}
+
+.object-form > h1 {
+    margin-top: 0px;
+}
+.object-form > .row {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+.object-form > .row > :first-child {
+    flex: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.object-form > .row > :last-child {
+    flex: 5;
+}

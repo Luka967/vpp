@@ -2,6 +2,7 @@
 
 namespace Skop\Controllers;
 use Skop\Core\Controller;
+use Skop\Core\ErrorPageException;
 use Skop\Models\DiscountClubModel;
 use Skop\Models\Domain\User;
 use Skop\Models\UserModel;
@@ -18,7 +19,7 @@ class UserController extends Controller
             'email' => $this->req->data['email']
         ];
 
-        $fetchedUser = UserModel::getOneByEmail($this->req->data['email']);
+        $fetchedUser = UserModel::withEmail($this->req->data['email']);
         if ($fetchedUser == null)
             $this->render('login.twig', [ 'emailError' => "Korisnik sa ovim e-mailom ne postoji" ]);
 
@@ -39,7 +40,7 @@ class UserController extends Controller
         if ($this->req->data['password'] != $this->req->data['password_repeat'])
             $this->render('register.twig', [ 'passwordError' => "Ponovljena šifra nije ista" ]);
 
-        if (UserModel::getOneByEmail($this->req->data['email']))
+        if (UserModel::withEmail($this->req->data['email']) != null)
             $this->render('register.twig', [ 'emailError' => "Već postoji korisnik sa ovim email-om" ]);
 
         $createdUser = new User();
@@ -47,9 +48,11 @@ class UserController extends Controller
         $createdUser->last_name = $this->req->data['last_name'];
         $createdUser->email = $this->req->data['email'];
         $createdUser->password = password_hash($this->req->data['password'], PASSWORD_BCRYPT);
-        UserModel::createOne($createdUser);
+        UserModel::insertOne($createdUser);
 
-        $createdUser = UserModel::getOneByEmail($this->req->data['email']);
+        $createdUser = UserModel::withEmail($this->req->data['email']);
+        if ($createdUser == null)
+            throw new ErrorPageException(0, 'Creating user failed');
         $this->setLoggedInUser($createdUser);
         $this->redirect('/');
     }

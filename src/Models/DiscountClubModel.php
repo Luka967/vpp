@@ -3,10 +3,12 @@
 namespace Skop\Models;
 
 use Skop\Core\Db;
+use Skop\Core\Model;
 use Skop\Models\Domain\DiscountClub;
 
-class DiscountClubModel
+class DiscountClubModel extends Model
 {
+    protected static string $tableName = '`discount_clubs`';
     const CLASS_PATH = 'Skop\\Models\\Domain\\DiscountClub';
 
     public static function all(): array
@@ -24,13 +26,6 @@ class DiscountClubModel
         if ($q->rowCount() == 0)
             return null;
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
-    }
-
-    public function insert(DiscountClub $partial)
-    {
-        Db::instance()
-            ->prepare("INSERT INTO `discount_clubs` (`name`, `discount`) VALUES (?, ?)")
-            ->execute([$partial->name, $partial->discount]);
     }
 
     public function delete(DiscountClub $item)

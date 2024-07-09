@@ -4,10 +4,12 @@ namespace Skop\Models\Domain;
 
 use Skop\Core\DomainObject;
 
-final class ScreeningFeature
+final class ScreeningFeature extends DomainObject
 {
-    use DomainObject;
-
-    public int $id;
     public string $description;
+
+    public static array $columnTraits = [
+        'id'            => ['type' => 'int'   , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => TINYINT_U_MAX],
+        'description'   => ['type' => 'string', 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+    ];
 }

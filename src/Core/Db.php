@@ -2,9 +2,7 @@
 
 namespace Skop\Core;
 
-use Skop\InternalException;
 use PDO;
-use PDOStatement;
 
 class Db
 {

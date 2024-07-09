@@ -2,12 +2,19 @@
 
 namespace Skop\Core;
 
-use Error;
+use DateMalformedStringException;
+use DateTime;
 
-function validateOne(array $source, string $key, array $restrictions)
+function validateOneValue(array &$source, string $key, array $restrictions)
 {
+    if ($restrictions['type'] == 'ignore')
+    {
+        unset($source[$key]);
+        return;
+    }
     if (!isset($source[$key]) || $source[$key] == null)
-        throw new ErrorPageException(SKOP_ERROR_INPUT_MISSING, "Source missing key '$key' or value was null");
+        if (!isset($restrictions['optional']))
+            throw new ErrorPageException(SKOP_ERROR_INPUT_MISSING, "Source missing key '$key' or value was null");
 
     $value = trim($source[$key]);
 
@@ -23,6 +30,7 @@ function validateOne(array $source, string $key, array $restrictions)
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid email address");
         break;
     case 'int':
+    case 'int|permissions':
         if (!filter_var($value, FILTER_VALIDATE_INT))
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid int");
         $value = intval($value);
@@ -31,6 +39,16 @@ function validateOne(array $source, string $key, array $restrictions)
         if (!filter_var($value, FILTER_VALIDATE_FLOAT))
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid float");
         $value = floatval($value);
+    case 'date':
+        try
+        {
+            $parsedDateTime = new DateTime($value);
+            $value = $parsedDateTime->format('Y-m-d');
+        }
+        catch (DateMalformedStringException)
+        {
+            throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid date");
+        }
         break;
     }
 
@@ -38,7 +56,7 @@ function validateOne(array $source, string $key, array $restrictions)
     $valueSize = match ($restrictions['type'])
     {
         'string', 'string|email' => strlen($value),
-        'int', 'float' => $value,
+        'int', 'int|permissions', 'float' => $value,
         default => -INF
     };
 
@@ -55,30 +73,102 @@ function validateOne(array $source, string $key, array $restrictions)
         break;
     }
 
-    return $value;
+    $source[$key] = $value;
+}
+
+function validateOneFile(array &$source, string $key, array $restrictions)
+{
+    $fileMetadata = $source[$key];
+    if ($fileMetadata['error'] == UPLOAD_ERR_NO_FILE)
+    {
+        if (!isset($restrictions['optional']))
+            throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file was not selected");
+        else
+        {
+            unset($source[$key]);
+            return;
+        }
+    }
+    else if ($fileMetadata['error'] != UPLOAD_ERR_OK)
+    {
+        $error = $fileMetadata['error'];
+        throw new ErrorPageException(0, "'$key' file could not get uploaded correctly ($error)");
+    }
+    if ($fileMetadata['size'] == 0)
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file is empty");
+    $filenameMatches = null;
+    if (!preg_match("/^([a-zA-Z0-9_]{1,31})\.([a-zA-Z0-9_]{1,15})$/", $fileMetadata['name'], $filenameMatches))
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file has bad name");
+    echo '<br><br>';
+    if (isset($restrictions['mimeTypes']) && !in_array($fileMetadata['type'], $restrictions['mimeTypes'], true))
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file is of bad type");
+    if (isset($restrictions['fileExtensions']) && !in_array($filenameMatches[2], $restrictions['fileExtensions'], true))
+        throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file has bad extension");
 }
 
 final class Request
 {
     public readonly string $method;
     public readonly string $path;
-    public readonly mixed $data;
+    public mixed $query = [];
+    public mixed $data;
+    public mixed $files;
 
     public function __construct()
     {
-        $path = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
-        if ($path[strlen($path) - 1] === '/')
+        $pathSplit = explode('?', $_SERVER['REQUEST_URI'], 2);
+        $path = $pathSplit[0];
+        if ($path[strlen($path) - 1] == '/')
             $path = substr($path, 0, -1);
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->path = $path;
         $this->data = $_POST;
+        $this->files = $_FILES;
+        if (count($pathSplit) > 1)
+            parse_str($pathSplit[1], $this->query);
     }
 
+    public function hasQueryKey(string $key): bool
+    {
+        return isset($this->query[$key]);
+    }
+    public function hasDataKey(string $key): bool
+    {
+        return isset($this->data[$key]);
+    }
+    public function hasFileUploaded(string $key): bool
+    {
+        return isset($this->files[$key]);
+    }
+
+    public function validateQueryInput(array $route)
+    {
+        if (!isset($route['dataQuery']))
+            return;
+        foreach ($route['dataQuery'] as $key => $restrictions)
+            validateOneValue($this->query, $key, $restrictions);
+        foreach ($this->query as $key => $_)
+            if (!isset($route['dataQuery'][$key]))
+                throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' query should not exist");
+    }
     public function validatePostInput(array $route)
     {
         if (!isset($route['dataPost']))
             return;
         foreach ($route['dataPost'] as $key => $restrictions)
-            validateOne($this->data, $key, $restrictions);
+            validateOneValue($this->data, $key, $restrictions);
+        foreach ($this->data as $key => $_)
+            if (!isset($route['dataPost'][$key]))
+                throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' should not exist");
+    }
+    public function validatePostFiles(array $route)
+    {
+        if (!isset($route['filesPost']))
+            return;
+        foreach ($route['filesPost'] as $key => $restrictions)
+            validateOneFile($this->files, $key, $restrictions);
+        foreach ($this->files as $key => $_)
+            if (!isset($route['filesPost'][$key]))
+                throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file should not exist");
     }
 }

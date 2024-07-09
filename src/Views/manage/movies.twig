@@ -1,0 +1,38 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Menadžer{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/manager.css">
+{% endblock %}
+{% block content %}
+    <div class="object-list-row">
+        <div class="col">
+            {% embed '_parts/domainObjectTable.twig' with {
+                columns: [['title', 'Naslov']],
+                rows: movies
+            } %} {% endembed %}
+            </table>
+        </div>
+        <div class="col object-form">
+            {% embed '_parts/domainObjectInput.twig' with {
+                columns: movieObjectColumns,
+                modifying: (persistentFormData is not empty),
+                initialPath: '/manage/movies',
+                addPath: '/manage/movies/add',
+                editPath: '/manage/movies/edit',
+                objectName: 'film'
+            } %}
+                {% block formExtra %}
+                    <div class="row">
+                        <label for="trailer_file">Hero trejler</label>
+                        <input type="file" id="trailer_file" name="trailer_file" accept="video/mp4">
+                    </div>
+                    <div class="row">
+                        <label for="poster_file">Poster</label>
+                        <input type="file" id="poster_file" name="poster_file" accept="image/jpeg">
+                    </div>
+                {% endblock %}
+            {% endembed %}
+        </div>
+    </div>
+{% endblock %}

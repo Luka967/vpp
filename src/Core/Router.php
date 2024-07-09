@@ -23,9 +23,7 @@ final class Router
         $this->routes = include $filename;
 
         $this->twigLoader = new FilesystemLoader(SKOP_APPLICATION_PATH.'Views');
-        $this->twigInstance = new Environment($this->twigLoader, [
-            'debug' => true
-        ]);
+        $this->twigInstance = new Environment($this->twigLoader, []);
     }
 
     public function dispatch()
@@ -46,8 +44,8 @@ final class Router
                 throw new ErrorPageException(SKOP_ERROR_NO_ROUTE);
             $route = $this->routes[$routeName];
 
-            $controller = $route['controller'];
-            $controllerClass = "\\Skop\\Controllers\\$controller";
+            $controllerName = $route['controller'];
+            $controllerClass = "\\Skop\\Controllers\\$controllerName";
             $action = $route['action'];
 
             // var_dump($routeName, $route, $controllerClass);
@@ -61,7 +59,9 @@ final class Router
             if (!method_exists($controller, $action))
                 throw new ErrorPageException(SKOP_ERROR_NO_CALLABLE);
 
+            $req->validateQueryInput($route);
             $req->validatePostInput($route);
+            $req->validatePostFiles($route);
 
             $controller->getLoggedInUser();
 
@@ -69,6 +69,12 @@ final class Router
                 throw new ErrorPageException(SKOP_ERROR_AUTH_LOGOUT);
             if (isset($route['forceLoggedIn']) && $controller->loggedInUser == null)
                 throw new ErrorPageException(SKOP_ERROR_AUTH_LOGIN);
+            if (isset($route['forceUserPermissions']))
+            {
+                $permissions = $controller->loggedInUser?->permissions ?? -1;
+                if ($permissions <= $route['forceUserPermissions'])
+                    throw new ErrorPageException(SKOP_ERROR_AUTH_NOPERMS);
+            }
 
             $controller->$action();
         }
