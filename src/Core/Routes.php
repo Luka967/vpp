@@ -75,13 +75,13 @@ return [
     ],
 
     'GET /manage/movies' => [
-        'controller' => 'ManagerController',
+        'controller' => 'ManagerMoviesController',
         'action' => 'showMovies',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER
     ],
     'GET /manage/movies/edit' => [
-        'controller' => 'ManagerController',
+        'controller' => 'ManagerMoviesController',
         'action' => 'showMovies',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
@@ -90,7 +90,7 @@ return [
         ]
     ],
     'POST /manage/movies/add' => [
-        'controller' => 'ManagerController',
+        'controller' => 'ManagerMoviesController',
         'action' => 'doInsertMovie',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
@@ -98,9 +98,10 @@ return [
             'id' => [ 'type' => 'ignore' ],
             ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
             'genres' => [
-                'type' => 'array|string|alphabetical', 'minArray' => 1, 'maxArray' => 3,
-                'min' => Genre::$columnTraits['name']['min'], 'max' => Genre::$columnTraits['name']['max']
+                ...Genre::$columnTraits['name'],
+                'type' => 'array|' . Genre::$columnTraits['name']['type'], 'minArray' => 1, 'maxArray' => 3
             ]
+
         ],
         'filesPost' => [
             'trailer_file' => [
@@ -114,7 +115,7 @@ return [
         ]
     ],
     'POST /manage/movies/edit' => [
-        'controller' => 'ManagerController',
+        'controller' => 'ManagerMoviesController',
         'action' => 'doUpdateMovie',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
@@ -122,8 +123,8 @@ return [
             ...filterDomainObjectColumns(Movie::$columnTraits, true, false),
             ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
             'genres' => [
-                'type' => 'array|string|alphabetical', 'minArray' => 1, 'maxArray' => 3,
-                'min' => Genre::$columnTraits['name']['min'], 'max' => Genre::$columnTraits['name']['max']
+                ...Genre::$columnTraits['name'],
+                'type' => 'array|' . Genre::$columnTraits['name']['type'], 'minArray' => 1, 'maxArray' => 3
             ]
         ],
         'filesPost' => [
@@ -140,7 +141,7 @@ return [
         ]
     ],
     'GET /manage/movies/delete' => [
-        'controller' => 'ManagerController',
+        'controller' => 'ManagerMoviesController',
         'action' => 'doDeleteMovie',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
