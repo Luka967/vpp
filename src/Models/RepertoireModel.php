@@ -21,7 +21,7 @@ class RepertoireModel extends Model
     public static function fromId(int $id): Repertoire|bool
     {
         $q = Db::instance()->prepare("SELECT * FROM `repertoire` WHERE `id` = :id");
-        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
         if (!$q->execute())
             return false;
         if ($q->rowCount() == 0)
@@ -38,7 +38,7 @@ class RepertoireModel extends Model
     public function delete(int $id): bool
     {
         $q = Db::instance()->prepare("DELETE FROM `repertoire` WHERE `id` = :id");
-        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
         return $q->execute();
     }
 }

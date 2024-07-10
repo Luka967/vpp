@@ -21,7 +21,7 @@ class UserModel extends Model
     public static function withId(int $id): ?User
     {
         $q = Db::instance()->prepare("SELECT * FROM `users` WHERE `id` = :id");
-        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
         $q->execute();
         if ($q->rowCount() == 0)
             return null;
@@ -30,7 +30,7 @@ class UserModel extends Model
     public static function withEmail(string $email): ?User
     {
         $q = Db::instance()->prepare("SELECT * FROM `users` WHERE `email` = :val");
-        $q->bindParam(':val', $email, \PDO::PARAM_STR);
+        $q->bindValue(':val', $email, \PDO::PARAM_STR);
         $q->execute();
         if ($q->rowCount() == 0)
             return null;

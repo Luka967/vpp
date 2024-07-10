@@ -9,7 +9,8 @@
         <div class="col">
             {% embed '_parts/domainObjectTable.twig' with {
                 columns: [['title', 'Naslov']],
-                rows: movies
+                rows: movies,
+                initialPath: '/manage/movies'
             } %} {% endembed %}
             </table>
         </div>
@@ -18,7 +19,6 @@
                 columns: movieObjectColumns,
                 modifying: (persistentFormData is not empty),
                 initialPath: '/manage/movies',
-                addPath: '/manage/movies/add',
                 editPath: '/manage/movies/edit',
                 objectName: 'film'
             } %}

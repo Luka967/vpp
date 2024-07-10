@@ -47,10 +47,10 @@
     {% endblock %}
     <div class="action-row">
         {% if modifying %}
-        <input class="object-form-add pop" type="submit" formaction="{{ editPath }}" value="Potvrdi izmene">
+        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/edit" value="Potvrdi izmene">
         <a class="button pop secondary" href="{{ initialPath }}">Dodaj novi</a>
         {% else %}
-        <input class="object-form-add pop" type="submit" formaction="{{ addPath }}" value="Dodaj novi">
+        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/add" value="Dodaj novi">
         {% endif %}
         {% block actionExtra %}
         {% endblock %}

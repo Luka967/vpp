@@ -35,6 +35,11 @@ function validateOneValue(array &$source, string $key, array $restrictions)
         unset($source[$key]);
         return;
     }
+    if ($restrictions['partial'] === null && empty($source[$key]))
+    {
+        $source[$key] = null;
+        return;
+    }
     if (!isset($source[$key]) || $source[$key] == null)
         if (!isset($restrictions['optional']))
             throw new ErrorPageException(SKOP_ERROR_INPUT_MISSING, "Source missing key '$key' or value was null");

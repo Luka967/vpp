@@ -96,6 +96,7 @@ class ManagerMoviesController extends Controller
         $existing = MovieModel::withId($this->req->query['id']);
         if ($existing == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_MOVIE);
+        GenreModel::setForMovie($existing, []);
         MovieModel::deleteOne($existing->id);
         $this->redirect('/manage/movies');
     }

@@ -5,18 +5,20 @@ namespace Skop\Core;
 use Exception;
 use Throwable;
 
-define('SKOP_ERROR_UNCAUGHT'            , 000);
-define('SKOP_ERROR_NO_ROUTE'            , 100);
-define('SKOP_ERROR_NO_CONTROLLER'       , 101);
-define('SKOP_ERROR_NO_CALLABLE'         , 102);
-define('SKOP_ERROR_AUTH_LOGIN'          , 200);
-define('SKOP_ERROR_AUTH_LOGOUT'         , 201);
-define('SKOP_ERROR_AUTH_NOPERMS'        , 202);
-define('SKOP_ERROR_INPUT_MISSING'       , 300);
-define('SKOP_ERROR_INPUT_INVALID'       , 301);
-define('SKOP_ERROR_UNKNOWN_USER'        , 400);
-define('SKOP_ERROR_UNKNOWN_MOVIE'       , 401);
-define('SKOP_ERROR_UNKNOWN_GENRE'       , 402);
+define('SKOP_ERROR_UNCAUGHT'                    , 000);
+define('SKOP_ERROR_NO_ROUTE'                    , 100);
+define('SKOP_ERROR_NO_CONTROLLER'               , 101);
+define('SKOP_ERROR_NO_CALLABLE'                 , 102);
+define('SKOP_ERROR_AUTH_LOGIN'                  , 200);
+define('SKOP_ERROR_AUTH_LOGOUT'                 , 201);
+define('SKOP_ERROR_AUTH_NOPERMS'                , 202);
+define('SKOP_ERROR_INPUT_MISSING'               , 300);
+define('SKOP_ERROR_INPUT_INVALID'               , 301);
+define('SKOP_ERROR_UNKNOWN_USER'                , 400);
+define('SKOP_ERROR_UNKNOWN_MOVIE'               , 401);
+define('SKOP_ERROR_UNKNOWN_GENRE'               , 402);
+define('SKOP_ERROR_UNKNOWN_SCREENINGFEATURE'    , 403);
+define('SKOP_ERROR_UNKNOWN_SEATTYPE'            , 404);
 
 define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNCAUGHT => [500, 'Internal server error'],
@@ -30,13 +32,15 @@ define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_INPUT_INVALID => [400, 'Request has one or more invalid inputs'],
     SKOP_ERROR_UNKNOWN_USER => [404, 'This user does not exist'],
     SKOP_ERROR_UNKNOWN_MOVIE => [404, 'This movie does not exist'],
-    SKOP_ERROR_UNKNOWN_GENRE => [404, 'This movie does not exist'],
+    SKOP_ERROR_UNKNOWN_GENRE => [404, 'This genre does not exist'],
+    SKOP_ERROR_UNKNOWN_SCREENINGFEATURE => [404, 'This screening feature does not exist'],
+    SKOP_ERROR_UNKNOWN_SEATTYPE => [404, 'This theater seat type does not exist']
 ]);
 
 define('SKOP_ERROR_PAGES_LANG', [
     SKOP_ERROR_UNCAUGHT => [
         'title' => 'Serverska greška',
-        'description' => 'Interna greška se desila prilikom obrade zahteva. Molimo pokušajte ponovo kasnije. Ukoliko se problem nastavi, kontaktirajte nas.'
+        'description' => 'Greška se desila prilikom obrade zahteva. Molimo pokušajte ponovo kasnije. Ukoliko se problem nastavi, kontaktirajte nas.'
     ],
     SKOP_ERROR_NO_ROUTE => [
         'title' => 'Stranica ne postoji',
@@ -85,6 +89,14 @@ define('SKOP_ERROR_PAGES_LANG', [
     SKOP_ERROR_UNKNOWN_GENRE => [
         'title' => 'Žanr ne postoji',
         'description' => 'Ovaj žanr više ne postoji.',
+    ],
+    SKOP_ERROR_UNKNOWN_SCREENINGFEATURE => [
+        'title' => 'Tip projekcije ne postoji',
+        'description' => 'Ovaj tip projekcije više ne postoji.',
+    ],
+    SKOP_ERROR_UNKNOWN_SEATTYPE => [
+        'title' => 'Tip sedišta ne postoji',
+        'description' => 'Ovaj tip sedišta više ne postoji.',
     ]
 ]);
 

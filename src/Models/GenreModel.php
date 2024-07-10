@@ -22,7 +22,7 @@ class GenreModel extends Model
     public static function withId(int $id): ?Genre
     {
         $q = Db::instance()->prepare("SELECT * FROM `genres` WHERE `id` = :id");
-        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
         $q->execute();
         if ($q->rowCount() == 0)
             return null;
@@ -31,7 +31,7 @@ class GenreModel extends Model
     public static function withName(string $name): ?Genre
     {
         $q = Db::instance()->prepare("SELECT * FROM `genres` WHERE `name` = :name");
-        $q->bindParam(':name', $name, \PDO::PARAM_STR);
+        $q->bindValue(':name', $name, \PDO::PARAM_STR);
         $q->execute();
         if ($q->rowCount() == 0)
             return null;
@@ -44,7 +44,7 @@ class GenreModel extends Model
             "SELECT `movie_genres`.`genre_id` AS `id`, `genres`.`name` FROM `movie_genres`
                 INNER JOIN `genres` ON `genres`.`id` = `movie_genres`.`genre_id`
             WHERE `movie_genres`.`movie_id` = :id");
-        $q->bindParam(':id', $movie->id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $movie->id, \PDO::PARAM_INT);
         $q->execute();
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
     }

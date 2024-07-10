@@ -8,19 +8,18 @@
     <div class="object-list-row">
         <div class="col">
             {% embed '_parts/domainObjectTable.twig' with {
-                columns: [['name', 'Žanr']],
-                rows: genres,
+                columns: [['description', 'Opis']],
+                rows: screeningFeatures,
                 notEditable: true,
-                initialPath: '/manage/genres'
+                initialPath: '/manage/repertoire/features'
             } %} {% endembed %}
         </div>
         <div class="col object-form">
             {% embed '_parts/domainObjectInput.twig' with {
-                columns: genreObjectColumns,
+                columns: screeningFeatureColumns,
                 modifying: (persistentFormData is not empty),
-                initialPath: '/manage/genres',
-                editPath: '/manage/genres/edit',
-                objectName: 'žanr'
+                initialPath: '/manage/repertoire/features',
+                objectName: 'tip projekcije'
             } %} {% endembed %}
         </div>
     </div>

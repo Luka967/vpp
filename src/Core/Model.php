@@ -11,7 +11,6 @@ abstract class Model
     {
         $tableName = static::$tableName;
         $bindings = $partial->generateInsertBindings();
-        print_r($bindings);
         Db::instance()
             ->prepare("INSERT INTO $tableName $bindings->query")
             ->execute($bindings->values);

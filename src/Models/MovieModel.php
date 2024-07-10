@@ -30,7 +30,7 @@ class MovieModel extends Model
     public static function withId(int $id): ?Movie
     {
         $q = Db::instance()->prepare("SELECT * FROM `movies` WHERE `id` = :id");
-        $q->bindParam(':id', $id, \PDO::PARAM_INT);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
         $q->execute();
         if ($q->rowCount() == 0)
             return null;

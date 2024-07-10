@@ -2,6 +2,8 @@
 
 use Skop\Models\Domain\Genre;
 use Skop\Models\Domain\Movie;
+use Skop\Models\Domain\ScreeningFeature;
+use Skop\Models\Domain\TheaterSeatType;
 use Skop\Models\Domain\User;
 
 function filterDomainObjectColumns(array $columns, bool $partial, bool $editable): array
@@ -53,7 +55,7 @@ return [
         'forceLoggedOut' => true,
         'dataPost' => [
             ...filterDomainObjectColumns(User::$columnTraits, false, true),
-            'password_repeat' => [ 'type' => 'string', 'min' => 8, 'max' => 63]
+            'password_repeat' => User::$columnTraits['password']
         ]
     ],
     'GET /me' => [
@@ -101,7 +103,6 @@ return [
                 ...Genre::$columnTraits['name'],
                 'type' => 'array|' . Genre::$columnTraits['name']['type'], 'minArray' => 1, 'maxArray' => 3
             ]
-
         ],
         'filesPost' => [
             'trailer_file' => [
@@ -175,4 +176,75 @@ return [
             'id' => Movie::$columnTraits['id']
         ]
     ],
+
+    'GET /manage/repertoire/features' => [
+        'controller' => 'ManagerController',
+        'action' => 'showScreeningFeatures',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+    ],
+    'POST /manage/repertoire/features/add' => [
+        'controller' => 'ManagerController',
+        'action' => 'doInsertScreeningFeature',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            'id' => [ 'type' => 'ignore' ],
+            ...filterDomainObjectColumns(ScreeningFeature::$columnTraits, false, true)
+        ],
+    ],
+    'GET /manage/repertoire/features/delete' => [
+        'controller' => 'ManagerController',
+        'action' => 'doDeleteScreeningFeature',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => ScreeningFeature::$columnTraits['id']
+        ]
+    ],
+
+    'GET /manage/theaters/seats' => [
+        'controller' => 'ManagerController',
+        'action' => 'showTheaterSeatTypes',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+    ],
+    'POST /manage/theaters/seats/add' => [
+        'controller' => 'ManagerController',
+        'action' => 'doInsertTheaterSeatType',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            'id' => [ 'type' => 'ignore' ],
+            ...filterDomainObjectColumns(TheaterSeatType::$columnTraits, false, true)
+        ],
+    ],
+    'GET /manage/theaters/seats/edit' => [
+        'controller' => 'ManagerController',
+        'action' => 'showTheaterSeatTypes',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => TheaterSeatType::$columnTraits['id']
+        ]
+    ],
+    'POST /manage/theaters/seats/edit' => [
+        'controller' => 'ManagerMoviesController',
+        'action' => 'doUpdateTheaterSeatType',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            ...filterDomainObjectColumns(TheaterSeatType::$columnTraits, true, false),
+            ...filterDomainObjectColumns(TheaterSeatType::$columnTraits, false, true)
+        ]
+    ],
+    'GET /manage/theaters/seats/delete' => [
+        'controller' => 'ManagerController',
+        'action' => 'doDeleteTheaterSeatType',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => TheaterSeatType::$columnTraits['id']
+        ]
+    ]
 ];

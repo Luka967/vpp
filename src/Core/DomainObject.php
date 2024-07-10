@@ -22,7 +22,7 @@ abstract class DomainObject
         $valueList = [];
         foreach (static::$columnTraits as $key => $traits)
         {
-            if (static::$columnTraits[$key]['partial'])
+            if (static::$columnTraits[$key]['partial'] === true)
                 continue;
             $columnList[] = "`$key`";
             $bindList[] = '?';

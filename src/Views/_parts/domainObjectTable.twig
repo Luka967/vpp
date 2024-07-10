@@ -17,10 +17,10 @@
             {% endfor %}
             <td>
                 {% if not notEditable %}
-                <a class="button pop" href="/manage/movies/edit?id={{ row.id }}">Izmeni</a>
+                <a class="button pop" href="{{ initialPath }}/edit?id={{ row.id }}">Izmeni</a>
                 {% else %}
                 {% endif %}
-                <a class="button pop" href="/manage/movies/delete?id={{ row.id }}">Obriši</a>
+                <a class="button pop" href="{{ initialPath }}/delete?id={{ row.id }}">Obriši</a>
             </td>
         </tr>
         {% else %}
