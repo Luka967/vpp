@@ -1,0 +1,154 @@
+.seating-wrapper table {
+    border-spacing: 0px;
+}
+.seating-wrapper .seating-overflow {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.seating-wrapper .seating-overflow .projector {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+.seating-wrapper  .projector > span {
+    background-color: var(--translucent);
+    border-radius: 10px;
+    padding: 10px;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    border: var(--border);
+}
+.seating-wrapper  .projector::before {
+    position: absolute;
+    bottom: 18px;
+    left: 0px;
+    content: '';
+    width: 100%;
+    border-bottom: 7px solid white;
+}
+
+.seating-wrapper .seat {
+    position: relative;
+    cursor: pointer;
+    transform-origin: center;
+    transition: transform var(--transition);
+}
+.seating-wrapper .seat.empty {
+    cursor: default;
+    pointer-events: none;
+}
+.seating-wrapper .seat:hover {
+    transform: scale(105%);
+}
+.seating-wrapper .seat:active {
+    transform: scale(90%);
+}
+.seating-wrapper .seat > * {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+.seating-wrapper .seat.Standard i, .seating-legend > .item.Standard > i {
+    color: aquamarine;
+}
+.seating-wrapper .seat.VIP i, .seating-legend > .item.VIP > i {
+    color: yellow;
+}
+.seating-wrapper .seat.Ljubavno i, .seating-legend > .item.Ljubavno > i {
+    color: pink;
+}
+.seating-wrapper .seat > .number {
+    font-family: var(--font-mono);
+    color: var(--bg);
+}
+.seating-wrapper .seat.picked i {
+    color: var(--information);
+}
+.seating-wrapper .seat.picked > .number {
+    color: var(--text);
+}
+.seating-wrapper .seating-legend {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+.seating-wrapper .seating-legend > .item {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+}
+.seating-wrapper .seat {
+    width: 24px;
+    height: 24px;
+}
+.seating-wrapper .seat i {
+    font-size: 20px;
+}
+.seating-wrapper .seat .number {
+    font-family: var(--font-mono);
+    color: var(--bg);
+    font-size: 12px;
+    padding-bottom: 7px;
+}
+.seating-wrapper .seat.picked .number {
+    color: var(--text);
+}
+.seating-wrapper .seating-legend i {
+    font-size: 24px;
+}
+
+@media only screen and (max-width: 640px) {
+    .seating-wrapper .seat {
+        width: 18px;
+        height: 18px;
+    }
+    .seating-wrapper .seat i {
+        font-size: 18px;
+    }
+    .seating-wrapper .seat .number {
+        font-size: 12px;
+        padding-bottom: 6px;
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 1024px) {
+    .seating-wrapper .seat {
+        width: 20px;
+        height: 20px;
+    }
+    .seating-wrapper .seat i {
+        font-size: 20px;
+    }
+    .seating-wrapper .seat .number {
+        font-size: 12px;
+        padding-bottom: 8px;
+    }
+}
+
+@media only screen and (min-width: 1366px) {
+    .seating-wrapper .seat {
+        width: 30px;
+        height: 30px;
+    }
+    .seating-wrapper .seat i {
+        font-size: 24px;
+    }
+    .seating-wrapper .seat .number {
+        font-size: 14px;
+        padding-bottom: 9px;
+    }
+}

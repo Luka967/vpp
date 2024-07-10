@@ -246,5 +246,12 @@ return [
         'dataQuery' => [
             'id' => TheaterSeatType::$columnTraits['id']
         ]
-    ]
+    ],
+
+    'GET /manage/theaters' => [
+        'controller' => 'ManagerTheatersController',
+        'action' => 'showTheaters',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+    ],
 ];

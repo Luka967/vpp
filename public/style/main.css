@@ -669,7 +669,6 @@ input[type="submit"]:hover, .button:hover {
 input[type="submit"].secondary, .button.secondary {
     background-color: var(--bg);
     color: var(--text);
-    margin-left: 10px;
 }
 input[type="submit"].secondary:hover, .button.secondary:hover {
     background-color: unset;
@@ -692,96 +691,6 @@ input[type="submit"][disabled]:hover {
 }
 .reservation-form > .left {
     overflow-x: hidden;
-}
-.seating-overflow {
-    width: 100%;
-    overflow-x: auto;
-}
-.reservation-form > .left .projector {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-.reservation-form .projector > span {
-    background-color: var(--translucent);
-    border-radius: 10px;
-    padding: 10px;
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-    border: var(--border);
-}
-.reservation-form .projector::before {
-    position: absolute;
-    bottom: 18px;
-    left: 0px;
-    content: '';
-    width: 100%;
-    border-bottom: 7px solid white;
-}
-
-.seat {
-    position: relative;
-    cursor: pointer;
-    transform-origin: center;
-    transition: transform var(--transition);
-}
-.seat.empty {
-    cursor: default;
-    pointer-events: none;
-}
-.seat:hover {
-    transform: scale(105%);
-}
-.seat:active {
-    transform: scale(90%);
-}
-.seat > * {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-}
-.seat.s i, .seating-legend > .item.s > i {
-    color: aquamarine;
-}
-.seat.v i, .seating-legend > .item.v > i {
-    color: yellow;
-}
-.seat.l i, .seating-legend > .item.l > i {
-    color: pink;
-}
-.seat > .number {
-    font-family: var(--font-mono);
-    color: var(--bg);
-}
-.seat.picked i {
-    color: var(--information);
-}
-.seat.picked > .number {
-    color: var(--text);
-}
-.seating-legend {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-top: 20px;
-}
-.seating-legend > .item {
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    column-gap: 5px;
-}
-.seating-legend > .item > i {
-    font-size: 24px;
 }
 
 #reservation-movie {
@@ -834,6 +743,12 @@ input[type="submit"][disabled]:hover {
     content: ' din';
     font-size: 18px;
     font-family: var(--font);
+}
+form .submit-row {
+    margin-top: 20px;
+}
+form .submit-row :not(:last-child) {
+    margin-right: 10px;
 }
 
 h1 a {
@@ -976,17 +891,6 @@ h1 > .small {
         margin-top: 20px;
         margin-bottom: 30px;
     }
-    .seat {
-        width: 30px;
-        height: 30px;
-    }
-    .seat i {
-        font-size: 25px;
-    }
-    .seat .number {
-        font-size: 12px;
-        padding-bottom: 5px;
-    }
 }
 @media only screen and (min-width: 640px) and (max-width: 1024px) {
     .content {
@@ -1111,17 +1015,7 @@ h1 > .small {
         margin-top: 20px;
         margin-bottom: 30px;
     }
-    .seat {
-        width: 35px;
-        height: 35px;
-    }
-    .seat i {
-        font-size: 30px;
-    }
-    .seat .number {
-        font-size: 14px;
-        padding-bottom: 8px;
-    }
+
 }
 @media only screen and (min-width: 1024px) and (max-width: 1366px) {
     .content {
@@ -1202,17 +1096,6 @@ h1 > .small {
         align-items: center;
         justify-content: center;
     }
-    .seat {
-        width: 40px;
-        height: 40px;
-    }
-    .seat i {
-        font-size: 32px;
-    }
-    .seat .number {
-        font-size: 14px;
-        padding-bottom: 8px;
-    }
 }
 @media only screen and (min-width: 1366px) {
     .content {
@@ -1291,16 +1174,5 @@ h1 > .small {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-    .seat {
-        width: 45px;
-        height: 45px;
-    }
-    .seat i {
-        font-size: 35px;
-    }
-    .seat .number {
-        font-size: 16px;
-        padding-bottom: 8px;
     }
 }

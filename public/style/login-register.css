@@ -1,9 +1,6 @@
 h1 {
     margin-bottom: 25px;
 }
-.submit-row {
-    margin-top: 20px;
-}
 form {
     display: flex;
     flex-direction: column;

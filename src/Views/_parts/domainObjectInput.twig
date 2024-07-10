@@ -1,9 +1,9 @@
 <h1>
-    {% if modifying %} Izmeni postojeći {% else %} Novi {% endif %} {{ objectName }}
+    {% if modifying %} Izmeni {% else %} Dodaj {% endif %} {{ objectName }}
 </h1>
 <form class="object-form" method="POST" enctype="multipart/form-data">
     {% for name, traits in columns %}
-    <div class="row">
+    <div class="row {{ ((modifying and not traits.editable) or (not modifying and traits.partial)) ? 'disabled' : '' }}">
         {% if traits.type != 'string|movierating' and traits.type != 'int|permissions' %}
         <label for="{{ name }}">{{ name }}</label>
         {% else %}
@@ -45,12 +45,12 @@
     {% endfor %}
     {% block formExtra %}
     {% endblock %}
-    <div class="action-row">
+    <div class="submit-row">
         {% if modifying %}
-        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/edit" value="Potvrdi izmene">
-        <a class="button pop secondary" href="{{ initialPath }}">Dodaj novi</a>
+        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/edit" value="Potvrdi">
+        <a class="button pop secondary" href="{{ initialPath }}">Dodaj novu stavku</a>
         {% else %}
-        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/add" value="Dodaj novi">
+        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/add" value="Potvrdi">
         {% endif %}
         {% block actionExtra %}
         {% endblock %}

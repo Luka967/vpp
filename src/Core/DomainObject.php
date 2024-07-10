@@ -29,8 +29,8 @@ abstract class DomainObject
             $valueList[] = $this->$key;
         }
         return new DomainObjectBinding(
-            query: '(' . join(', ', $columnList) . ') VALUES (' . join(', ', $bindList) . ')',
-            values: $valueList
+            '(' . join(', ', $columnList) . ') VALUES (' . join(', ', $bindList) . ')',
+            $valueList
         );
     }
 
@@ -48,8 +48,8 @@ abstract class DomainObject
             $valueList[] = $this->$key;
         }
         return new DomainObjectBinding(
-            query: join(', ', $bindList),
-            values: $valueList
+            join(', ', $bindList),
+            $valueList
         );
     }
 }

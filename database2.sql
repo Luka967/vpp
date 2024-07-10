@@ -60,12 +60,16 @@ CREATE TABLE `movie_genres` (
 
 CREATE TABLE `theaters` (
     `id` TINYINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(63) NOT NULL
+    `name` VARCHAR(63) NOT NULL,
+
+    UNIQUE (`name`)
 );
 
 CREATE TABLE `screening_features` (
     `id` TINYINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `description` VARCHAR(31) NOT NULL
+    `description` VARCHAR(31) NOT NULL,
+
+    UNIQUE (`description`)
 );
 
 CREATE TABLE `repertoire` (

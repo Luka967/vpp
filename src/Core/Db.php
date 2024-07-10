@@ -16,11 +16,4 @@ class Db
         Db::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         return Db::$instance;
     }
-
-    // public static function try_execute(PDOStatement $q, array $code_handlers): bool {
-    //     if ($q->execute())
-    //         return true;
-    //     $error_result = $q->errorInfo();
-    //     throw new InternalException();
-    // }
 }

@@ -30,6 +30,9 @@ table.object-list td {
     justify-content: space-between;
     column-gap: 10px;
 }
+.object-form > .row-gap {
+    margin-bottom: 25px;
+}
 .object-form > .row > :first-child {
     flex: 2;
     display: inline-flex;
@@ -38,6 +41,12 @@ table.object-list td {
 }
 .object-form > .row > :last-child {
     flex: 5;
+}
+.object-form > .row.disabled {
+    pointer-events: none;
+}
+.object-form > .row.disabled {
+    opacity: 50%;
 }
 
 .genres-fieldset {

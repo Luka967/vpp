@@ -1,0 +1,47 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Menadžer{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/manager.css">
+    <link rel="stylesheet" href="{{ publicRoot }}style/seating.css">
+    <script src="{{ publicRoot }}js/seating.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="object-list-row">
+        <div class="col">
+            {% embed '_parts/domainObjectTable.twig' with {
+                columns: [['name', 'Naziv']],
+                rows: theaters,
+                notEditable: true,
+                initialPath: '/manage/theaters'
+            } %} {% endembed %}
+        </div>
+        <div class="col object-form">
+            {% embed '_parts/domainObjectInput.twig' with {
+                columns: theaterColumns,
+                modifying: (persistentFormData is not empty),
+                initialPath: '/manage/theaters',
+                objectName: 'bioskopsku salu'
+            } %}
+                {% block formExtra %}
+                <div class="row row-gap"></div>
+                <div class="row">
+                    <label for="theater-seating-rowcount">Broj redova</label>
+                    <div>
+                        <input type="number" id="theater-seating-rowcount" min="1" max="31" value="10" style="width: 90px">
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="theater-seating-rowcount">Broj kolona</label>
+                    <div>
+                        <input type="number" id="theater-seating-colcount" min="1" max="31" value="15" style="width: 90px">
+                    </div>
+                </div>
+                <div class="row-gap">
+                    {% embed '_parts/theaterSeating.twig' with {id: 'theater-seating'} %}{% endembed %}
+                </div>
+                {% endblock %}
+            {% endembed %}
+        </div>
+    </div>
+{% endblock %}
