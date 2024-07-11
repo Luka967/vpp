@@ -32,10 +32,13 @@ function validateOneValue(array &$source, string $key, array $restrictions)
 {
     if ($restrictions['type'] == 'ignore')
     {
-        unset($source[$key]);
+        if (isset($restrictions['setToNull']))
+            $source[$key] = null;
+        else
+            unset($source[$key]);
         return;
     }
-    if ($restrictions['partial'] === null && empty($source[$key]))
+    if (isset($restrictions['partial']) && $restrictions['partial'] === null && empty($source[$key]))
     {
         $source[$key] = null;
         return;
@@ -57,8 +60,12 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     switch ($restrictions['type'])
     {
     case 'string|alphabetical':
-        if (!preg_match("/^[a-zA-ZабвгдђежзијклљмнњопрстћуфхцчџшАБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШćĆčČšŠđĐ]+$/", $value))
+        if (!preg_match('/^[a-zA-ZабвгдђежзијклљмнњопрстћуфхцчџшАБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШćĆčČšŠđĐ]+$/', $value))
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid alphabetical string");
+        break;
+    case 'string|objectname':
+        if (!preg_match('/^[a-zA-ZабвгдђежзијклљмнњопрстћуфхцчџшАБВГДЂЕЖЗИЈКЛЉМНЊОПРСТЋУФХЦЧЏШćĆčČšŠđĐ0-9_\s]+$/', $value))
+            throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid object name string");
         break;
     case 'string|email':
         if (!filter_var($value, FILTER_VALIDATE_EMAIL))
@@ -90,7 +97,7 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     // Validacija veličine
     $valueSize = match ($restrictions['type'])
     {
-        'string', 'string|email' => strlen($value),
+        'string', 'string|email', 'string|objectname', 'string|alphabetical' => strlen($value),
         'int', 'int|permissions', 'float' => $value,
         default => -INF
     };
@@ -98,6 +105,8 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     switch ($restrictions['type'])
     {
     case 'string':
+    case 'string|alphabetical':
+    case 'string|objectname':
     case 'string|email':
     case 'int':
     case 'float':
@@ -134,7 +143,6 @@ function validateOneFile(array &$source, string $key, array $restrictions)
     $filenameMatches = null;
     if (!preg_match("/^([a-zA-Z0-9_]{1,31})\.([a-zA-Z0-9_]{1,15})$/", $fileMetadata['name'], $filenameMatches))
         throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file has bad name");
-    echo '<br><br>';
     if (isset($restrictions['mimeTypes']) && !in_array($fileMetadata['type'], $restrictions['mimeTypes'], true))
         throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "'$key' file is of bad type");
     if (isset($restrictions['fileExtensions']) && !in_array($filenameMatches[2], $restrictions['fileExtensions'], true))

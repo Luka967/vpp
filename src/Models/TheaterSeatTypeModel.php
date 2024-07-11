@@ -27,7 +27,7 @@ class TheaterSeatTypeModel extends Model
             return null;
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
     }
-    public static function withDescription(string $name): ?TheaterSeatType
+    public static function withName(string $name): ?TheaterSeatType
     {
         $q = Db::instance()->prepare("SELECT * FROM `theater_seat_types` WHERE `name` = :name");
         $q->bindValue(':name', $name, \PDO::PARAM_STR);

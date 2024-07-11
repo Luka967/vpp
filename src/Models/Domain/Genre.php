@@ -9,7 +9,7 @@ final class Genre extends DomainObject
     public string $name;
 
     public static array $columnTraits = [
-        'id'            => ['type' => 'int'   , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => SMALLINT_U_MAX],
-        'name'          => ['type' => 'string', 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 31],
+        'id'            => ['type' => 'int'                 , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => SMALLINT_U_MAX],
+        'name'          => ['type' => 'string|objectname'   , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 31],
     ];
 }

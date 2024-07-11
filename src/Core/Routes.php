@@ -3,6 +3,7 @@
 use Skop\Models\Domain\Genre;
 use Skop\Models\Domain\Movie;
 use Skop\Models\Domain\ScreeningFeature;
+use Skop\Models\Domain\Theater;
 use Skop\Models\Domain\TheaterSeatType;
 use Skop\Models\Domain\User;
 
@@ -97,7 +98,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore' ],
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
             ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
             'genres' => [
                 ...Genre::$columnTraits['name'],
@@ -163,7 +164,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore' ],
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
             ...filterDomainObjectColumns(Genre::$columnTraits, false, true)
         ],
     ],
@@ -189,7 +190,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore' ],
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
             ...filterDomainObjectColumns(ScreeningFeature::$columnTraits, false, true)
         ],
     ],
@@ -215,7 +216,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore' ],
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
             ...filterDomainObjectColumns(TheaterSeatType::$columnTraits, false, true)
         ],
     ],
@@ -254,4 +255,35 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
     ],
+    'POST /manage/theaters/add' => [
+        'controller' => 'ManagerTheatersController',
+        'action' => 'doInsertTheater',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            ...filterDomainObjectColumns(Theater::$columnTraits, false, true),
+            'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
+        ]
+    ],
+    'GET /manage/theaters/edit' => [
+        'controller' => 'ManagerTheatersController',
+        'action' => 'showEditTheater',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Theater::$columnTraits['id']
+        ]
+    ],
+    'POST /manage/theaters/edit' => [
+        'controller' => 'ManagerTheatersController',
+        'action' => 'doUpdateTheater',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            ...filterDomainObjectColumns(Theater::$columnTraits, true, false),
+            ...filterDomainObjectColumns(Theater::$columnTraits, false, true),
+            'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
+        ]
+    ]
 ];

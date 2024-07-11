@@ -12,7 +12,6 @@
             {% embed '_parts/domainObjectTable.twig' with {
                 columns: [['name', 'Naziv']],
                 rows: theaters,
-                notEditable: true,
                 initialPath: '/manage/theaters'
             } %} {% endembed %}
         </div>
@@ -37,6 +36,7 @@
                         <input type="number" id="theater-seating-colcount" min="1" max="31" value="15" style="width: 90px">
                     </div>
                 </div>
+                <input type="hidden" name="seating" id="theater-seating-output" value="{{ persistentFormData.seating }}">
                 <div class="row-gap">
                     {% embed '_parts/theaterSeating.twig' with {id: 'theater-seating'} %}{% endembed %}
                 </div>

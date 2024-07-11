@@ -9,7 +9,7 @@
         {% else %}
         <div></div>
         {% endif %}
-        {% if traits.type == 'string' or traits.type == 'string|alphabetic' %}
+        {% if traits.type in ['string', 'string|alphabetic', 'string|objectname'] %}
             {% if traits.max <= 255 %}
             <input type="text" id="{{ name }}" name="{{ name }}" minlength="{{ traits.min }}" maxlength="{{ traits.max }}" value="{{ attribute(persistentFormData, name) }}">
             {% else %}

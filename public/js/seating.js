@@ -4,9 +4,13 @@
      * @param {HTMLDivElement} elem
      * @param {HTMLInputElement} [inputRowsElem]
      * @param {HTMLInputElement} [inputColsElem]
+     * @param {HTMLInputElement} outputElem
      * @param {string[]} seatTypes
      */
-    function makeInteractive(elem, inputRowsElem, inputColsElem) {
+    function makeInteractive(elem, inputRowsElem, inputColsElem, outputElem) {
+        if (outputElem == null)
+            return;
+
         const isEditable = inputRowsElem != null && inputColsElem != null;
         /** @type {string} */
         let setTypeTo = null;
@@ -20,19 +24,18 @@
 
         /**
          * @param {Element} divSeat
+         * @param {number} row
          * @param {number} col
-         * @param {string | null} data
          */
-        function toggleSeatEmpty(divSeat, col, data) {
-            const creating = divSeat.classList.contains('empty');
-            divSeat.classList.toggle('empty');
+        function setSeatEmpty(divSeat, row, col) {
+            divSeat.className = 'seat';
+            const seatType = data[row][col];
+            divSeat.classList.add(seatType == null ? 'empty' : seatType);
 
-            if (!creating)
+            if (divSeat.children.length > 0 && seatType == null)
                 while (divSeat.children.length > 0)
                     divSeat.removeChild(divSeat.lastElementChild);
-            else {
-                divSeat.classList.add(data);
-
+            else if (divSeat.children.length === 0 && seatType != null) {
                 const iSeatGlyph = document.createElement('i');
                 iSeatGlyph.classList.add('fa-solid', 'fa-couch');
 
@@ -42,7 +45,6 @@
 
                 const divNumber = document.createElement('div');
                 divNumber.classList.add('number');
-                divNumber.innerText = col.toString();
 
                 divSeat.appendChild(divIcon);
                 divSeat.appendChild(divNumber);
@@ -59,23 +61,30 @@
 
             elem.querySelector('td.seating-table-projector').colSpan = oneRowColCount;
 
-            while (colgroup.children.length > oneRowColCount)
+            while (colgroup.children.length > 1 + oneRowColCount)
                 colgroup.removeChild(colgroup.lastElementChild);
-            while (colgroup.children.length < oneRowColCount)
+            while (colgroup.children.length < 1 + oneRowColCount)
                 colgroup.appendChild(document.createElement('col'));
 
             const rowCount = data.length;
 
             while (tbody.children.length > rowCount)
                 tbody.removeChild(tbody.lastElementChild);
-            while (tbody.children.length < rowCount)
-                tbody.appendChild(document.createElement('tr'));
+            while (tbody.children.length < rowCount) {
+                const tdRowIdx = document.createElement('td');
+                tdRowIdx.classList.add('row-index');
+                tdRowIdx.innerText = 1 + tbody.children.length;
+
+                const tr = document.createElement('tr');
+                tr.appendChild(tdRowIdx);
+                tbody.appendChild(tr);
+            }
 
             for (let row = 0; row < rowCount; row++) {
                 const rowElem = tbody.children.item(row);
-                while (rowElem.children.length > oneRowColCount)
-                    rowElem.removeChild(rowElem.lastElementChild);
-                while (rowElem.children.length < oneRowColCount) {
+                while (rowElem.children.length > 1 + oneRowColCount)
+                    rowElem.removeChild(rowElem.children.item(rowElem.children.length - 2));
+                while (rowElem.children.length < 1 + oneRowColCount) {
                     const divSeat = document.createElement('div');
                     divSeat.classList.add('seat', 'empty');
 
@@ -84,36 +93,41 @@
                     td.setAttribute('data-col', rowElem.children.length);
                     td.appendChild(divSeat);
 
-                    rowElem.appendChild(td);
+                    rowElem.insertBefore(td, rowElem.lastElementChild);
 
-                    if (isEditable) {
-                        td.style.cursor = 'pointer';
-                        td.addEventListener('click', ev => {
-                            const row = parseInt(td.getAttribute('data-row'));
-                            const col = parseInt(td.getAttribute('data-col'));
-                            if (isEditable) {
-                                data[row][col] = setTypeTo;
-                                updateDom();
-                            } else {
-                                divSeat.classList.toggle('picked');
-                                console.log('pick row', row, 'col', col);
-                            }
-                        });
-                    }
+                    if (!isEditable)
+                        continue;
+                    td.style.cursor = 'pointer';
+                    td.addEventListener('click', () => {
+                        const row = parseInt(td.getAttribute('data-row'));
+                        const col = parseInt(td.getAttribute('data-col'));
+                        if (isEditable) {
+                            data[row][col] = data[row][col] !== setTypeTo ? setTypeTo : null;
+                            updateDom();
+                        } else {
+                            divSeat.classList.toggle('picked');
+                            console.log('pick row', row, 'col', col);
+                        }
+                    });
                 }
 
                 for (let col = 0; col < oneRowColCount; col++) {
                     const td = rowElem.children.item(col);
-                    const divSeat = td.children.item(0);
-                    const seatType = data[row][col];
-                    if ((seatType == null) !== divSeat.classList.contains('empty'))
-                        toggleSeatEmpty(divSeat, 1 + col, seatType);
-                    else if (!divSeat.classList.contains(data[row][col])) {
-                        divSeat.className = '';
-                        divSeat.classList.add('seat', data[row][col]);
-                    }
+                    setSeatEmpty(td.children.item(0), row, col);
+                    let colIdx = 0;
+                    for (let i = data[row].length - 1; i >= col; i--)
+                        if (data[row][i] != null)
+                            colIdx++;
+                    if (data[row][col] != null)
+                        td.querySelector('.number').innerText = colIdx.toString();
                 }
             }
+
+            const outputSegments = [];
+            for (let row = 0; row < rowCount; row++)
+                for (let col = 0; col < oneRowColCount; col++)
+                    outputSegments.push(data[row][col] ?? '');
+            outputElem.value = `${rowCount};${oneRowColCount};${outputSegments.join(';')}`;
         }
         /**
          * @param {number} rowCount
@@ -131,7 +145,6 @@
                 while (data[row].length < colCount)
                     data[row].push(firstSeatType);
             }
-            updateDom();
         }
 
         if (isEditable) {
@@ -151,7 +164,23 @@
 
             function onChange() {
                 updateDataSize(inputRowsElem.valueAsNumber, inputColsElem.valueAsNumber);
+                updateDom();
             }
+
+            if (outputElem.value.length > 0) {
+                const split = outputElem.value.split(';');
+                const rows = inputRowsElem.valueAsNumber = parseInt(split[0]);
+                const cols = inputColsElem.valueAsNumber = parseInt(split[1]);
+                updateDataSize(rows, cols);
+                for (let i = 0; i < rows * cols; i++) {
+                    const seatType = split[i + 2];
+                    const col = i % cols;
+                    const row = Math.floor((i - col) / cols);
+                    data[row][col] = seatType === '' ? null : seatType;
+                }
+                updateDom();
+            }
+
             inputRowsElem.addEventListener('change', onChange);
             inputColsElem.addEventListener('change', onChange);
             onChange();
@@ -161,7 +190,14 @@
     }
 
     window.addEventListener('load', () => {
-        const divs = loadIds('theater-seating', 'theater-seating-rowcount', 'theater-seating-colcount');
-        makeInteractive(divs['theater-seating'], divs['theater-seating-rowcount'], divs['theater-seating-colcount']);
+        const divs = loadIds(
+            'theater-seating', 'theater-seating-rowcount', 'theater-seating-colcount', 'theater-seating-output'
+        );
+        makeInteractive(
+            divs['theater-seating'],
+            divs['theater-seating-rowcount'],
+            divs['theater-seating-colcount'],
+            divs['theater-seating-output']
+        );
     });
 })();

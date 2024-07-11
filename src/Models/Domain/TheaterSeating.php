@@ -13,11 +13,11 @@ final class TheaterSeating extends DomainObject
     public int $column;
 
     public static array $columnTraits = [
-        'id'            => ['type' => 'int'         , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => BIGINT_U_MAX],
-        'theater_id'    => ['type' => 'int|theater' , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => TINYINT_U_MAX],
-        'seat_type_id'  => ['type' => 'int|seattype', 'editable' => false, 'partial' => false, 'min' => 0, 'max' => TINYINT_U_MAX],
-        'active'        => ['type' => 'bool'        , 'editable' => true , 'partial' => false],
-        'row'           => ['type' => 'int'         , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => 31],
-        'column'        => ['type' => 'int'         , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => 31]
+        'id'            => ['type' => 'int' , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => BIGINT_U_MAX],
+        'theater_id'    => ['type' => 'int' , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => TINYINT_U_MAX],
+        'seat_type_id'  => ['type' => 'int' , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => TINYINT_U_MAX],
+        'active'        => ['type' => 'bool', 'editable' => false, 'partial' => false],
+        'row'           => ['type' => 'int' , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => 31],
+        'column'        => ['type' => 'int' , 'editable' => false, 'partial' => false, 'min' => 0, 'max' => 31]
     ];
 }

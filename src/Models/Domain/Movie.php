@@ -21,16 +21,16 @@ final class Movie extends DomainObject
 
     public static array $columnTraits = [
         'id'                    => ['type' => 'int'               , 'editable' => false, 'partial' => true , 'min' => 0, 'max' => INT_U_MAX],
-        'title'                 => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'title'                 => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
         'rating'                => ['type' => 'string|movierating', 'editable' => true , 'partial' => false],
-        'original_title'        => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'original_title'        => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
         'release_date'          => ['type' => 'date'              , 'editable' => true , 'partial' => false],
         'synopsis'              => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 65535],
         'runtime'               => ['type' => 'int'               , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => SMALLINT_U_MAX],
-        'director'              => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
-        'significant_cast_1'    => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
-        'significant_cast_2'    => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
-        'significant_cast_3'    => ['type' => 'string'            , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'director'              => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'significant_cast_1'    => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'significant_cast_2'    => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
+        'significant_cast_3'    => ['type' => 'string|objectname' , 'editable' => true , 'partial' => false, 'min' => 0, 'max' => 127],
     ];
 
     public function genres(): array

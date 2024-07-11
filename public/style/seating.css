@@ -110,6 +110,11 @@
 .seating-wrapper .seating-legend i {
     font-size: 24px;
 }
+.seating-wrapper .row-index {
+    font-weight: bold;
+    padding-left: 10px;
+    font-family: var(--font-mono);
+}
 
 @media only screen and (max-width: 640px) {
     .seating-wrapper .seat {

@@ -19,6 +19,13 @@ define('SKOP_ERROR_UNKNOWN_MOVIE'               , 401);
 define('SKOP_ERROR_UNKNOWN_GENRE'               , 402);
 define('SKOP_ERROR_UNKNOWN_SCREENINGFEATURE'    , 403);
 define('SKOP_ERROR_UNKNOWN_SEATTYPE'            , 404);
+define('SKOP_ERROR_UNKNOWN_THEATER'             , 405);
+define('SKOP_ERROR_CONFLICTING_USER'            , 500);
+define('SKOP_ERROR_CONFLICTING_MOVIE'           , 501);
+define('SKOP_ERROR_CONFLICTING_GENRE'           , 502);
+define('SKOP_ERROR_CONFLICTING_SCREENINGFEATURE', 503);
+define('SKOP_ERROR_CONFLICTING_SEATTYPE'        , 504);
+define('SKOP_ERROR_CONFLICTING_THEATER'         , 505);
 
 define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNCAUGHT => [500, 'Internal server error'],
@@ -34,7 +41,14 @@ define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNKNOWN_MOVIE => [404, 'This movie does not exist'],
     SKOP_ERROR_UNKNOWN_GENRE => [404, 'This genre does not exist'],
     SKOP_ERROR_UNKNOWN_SCREENINGFEATURE => [404, 'This screening feature does not exist'],
-    SKOP_ERROR_UNKNOWN_SEATTYPE => [404, 'This theater seat type does not exist']
+    SKOP_ERROR_UNKNOWN_SEATTYPE => [404, 'This theater seat type does not exist'],
+    SKOP_ERROR_UNKNOWN_THEATER => [404, 'This theater does not exist'],
+    SKOP_ERROR_CONFLICTING_USER => [400, 'User already exists with this email'],
+    SKOP_ERROR_CONFLICTING_MOVIE => [400, 'Movie already exists with this title'],
+    SKOP_ERROR_CONFLICTING_GENRE => [400, 'Genre already exists with this name'],
+    SKOP_ERROR_CONFLICTING_SCREENINGFEATURE => [400, 'Screening feature already exists with this description'],
+    SKOP_ERROR_CONFLICTING_SEATTYPE => [400, 'Theater seat type already exists with this name'],
+    SKOP_ERROR_CONFLICTING_THEATER => [400, 'Theater already exists with this name'],
 ]);
 
 define('SKOP_ERROR_PAGES_LANG', [
@@ -97,6 +111,34 @@ define('SKOP_ERROR_PAGES_LANG', [
     SKOP_ERROR_UNKNOWN_SEATTYPE => [
         'title' => 'Tip sedišta ne postoji',
         'description' => 'Ovaj tip sedišta više ne postoji.',
+    ],
+    SKOP_ERROR_UNKNOWN_THEATER => [
+        'title' => 'Bioskopska sala ne postoji',
+        'description' => 'Ova bioskopska sala više ne postoji.',
+    ],
+    SKOP_ERROR_CONFLICTING_USER => [
+        'title' => 'Korisnik već postoji',
+        'description' => 'Već postoji korisnik sa ovim e-mailom.',
+    ],
+    SKOP_ERROR_CONFLICTING_MOVIE => [
+        'title' => 'Film već postoji',
+        'description' => 'Već postoji film sa ovim naslovom.',
+    ],
+    SKOP_ERROR_CONFLICTING_GENRE => [
+        'title' => 'Žanr već postoji',
+        'description' => 'Već postoji žanr sa ovim imenom.',
+    ],
+    SKOP_ERROR_CONFLICTING_SCREENINGFEATURE => [
+        'title' => 'Tip projekcije već postoji',
+        'description' => 'Već postoji tip projekcije sa ovim opisom.',
+    ],
+    SKOP_ERROR_CONFLICTING_SEATTYPE => [
+        'title' => 'Tip sedišta već postoji',
+        'description' => 'Već postoji tip sedišta sa ovim imenom.',
+    ],
+    SKOP_ERROR_CONFLICTING_THEATER => [
+        'title' => 'Bioskopska sala već postoji',
+        'description' => 'Već postoji bioskopska sala sa ovim imenom.',
     ]
 ]);
 
