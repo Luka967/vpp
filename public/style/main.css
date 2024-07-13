@@ -627,6 +627,9 @@ header > .right > a > .icon.large {
 .movie-show-information .header > span {
     border-bottom: var(--border);
 }
+#movie-trailer {
+    width: 100%;
+}
 .movie-show-information .header.reservation-cta {
     display: flex;
     justify-content: center;

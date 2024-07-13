@@ -14,6 +14,9 @@
 <div class="movie-show-information">
     <article>
         <div class="content">
+            <video id="movie-trailer" controls>
+                <source src="{{ publicRoot }}img/movie-trailer/{{ movie.id }}.mp4">
+            </video>
             <div class="header"><span>SINOPSIS</span></div>
             <div id="movie-show-synopsis">{{ movie.synopsis }}</div>
             <div class="header reservation-cta"><span>REZERVIŠI KARTU</span></div>

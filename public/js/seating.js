@@ -90,7 +90,7 @@
 
                     const td = document.createElement('td');
                     td.setAttribute('data-row', row);
-                    td.setAttribute('data-col', rowElem.children.length);
+                    td.setAttribute('data-col', rowElem.children.length - 1);
                     td.appendChild(divSeat);
 
                     rowElem.insertBefore(td, rowElem.lastElementChild);
