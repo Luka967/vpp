@@ -5,7 +5,7 @@ define('SKOP_CONFIG', [
     'dbUsername' => 'root',
     'dbPassword' => '',
 
-    'logFile' => 'G:\\XAMPP\\htdocs\\vpp\\logfile.log',
+    'logFile' => __DIR__ . 'logfile.log',
 
     'minsReceptionOnly' => 30,
     'reservationMaxSeats' => 6

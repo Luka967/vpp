@@ -7,11 +7,11 @@ RewriteEngine On
 # L poslednje pravilo
 RewriteRule ^$ vpp/public/index.php [L]
 
-# ne proveravaj sledece pravilo ako pokusavamo ucitavati staticke fajlove
+# ne proveravaj sledeće pravilo ako pokušavamo učitavati statičke fajlove
 # NC case-insensitive
 RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
 
-# ne proveravaj sledece pravilo ako su ovo vec postojeci fajlovi/folderi
+# ne proveravaj sledeće pravilo ako su ovo već postojeći fajlovi/folderi
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
