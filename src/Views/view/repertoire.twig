@@ -1,0 +1,50 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Repertoar{% endblock %}
+{% block content %}
+{% set dayNames = ['PONEDELJAK', 'UTORAK', 'SREDA', 'ČETVRTAK', 'PETAK', 'SUBOTA', 'NEDELJA'] %}
+<div id="timetable-grid" class="timetable-grid">
+{% for dayIdx, day in repertoire.dayEntries %}
+    <div class="day">
+        <div class="section-title timetable-title">
+            <span>
+                <b>{{ dayNames[repertoire.dayTimestamps[dayIdx]|date('w')] }}</b>
+                <span class="day">{{ repertoire.dayTimestamps[dayIdx]|date('M d')|upper }}</span>
+            </span>
+        </div>
+        <table class="timetable">
+            <colgroup>
+                <col class="time">
+                <col class="screen">
+                <col class="movie">
+                <col class="reservation">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="timetable-time">VREME</th>
+                    <th class="timetable-screen">SALA</th>
+                    <th>FILM</th>
+                    <th>KARTE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for theaterIdx, theater in repertoire.dayEntries[dayIdx] %}
+                    {% for entry in repertoire.dayEntries[dayIdx][theaterIdx] %}
+                    <tr>
+                        <td class="timetable-time">{{ entry.screening_start|date('H:i') }}</td>
+                        <td class="timetable-screen">{{ repertoire.theaters[theaterIdx].name }}</td>
+                        <td class="timetable-movie">
+                            <a href="/movie?id={{ entry.movie_id }}">{{ repertoire.movies[entry.movie_id].title|upper }}</a>
+                        </td>
+                        {% embed '_parts/reserveButton.twig' with {
+                            screening_start: entry.screening_start
+                        } %}{% endembed %}
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ class Db
     {
         if (Db::$instance != null)
             return Db::$instance;
-        Db::$instance = new PDO('mysql:host=localhost; dbname=skop', 'root', '');
+        Db::$instance = new PDO(SKOP_CONFIG['dbUrl'], SKOP_CONFIG['dbUsername'], SKOP_CONFIG['dbPassword']);
         Db::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return Db::$instance;
     }

@@ -446,6 +446,12 @@ header > .right > a > .icon.large {
     cursor: pointer;
     transition: transform var(--transition);
 }
+.timetable-movie a {
+    color: var(--text);
+}
+.timetable-movie a:visited {
+    color: var(--text);
+}
 .timetable-movie:hover {
     text-decoration: underline;
 }

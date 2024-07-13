@@ -1,5 +1,7 @@
 <?php
 
+require 'Config.php';
+
 define('SKOP_SESSION_USERID_KEY', 'uid');
 
 define('TINYINT_S_MIN', -128);

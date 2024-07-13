@@ -31,6 +31,10 @@ return [
             'id' => Movie::$columnTraits['id']
         ]
     ],
+    'GET /repertoar' => [
+        'controller' => 'HomeController',
+        'action' => 'showRepertoire'
+    ],
 
     'GET /login' => [
         'controller' => 'UserController',

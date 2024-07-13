@@ -20,7 +20,47 @@
             <div class="header"><span>SINOPSIS</span></div>
             <div id="movie-show-synopsis">{{ movie.synopsis }}</div>
             <div class="header reservation-cta"><span>REZERVIŠI KARTU</span></div>
-            <div id="movie-show-slots-insert"></div>
+            <div id="movie-show-slots-insert">
+                <div class="day">
+                    <table class="timetable">
+                        <colgroup>
+                            <col class="date">
+                            <col class="time">
+                            <col class="screen">
+                            <col class="reservation">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="timetable-date">DATUM</th>
+                                <th class="timetable-time">VREME</th>
+                                <th class="timetable-screen">SALA</th>
+                                <th>KARTE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for dayIdx, day in repertoire.dayEntries %}
+                            {% for theaterIdx, theater in repertoire.dayEntries[dayIdx] %}
+                                {% for entry in repertoire.dayEntries[dayIdx][theaterIdx] %}
+                                    {% if entry.movie_id == movie.id %}
+                                    <tr>
+                                        <td class="timetable-date">{{ entry.screening_start|date('M d')|upper }}</td>
+                                        <td class="timetable-time">{{ entry.screening_start|date('H:i') }}</td>
+                                        <td class="timetable-screen">{{ repertoire.theaters[theaterIdx].name }}</td>
+                                        <td class="timetable-reservation">
+                                            <div class="online pop">
+                                                <i class="fa-solid fa-ticket"></i>
+                                                <span class="hide-m--">Online</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </day>
+            </div>
         </div>
     </article>
     <aside>

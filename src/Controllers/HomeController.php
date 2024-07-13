@@ -29,7 +29,16 @@ class HomeController extends Controller
         if ($movie == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_MOVIE);
         $this->render('view/movie.twig', [
-            'movie' => $movie
+            'movie' => $movie,
+            'repertoire' => RepertoireModel::tryGenerate()
+        ]);
+    }
+
+    public function showRepertoire()
+    {
+        $this->render('view/repertoire.twig', [
+            'repertoire' => RepertoireModel::tryGenerate(),
+            'minsReceptionOnly' => SKOP_CONFIG['minsReceptionOnly']
         ]);
     }
 }
