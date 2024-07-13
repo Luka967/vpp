@@ -24,7 +24,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `genres` (
     `id` SMALLINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(31) NOT NULL
+    `name` VARCHAR(31) NOT NULL,
 
     UNIQUE (`name`)
 );
@@ -111,7 +111,7 @@ CREATE TABLE `theater_seat_types` (
     `price_adult` INT UNSIGNED NOT NULL,
     `price_adult_weekend` INT UNSIGNED DEFAULT NULL,
     `price_child` INT UNSIGNED DEFAULT NULL,
-    `price_adult_weekend` INT UNSIGNED NOT NULL,
+    `price_child_weekend` INT UNSIGNED NOT NULL,
     `extra` VARCHAR(255) DEFAULT NULL,
 
     UNIQUE (`name`)
