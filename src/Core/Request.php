@@ -68,19 +68,27 @@ function validateOneValue(array &$source, string $key, array $restrictions)
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid object name string");
         break;
     case 'string|email':
-        if (!filter_var($value, FILTER_VALIDATE_EMAIL))
+        $value = filter_var($value, FILTER_VALIDATE_EMAIL);
+        if ($value === false)
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid email address");
         break;
     case 'int':
     case 'int|permissions':
-        if (!filter_var($value, FILTER_VALIDATE_INT))
+        $value = filter_var($value, FILTER_VALIDATE_INT);
+        if ($value === false)
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid int");
         $value = intval($value);
         break;
     case 'float':
-        if (!filter_var($value, FILTER_VALIDATE_FLOAT))
+        $value = filter_var($value, FILTER_VALIDATE_FLOAT);
+        if ($value === false)
             throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid float");
         $value = floatval($value);
+    case 'bool':
+        if ($value !== 'true' && $value !== 'false')
+            throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Given '$key' is not a valid bool");
+        $value = $value === 'true' ? true : false;
+        break;
     case 'date':
         try
         {
@@ -97,7 +105,7 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     // Validacija veličine
     $valueSize = match ($restrictions['type'])
     {
-        'string', 'string|email', 'string|objectname', 'string|alphabetical' => strlen($value),
+        'string', 'string|email', 'string|password', 'string|objectname', 'string|alphabetical' => strlen($value),
         'int', 'int|permissions', 'float' => $value,
         default => -INF
     };
@@ -108,6 +116,7 @@ function validateOneValue(array &$source, string $key, array $restrictions)
     case 'string|alphabetical':
     case 'string|objectname':
     case 'string|email':
+    case 'string|password':
     case 'int':
     case 'float':
         if (isset($restrictions['min']) && $valueSize < $restrictions['min'])

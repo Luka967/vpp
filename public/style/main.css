@@ -629,6 +629,7 @@ header > .right > a > .icon.large {
 #movie-trailer {
     width: 100%;
     border: 1px solid var(--text);
+    margin-top: 42px;
 }
 .movie-show-information .header.reservation-cta {
     display: flex;

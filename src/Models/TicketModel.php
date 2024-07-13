@@ -18,12 +18,25 @@ class TicketModel extends Model
         $q->execute();
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
     }
+    public static function allUnpaid(): array
+    {
+        $q = Db::instance()->prepare("SELECT * FROM `tickets` WHERE `paid_at` IS NULL");
+        $q->execute();
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
+    }
 
     public static function allOfUserUnpaid(int $userId): array
     {
         $q = Db::instance()->prepare("SELECT * FROM `tickets` WHERE `user_id` = ? AND `paid_at` IS NULL");
         $q->execute([$userId]);
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
+    }
+
+    public static function deleteOfRepertoire(int $entryId)
+    {
+        Db::instance()
+            ->prepare("DELETE FROM `tickets` WHERE `repertoire_id` = ?")
+            ->execute([$entryId]);
     }
 
     public static function withId(int $id): ?Ticket

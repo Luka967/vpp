@@ -1,0 +1,14 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Rezerviši{% endblock %}
+{% block content %}
+<h1>Uspešno otkazana rezervacija</h1>
+<p>
+    Uspešno ste otkazali rezervaciju.
+</p>
+<p>
+    Dozvoljeno Vam je napraviti novu rezervaciju ukoliko ste napravili grešku prilikom rezervacije.
+</p>
+<a class="button pop" href="/rezervacija?id={{ repertoireEntry.id }}">Ponovi rezervaciju</a>
+<a class="button secondary pop" href="/">Naslovna strana</a>
+{% endblock %}

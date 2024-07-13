@@ -6,6 +6,7 @@ use Skop\Models\Domain\Repertoire;
 use Skop\Models\Domain\ScreeningFeature;
 use Skop\Models\Domain\Theater;
 use Skop\Models\Domain\TheaterSeatType;
+use Skop\Models\Domain\Ticket;
 use Skop\Models\Domain\User;
 
 function filterDomainObjectColumns(array $columns, bool $partial, bool $editable): array
@@ -56,7 +57,15 @@ return [
             'id' => Repertoire::$columnTraits['id']
         ],
         'dataPost' => [
-            'seats_picked' => [ 'type' => 'string', 'min' => 4, 'max' => 63 ]
+            'seats_picked' => [ 'type' => 'string', 'min' => 3, 'max' => 63 ]
+        ]
+    ],
+    'GET /me/rezervacije/delete' => [
+        'controller' => 'ReservationController',
+        'action' => 'doDelete',
+        'forceLoggedIn' => true,
+        'dataQuery' => [
+            'id' => Ticket::$columnTraits['id']
         ]
     ],
 
@@ -71,7 +80,7 @@ return [
         'forceLoggedOut' => true,
         'dataPost' => [
             'email' => [ 'type' => 'string|email', 'min' => 8, 'max' => 63],
-            'password' => [ 'type' => 'string', 'min' => 8, 'max' => 63]
+            'password' => [ 'type' => 'string|password', 'min' => 8, 'max' => 63]
         ]
     ],
     'GET /register' => [
@@ -315,6 +324,15 @@ return [
             'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
         ]
     ],
+    'GET /manage/theaters/delete' => [
+        'controller' => 'ManagerTheatersController',
+        'action' => 'doDeleteTheater',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Theater::$columnTraits['id']
+        ]
+    ],
 
     'GET /manage/repertoire' => [
         'controller' => 'ManagerRepertoireController',
@@ -368,6 +386,76 @@ return [
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataQuery' => [
             'id' => Repertoire::$columnTraits['id']
+        ]
+    ],
+
+    'GET /manage/users' => [
+        'controller' => 'ManagerUserController',
+        'action' => 'show',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+    ],
+    'GET /manage/users/edit' => [
+        'controller' => 'ManagerUserController',
+        'action' => 'showEdit',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => User::$columnTraits['id']
+        ]
+    ],
+    'POST /manage/users/edit' => [
+        'controller' => 'ManagerUserController',
+        'action' => 'doUpdate',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            ...filterDomainObjectColumns(User::$columnTraits, true, false),
+            ...filterDomainObjectColumns(User::$columnTraits, false, true)
+        ]
+    ],
+    'GET /manage/users/delete' => [
+        'controller' => 'ManagerUserController',
+        'action' => 'doDelete',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => User::$columnTraits['id']
+        ]
+    ],
+
+    'GET /manage/tickets' => [
+        'controller' => 'ManagerTicketsController',
+        'action' => 'show',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+    ],
+    'GET /manage/tickets/edit' => [
+        'controller' => 'ManagerTicketsController',
+        'action' => 'showEdit',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Ticket::$columnTraits['id']
+        ]
+    ],
+    'POST /manage/tickets/edit' => [
+        'controller' => 'ManagerTicketsController',
+        'action' => 'doUpdate',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            ...filterDomainObjectColumns(Ticket::$columnTraits, true, false),
+            ...filterDomainObjectColumns(Ticket::$columnTraits, false, true)
+        ]
+    ],
+    'GET /manage/tickets/delete' => [
+        'controller' => 'ManagerTicketsController',
+        'action' => 'doDelete',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Ticket::$columnTraits['id']
         ]
     ],
 ];

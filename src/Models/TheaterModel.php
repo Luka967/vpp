@@ -39,10 +39,11 @@ class TheaterModel extends Model
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
     }
 
-    public static function seatingFor(Theater $theater): array
+    public static function seatingFor(Theater $theater, bool $active = true): array
     {
-        $q = Db::instance()->prepare("SELECT * FROM `theater_seating` WHERE `theater_id` = :id AND `active` = 1");
+        $q = Db::instance()->prepare("SELECT * FROM `theater_seating` WHERE `theater_id` = :id AND `active` = :active");
         $q->bindValue(':id', $theater->id, \PDO::PARAM_INT);
+        $q->bindValue(':active', $active, \PDO::PARAM_BOOL);
         $q->execute();
         return $q->fetchAll(\PDO::FETCH_CLASS, static::SEATING_CLASS_PATH);
     }

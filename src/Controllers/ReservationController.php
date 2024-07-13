@@ -56,8 +56,10 @@ class ReservationController extends Controller
             $seatStrSplit = explode('-', $seatStr, 2);
             if (count($seatStrSplit) != 2)
                 throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, 'Seats picked not conforming');
-            if (!filter_var($seatStrSplit[0], FILTER_VALIDATE_INT) || !filter_var($seatStrSplit[1], FILTER_VALIDATE_INT))
-                throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, 'Seats picked not conforming');
+            if (
+                filter_var($seatStrSplit[0], FILTER_VALIDATE_INT) === false
+                || filter_var($seatStrSplit[1], FILTER_VALIDATE_INT) === false
+            ) throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, 'Seats picked not conforming');
             $row = intval($seatStrSplit[0]);
             $col = intval($seatStrSplit[1]);
             $seats[] = [ 'row' => $row, 'col' => $col ];
@@ -113,7 +115,7 @@ class ReservationController extends Controller
 
         $newTicket = TicketModel::insertOneWithPickedSeats($newTicket, $seatsFound);
 
-        $this->render('view/reservation-success.twig', [
+        $this->render('view/reservationSuccess.twig', [
             'seats' => $seatsFound,
             'movie' => $repertoireEntry->movie(),
             'theater' => $theater,
@@ -129,5 +131,11 @@ class ReservationController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_TICKET);
         if (!$ticket->repertoireEntry()->hasReservationsOnline())
             throw new ErrorPageException(SKOP_ERROR_UNREACHABLE_REPERTOIRE);
+
+        TicketModel::deleteOne($ticket->id);
+
+        $this->render('view/reservationDeleteSuccess.twig', [
+            'repertoireEntry' => $ticket->repertoireEntry()
+        ]);
     }
 }

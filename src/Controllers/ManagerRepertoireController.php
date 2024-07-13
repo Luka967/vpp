@@ -7,6 +7,7 @@ use Skop\Core\ErrorPageException;
 use Skop\Models\Domain\Repertoire;
 use Skop\Models\RepertoireModel;
 use Skop\Models\ScreeningFeatureModel;
+use Skop\Models\TicketModel;
 
 class ManagerRepertoireController extends Controller
 {
@@ -81,6 +82,7 @@ class ManagerRepertoireController extends Controller
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_REPERTOIRE);
 
+        TicketModel::deleteOfRepertoire($obj->id);
         ScreeningFeatureModel::setForRepertoireEntry($obj, []);
         RepertoireModel::deleteOne($obj->id);
 

@@ -65,7 +65,8 @@ class RepertoireModel extends Model
 
         $theaters = [];
         foreach (TheaterModel::all() as $theater)
-            $theaters[$theater->id] = $theater;
+            if ($theater->active)
+                $theaters[$theater->id] = $theater;
 
         $moviesSeen = [];
         $movies = [];

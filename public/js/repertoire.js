@@ -1,12 +1,5 @@
 (() => {
     window.addEventListener('load', () => {
-        document.querySelectorAll('select').forEach(inputElem => {
-            const value = inputElem.getAttribute('data-value');
-            if (value == null)
-                return;
-            inputElem.value = value;
-            inputElem.removeAttribute('data-value');
-        });
         document.querySelectorAll('.theater-timeline .entry').forEach(entryElem => {
             entryElem.addEventListener('click', () => {
                 window.location.href = `/manage/repertoire/edit?id=${entryElem.getAttribute('data-id')}`;

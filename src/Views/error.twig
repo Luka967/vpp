@@ -2,12 +2,14 @@
 
 {% block title %}SKOP - Greška{% endblock %}
 {% block content %}
-    <h1>{{ errorTitle }}</h1>
-    <p>{{ errorDescription }}</p>
-    <p>Kod: {{ errorCode }} ({{ errorExtra }})</p>
-    {% if linkBack != null %}
-        <a href="{{ linkBack.to }}">{{ linkBack.label }}</a>
-    {% else %}
-        <a class="nav-go-back button pop">Nazad</a>
-    {% endif %}
+    <div class="content">
+        <h1>{{ errorTitle }}</h1>
+        <p>{{ errorDescription }}</p>
+        <p style="margin-bottom: 30px;">({{ errorCode }}{{ errorExtra is not null ? (' ' ~ errorExtra) : '' }})</p>
+        {% if linkBack != null %}
+            <a class="button" href="{{ linkBack.to }}">{{ linkBack.label }}</a>
+        {% else %}
+            <a class="nav-go-back button pop">Nazad</a>
+        {% endif %}
+    </div>
 {% endblock %}

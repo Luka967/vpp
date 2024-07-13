@@ -61,8 +61,10 @@ CREATE TABLE `movie_genres` (
 CREATE TABLE `theaters` (
     `id` TINYINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(63) NOT NULL,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
 
-    UNIQUE (`name`)
+    UNIQUE (`name`),
+    INDEX (`active`)
 );
 
 CREATE TABLE `screening_features` (
@@ -119,7 +121,7 @@ CREATE TABLE `theater_seating` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `theater_id` TINYINT UNSIGNED NOT NULL,
     `seat_type_id` TINYINT UNSIGNED NOT NULL,
-    `active` TINYINT NOT NULL DEFAULT 1,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
     `row` SMALLINT NOT NULL,
     `column` SMALLINT NOT NULL,
 

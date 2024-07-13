@@ -1,0 +1,32 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Menadžer{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/manager.css">
+    <script src="{{ publicRoot }}js/selectFix.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="object-list-row">
+        <div class="col">
+            {% embed '_parts/domainObjectTable.twig' with {
+                columns: [
+                    ['ticket_code', 'Kod'],
+                    ['screeningStart', 'Početak'],
+                    ['pickedSeatCount', 'Sedišta'],
+                    ['movieTitle', 'Film']
+                ],
+                rows: tickets,
+                initialPath: '/manage/tickets'
+            } %} {% endembed %}
+        </div>
+        <div class="col object-form">
+            {% embed '_parts/domainObjectInput.twig' with {
+                columns: ticketObjectColumns,
+                modifying: (persistentFormData is not empty),
+                initialPath: '/manage/tickets',
+                editPath: '/manage/tickets/edit',
+                objectName: 'rezervaciju'
+            } %} {% endembed %}
+        </div>
+    </div>
+{% endblock %}

@@ -94,6 +94,8 @@ class ManagerTheatersController extends Controller
         $obj = TheaterModel::withId($this->req->data['id']);
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_THEATER);
+        foreach ($obj::$columnTraits as $key => $_)
+            $obj->$key = $this->req->data[$key];
 
         $oldSeating = TheaterModel::seatingModelFor($obj);
         $newSeating = $this->fetchSeatingValue($this->req->data['seating']);
@@ -101,6 +103,26 @@ class ManagerTheatersController extends Controller
         TheaterModel::updateOne($obj);
         if ($oldSeating != $newSeating)
             TheaterModel::updateSeatingFor($obj, $newSeating['rows'], $newSeating['cols'], $newSeating['objects']);
+
+        $this->redirect('/manage/theaters');
+    }
+
+    public function doDeleteTheater()
+    {
+        $obj = TheaterModel::withId($this->req->query['id']);
+        if ($obj == null)
+            throw new ErrorPageException(SKOP_ERROR_UNKNOWN_THEATER);
+
+        // updateSeatingFor će deaktivirati sedišta koja su imale rezervacije
+        TheaterModel::updateSeatingFor($obj, 0, 0, []);
+        if (count(TheaterModel::seatingFor($obj, false)) > 0)
+        {
+            // Nemoguće je obrisati objekat jer deaktivirana sedišta moraju imati referencu, sakrij ga
+            $obj->active = false;
+            TheaterModel::updateOne($obj);
+        }
+        else
+            TheaterModel::deleteOne($obj->id);
 
         $this->redirect('/manage/theaters');
     }

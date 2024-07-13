@@ -10,7 +10,7 @@
     <div class="object-list-row">
         <div class="col">
             {% embed '_parts/domainObjectTable.twig' with {
-                columns: [['name', 'Naziv']],
+                columns: [['name', 'Naziv'], ['active', 'Aktivna']],
                 rows: theaters,
                 initialPath: '/manage/theaters'
             } %} {% endembed %}
