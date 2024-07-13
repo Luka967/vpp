@@ -5,16 +5,21 @@ namespace Skop\Controllers;
 use Skop\Core\Controller;
 use Skop\Core\ErrorPageException;
 use Skop\Models\MovieModel;
+use Skop\Models\RepertoireModel;
 
 class HomeController extends Controller
 {
     public function showLanding()
     {
-        $movies = MovieModel::all();
-        $heroMovie = $movies[random_int(0, count($movies) - 1)];
+        $movies = RepertoireModel::tryGenerate()['movies'];
+        $moviesList = [];
+        foreach ($movies as $movie)
+            $moviesList[] = $movie;
+
+        $heroMovie = $moviesList[random_int(0, count($moviesList) - 1)];
         $this->render('index.twig', [
             'heroMovie' => $heroMovie,
-            'movies' => $movies
+            'movies' => $moviesList
         ]);
     }
 

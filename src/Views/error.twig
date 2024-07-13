@@ -4,7 +4,7 @@
 {% block content %}
     <h1>{{ errorTitle }}</h1>
     <p>{{ errorDescription }}</p>
-    <p>Kod: {{ errorCode }}</p>
+    <p>Kod: {{ errorCode }} ({{ errorExtra }})</p>
     {% if linkBack != null %}
         <a href="{{ linkBack.to }}">{{ linkBack.label }}</a>
     {% else %}

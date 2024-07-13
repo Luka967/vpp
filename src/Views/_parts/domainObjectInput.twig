@@ -4,7 +4,7 @@
 <form class="object-form" method="POST" enctype="multipart/form-data">
     {% for name, traits in columns %}
     <div class="row {{ ((modifying and not traits.editable) or (not modifying and traits.partial)) ? 'disabled' : '' }}">
-        {% if traits.type != 'string|movierating' and traits.type != 'int|permissions' %}
+        {% if traits.type not in ['string|movierating', 'int|permissions'] %}
         <label for="{{ name }}">{{ name }}</label>
         {% else %}
         <div></div>
@@ -23,6 +23,8 @@
         <input type="number" id="{{ name }}" name="{{ name }}" min="{{ traits.min }}" max="{{ traits.max }}" value="{{ attribute(persistentFormData, name) }}">
         {% elseif traits.type == 'date' %}
         <input type="date" id="{{ name }}" name="{{ name }}" value="{{ attribute(persistentFormData, name) }}">
+        {% elseif traits.type == 'datetime' %}
+        <input type="datetime-local" id="{{ name }}" name="{{ name }}" value="{{ attribute(persistentFormData, name)|date('Y-m-d\\TH:i') }}">
         {% elseif traits.type == 'int|permissions' %}
         <fieldset>
             <legend>{{ name }}</legend>
@@ -38,21 +40,30 @@
             <input type="radio" id="13" name="{{ name }}" value="13" {{ attribute(persistentFormData, name) == '13' ? 'checked' : '' }}> <label for="13">13</label>
             <input type="radio" id="R" name="{{ name }}" value="R" {{ attribute(persistentFormData, name) == 'R' ? 'checked' : '' }}> <label for="R">R</label>
         </fieldset>
+        {% elseif traits.type == 'id|movie' %}
+        <select name="{{ name }}" id="{{ name }}" data-value="{{ attribute(persistentFormData, name) }}">
+            {% for movie in movies %}
+            <option value="{{ movie.id }}">{{ movie.title }}</option>
+            {% endfor %}
+        </select>
+        {% elseif traits.type == 'id|theater' %}
+        <select name="{{ name }}" id="{{ name }}" data-value="{{ attribute(persistentFormData, name) }}">
+            {% for theater in theaters %}
+            <option value="{{ theater.id }}">{{ theater.name }}</option>
+            {% endfor %}
+        </select>
         {% else %}
-        Error
+        ???
         {% endif %}
     </div>
     {% endfor %}
     {% block formExtra %}
     {% endblock %}
     <div class="submit-row">
+        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/{{ modifying ? 'edit' : 'add'}}" value="Potvrdi">
+        {% block actionExtra %}{% endblock %}
         {% if modifying %}
-        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/edit" value="Potvrdi">
         <a class="button pop secondary" href="{{ initialPath }}">Dodaj novu stavku</a>
-        {% else %}
-        <input class="object-form-add pop" type="submit" formaction="{{ initialPath }}/add" value="Potvrdi">
         {% endif %}
-        {% block actionExtra %}
-        {% endblock %}
     </div>
 </form>

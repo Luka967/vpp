@@ -12,7 +12,8 @@ class ErrorController extends Controller
         $this->render('error.twig', [
             'errorCode' => $ex->errorPageCode,
             'errorTitle' => SKOP_ERROR_PAGES_LANG[$ex->errorPageCode]['title'],
-            'errorDescription' => $ex->extraDetails ?? SKOP_ERROR_PAGES_LANG[$ex->errorPageCode]['description'],
+            'errorDescription' => SKOP_ERROR_PAGES_LANG[$ex->errorPageCode]['description'],
+            'errorExtra' => $ex->extraDetails,
             'linkBack' => SKOP_ERROR_PAGES_LANG[$ex->errorPageCode]['linkBack'] ?? null
         ]);
     }

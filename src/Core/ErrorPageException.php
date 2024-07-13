@@ -20,12 +20,14 @@ define('SKOP_ERROR_UNKNOWN_GENRE'               , 402);
 define('SKOP_ERROR_UNKNOWN_SCREENINGFEATURE'    , 403);
 define('SKOP_ERROR_UNKNOWN_SEATTYPE'            , 404);
 define('SKOP_ERROR_UNKNOWN_THEATER'             , 405);
+define('SKOP_ERROR_UNKNOWN_REPERTOIRE'          , 406);
 define('SKOP_ERROR_CONFLICTING_USER'            , 500);
 define('SKOP_ERROR_CONFLICTING_MOVIE'           , 501);
 define('SKOP_ERROR_CONFLICTING_GENRE'           , 502);
 define('SKOP_ERROR_CONFLICTING_SCREENINGFEATURE', 503);
 define('SKOP_ERROR_CONFLICTING_SEATTYPE'        , 504);
 define('SKOP_ERROR_CONFLICTING_THEATER'         , 505);
+define('SKOP_ERROR_CONFLICTING_REPERTOIRE'      , 506);
 
 define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNCAUGHT => [500, 'Internal server error'],
@@ -43,30 +45,36 @@ define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNKNOWN_SCREENINGFEATURE => [404, 'This screening feature does not exist'],
     SKOP_ERROR_UNKNOWN_SEATTYPE => [404, 'This theater seat type does not exist'],
     SKOP_ERROR_UNKNOWN_THEATER => [404, 'This theater does not exist'],
+    SKOP_ERROR_UNKNOWN_REPERTOIRE => [404, 'This repertoire entry does not exist'],
     SKOP_ERROR_CONFLICTING_USER => [400, 'User already exists with this email'],
     SKOP_ERROR_CONFLICTING_MOVIE => [400, 'Movie already exists with this title'],
     SKOP_ERROR_CONFLICTING_GENRE => [400, 'Genre already exists with this name'],
     SKOP_ERROR_CONFLICTING_SCREENINGFEATURE => [400, 'Screening feature already exists with this description'],
     SKOP_ERROR_CONFLICTING_SEATTYPE => [400, 'Theater seat type already exists with this name'],
     SKOP_ERROR_CONFLICTING_THEATER => [400, 'Theater already exists with this name'],
+    SKOP_ERROR_CONFLICTING_REPERTOIRE => [400, 'Time span of new repertoire entry is colliding with existing']
 ]);
 
 define('SKOP_ERROR_PAGES_LANG', [
     SKOP_ERROR_UNCAUGHT => [
         'title' => 'Serverska greška',
-        'description' => 'Greška se desila prilikom obrade zahteva. Molimo pokušajte ponovo kasnije. Ukoliko se problem nastavi, kontaktirajte nas.'
+        'description' => 'Greška se desila prilikom obrade zahteva. Molimo pokušajte ponovo kasnije. ' .
+            'Ukoliko se problem nastavi, kontaktirajte nas.'
     ],
     SKOP_ERROR_NO_ROUTE => [
         'title' => 'Stranica ne postoji',
-        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. Ukoliko mislite da je greška kontaktirajte nas.'
+        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. ' .
+            'Ukoliko mislite da je greška kontaktirajte nas.'
     ],
     SKOP_ERROR_NO_CONTROLLER => [
         'title' => 'Stranica ne postoji',
-        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. Ukoliko mislite da je greška kontaktirajte nas.'
+        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. ' .
+            'Ukoliko mislite da je greška kontaktirajte nas.'
     ],
     SKOP_ERROR_NO_CALLABLE => [
         'title' => 'Stranica ne postoji',
-        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. Ukoliko mislite da je greška kontaktirajte nas.'
+        'description' => 'Ova stranica trenutno ne postoji ili je nedavno bila obrisana. ' .
+            'Ukoliko mislite da je greška kontaktirajte nas.'
     ],
     SKOP_ERROR_AUTH_LOGIN => [
         'title' => 'Morate biti prijavljeni',
@@ -116,6 +124,10 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Bioskopska sala ne postoji',
         'description' => 'Ova bioskopska sala više ne postoji.',
     ],
+    SKOP_ERROR_UNKNOWN_REPERTOIRE => [
+        'title' => 'Stavka repertoara ne postoji',
+        'description' => 'Ova stavka repertoara više ne postoji.',
+    ],
     SKOP_ERROR_CONFLICTING_USER => [
         'title' => 'Korisnik već postoji',
         'description' => 'Već postoji korisnik sa ovim e-mailom.',
@@ -139,6 +151,11 @@ define('SKOP_ERROR_PAGES_LANG', [
     SKOP_ERROR_CONFLICTING_THEATER => [
         'title' => 'Bioskopska sala već postoji',
         'description' => 'Već postoji bioskopska sala sa ovim imenom.',
+    ],
+    SKOP_ERROR_CONFLICTING_REPERTOIRE => [
+        'title' => 'Nova stavka repertoara se podudara',
+        'description' => 'Ubacivanje nove stavke repertoara je nemoguće jer ' .
+            'početak i kraj prikazivanja prelazi u vremenski period nekog već postojećeg prikazivanja.',
     ]
 ]);
 

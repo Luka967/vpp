@@ -2,6 +2,7 @@
 
 use Skop\Models\Domain\Genre;
 use Skop\Models\Domain\Movie;
+use Skop\Models\Domain\Repertoire;
 use Skop\Models\Domain\ScreeningFeature;
 use Skop\Models\Domain\Theater;
 use Skop\Models\Domain\TheaterSeatType;
@@ -285,5 +286,60 @@ return [
             ...filterDomainObjectColumns(Theater::$columnTraits, false, true),
             'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
         ]
-    ]
+    ],
+
+    'GET /manage/repertoire' => [
+        'controller' => 'ManagerRepertoireController',
+        'action' => 'showRepertoire',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER
+    ],
+    'POST /manage/repertoire/add' => [
+        'controller' => 'ManagerRepertoireController',
+        'action' => 'doInsertEntry',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            ...filterDomainObjectColumns(Repertoire::$columnTraits, false, false),
+            'features' => [
+                ...ScreeningFeature::$columnTraits['description'],
+                'type' => 'array|' . ScreeningFeature::$columnTraits['description']['type'], 'minArray' => 1, 'maxArray' => 3
+            ]
+        ]
+    ],
+    'GET /manage/repertoire/edit' => [
+        'controller' => 'ManagerRepertoireController',
+        'action' => 'showEditEntry',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Repertoire::$columnTraits['id']
+        ]
+    ],
+    'POST /manage/repertoire/edit' => [
+        'controller' => 'ManagerRepertoireController',
+        'action' => 'doUpdateEntry',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataPost' => [
+            'id' => Repertoire::$columnTraits['id'],
+            'movie_id' => [ 'type' => 'ignore' ],
+            'theater_id' => [ 'type' => 'ignore' ],
+            'screening_start' => [ 'type' => 'ignore' ],
+            'features' => [
+                ...ScreeningFeature::$columnTraits['description'],
+                'type' => 'array|' . ScreeningFeature::$columnTraits['description']['type'], 'minArray' => 1, 'maxArray' => 3
+            ]
+        ]
+    ],
+    'GET /manage/repertoire/delete' => [
+        'controller' => 'ManagerRepertoireController',
+        'action' => 'doDeleteEntry',
+        'forceLoggedIn' => true,
+        'forceUserPermissions' => User::PERMISSIONS_MANAGER,
+        'dataQuery' => [
+            'id' => Repertoire::$columnTraits['id']
+        ]
+    ],
 ];

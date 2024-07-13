@@ -1,0 +1,85 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Menadžer{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/manager.css">
+    <link rel="stylesheet" href="{{ publicRoot }}style/repertoire.css">
+    <script src="{{ publicRoot }}js/repertoire.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="col object-form">
+        {% embed '_parts/domainObjectInput.twig' with {
+            columns: repertoireEntryColumns,
+            modifying: (persistentFormData is not empty),
+            initialPath: '/manage/repertoire',
+            objectName: 'stavku repertoara'
+        } %}
+            {% block formExtra %}
+            <div class="row">
+                <div></div>
+                <fieldset>
+                    <legend>Tip projekcije</legend>
+                    <div class="features-fieldset">
+                        {% for feature in screeningFeatures %}
+                        <div class="genre">
+                            <input
+                                type="checkbox" id="features-{{ feature.id }}" name="features[]" value="{{ feature.description }}"
+                                {{ feature.description in (persistentFormData.features ?? [])|map(v => v.description) ? 'checked' : '' }}
+                            >
+                            <label for="features-{{ feature.id }}">{{ feature.description }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            </div>
+            {% endblock %}
+            {% block actionExtra %}
+            {% if persistentFormData is not empty %}
+            <a href="/manage/repertoire/delete?id={{ persistentFormData.id }}" class="button pop">Obriši</a>
+            {% endif %}
+            {% endblock %}
+        {% endembed %}
+    </div>
+    <h1>Trenutni ciklus repertoara</h1>
+    <div class="repertoire-days-list">
+        {% for idxDay, timestamp in dayTimestamps %}
+        {% if idxDay == 7 %}
+            <div class="next-week">Sledeća nedelja</div>
+        {% endif %}
+        <div class="day">
+            <div class="day-date">{{ timestamp|date('D d. M') }}</div>
+            <div class="day-theaters">
+                {% for theater in theaters %}
+                <div class="theater">
+                    <div class="theater-name">{{ theater.name }}</div>
+                    <div class="pop theater-timeline" data-theater="{{ theater.id }}">
+                        <div class="pop filler" data-timestamp="{{ timestamp|date('U') }}" style="flex: 60">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        {% for idxEntry, entry in dayEntries[idxDay][theater.id] %}
+                            {% set movieRuntime = movies[entry.movie.id].runtime %}
+                            {% set screeningEnd = entry.screening_start|date_modify('+' ~ movieRuntime ~ ' minutes') %}
+                            <div class="pop entry" style="flex: {{ movieRuntime }}" data-id="{{ entry.id }}">
+                                <div class="start"><span>{{ entry.screening_start|date('H:i') }}</span></div>
+                                <div class="title">{{ movies[entry.movie.id].title }}</div>
+                                <div class="end"><span>{{ screeningEnd|date('H:i') }}</span></div>
+                            </div>
+                            {% if idxEntry < (dayEntries[idxDay][theater.id]|length - 1) %}
+                            <div class="pop filler" data-timestamp="{{ screeningEnd|date('U') }}" style="flex: {{ dayEntryGaps[idxDay][theater.id][idxEntry] }}">
+                                <i class="fa-solid fa-plus"></i>
+                                {{ dayEntryGaps[idxDay][theater.id][idxEntry] }} min
+                            </div>
+                            {% else %}
+                            <div class="pop filler" data-timestamp="{{ screeningEnd|date('U') }}" style="flex: 60">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

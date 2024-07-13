@@ -17,12 +17,12 @@ final class Router
     {
         session_start();
 
-        $filename = SKOP_APPLICATION_PATH.'Core/Routes.php';
-        if (!is_file($filename))
+        $routesFile = SKOP_APPLICATION_PATH . 'Core/Routes.php';
+        if (!is_file($routesFile))
             throw new Exception('No routes defined');
-        $this->routes = include $filename;
+        $this->routes = include $routesFile;
 
-        $this->twigLoader = new FilesystemLoader(SKOP_APPLICATION_PATH.'Views');
+        $this->twigLoader = new FilesystemLoader(SKOP_APPLICATION_PATH . 'Views');
         $this->twigInstance = new Environment($this->twigLoader, []);
     }
 

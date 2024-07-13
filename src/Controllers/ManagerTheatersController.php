@@ -86,16 +86,12 @@ class ManagerTheatersController extends Controller
     {
         $obj = TheaterModel::withId($this->req->query['id']);
         if ($obj == null)
-            throw new ErrorPageException(SKOP_ERROR_UNKNOWN_GENRE);
+            throw new ErrorPageException(SKOP_ERROR_UNKNOWN_THEATER);
 
         $this->persistentFormData = (array)$obj;
         $this->persistentFormData['seating'] = $this->fetchSeatingModel($obj);
 
-        $this->render('manage/theaters.twig', [
-            'seatTypes' => TheaterSeatTypeModel::all(),
-            'theaters' => TheaterModel::all(),
-            'theaterColumns' => Theater::$columnTraits
-        ]);
+        $this->showTheaters();
     }
 
     public function doInsertTheater()

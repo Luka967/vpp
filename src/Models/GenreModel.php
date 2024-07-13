@@ -55,6 +55,11 @@ class GenreModel extends Model
         Db::instance()
             ->prepare("DELETE FROM `movie_genres` WHERE `movie_genres`.`movie_id` = ?")
             ->execute([$movie->id]);
+        if (count($genres) == 0)
+        {
+            Db::instance()->commit();
+            return;
+        }
         $insertRowsBind = substr(str_repeat('(?, ?),', count($genres)), 0, -1);
         $insertRows = [];
         foreach ($genres as $genre)
