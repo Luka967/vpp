@@ -17,7 +17,10 @@ class HomeController extends Controller
         foreach ($movies as $movie)
             $moviesList[] = $movie;
 
-        $heroMovie = $moviesList[random_int(0, count($moviesList) - 1)];
+        if (count($moviesList) > 0)
+            $heroMovie = $moviesList[random_int(0, count($moviesList) - 1)];
+        else
+            $heroMovie = null;
         $this->render('index.twig', [
             'heroMovie' => $heroMovie,
             'movies' => $moviesList
