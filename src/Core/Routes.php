@@ -48,6 +48,17 @@ return [
             'id' => Repertoire::$columnTraits['id']
         ]
     ],
+    'POST /rezervacija' => [
+        'controller' => 'ReservationController',
+        'action' => 'doInsert',
+        'forceLoggedIn' => true,
+        'dataQuery' => [
+            'id' => Repertoire::$columnTraits['id']
+        ],
+        'dataPost' => [
+            'seats_picked' => [ 'type' => 'string', 'min' => 4, 'max' => 63 ]
+        ]
+    ],
 
     'GET /login' => [
         'controller' => 'UserController',

@@ -17,7 +17,7 @@ class ManagerRepertoireController extends Controller
         $this->render('manage/repertoire.twig', [
             'repertoireEntryColumns' => Repertoire::$columnTraits,
             'screeningFeatures' => ScreeningFeatureModel::all(),
-            'movies' => $repertoire['movies'],
+            'movies' => $repertoire['allMovies'],
             'theaters' => $repertoire['theaters'],
             'dayTimestamps' => $repertoire['dayTimestamps'],
             'dayEntries' => $repertoire['dayEntries'],

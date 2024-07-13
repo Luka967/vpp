@@ -5,5 +5,6 @@ define('SKOP_CONFIG', [
     'dbUsername' => 'root',
     'dbPassword' => '',
 
-    'minsReceptionOnly' => 30
+    'minsReceptionOnly' => 30,
+    'reservationMaxSeats' => 6
 ]);

@@ -1,13 +1,10 @@
 <td class="timetable-reservation">
-    {% set timeUntil = date('now').diff(date(screening_start|date('Y-m-d\\TH:i'))) %}
-    {% set minutesUntil = timeUntil.d * 60 * 24 + timeUntil.h * 60 + timeUntil.i %}
-
-    {% if timeUntil.invert %}
+    {% if entry.hasStarted %}
     <a class="locked pop">
         <i class="fa-solid fa-ticket"></i>
         <span class="hide-m--">N/A</span>
     </a>
-    {% elseif minutesUntil < minsReceptionOnly %}
+    {% elseif not entry.hasReservationsOnline %}
     <a class="reception pop">
         <i class="fa-solid fa-ticket"></i>
         <span class="hide-m--">Na šalteru</span>

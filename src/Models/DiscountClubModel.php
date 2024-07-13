@@ -18,7 +18,7 @@ class DiscountClubModel extends Model
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH);
     }
 
-    public static function fromId(int $id): DiscountClub
+    public static function withId(int $id): DiscountClub
     {
         $q = Db::instance()->prepare("SELECT * FROM `discount_clubs` WHERE `id` = :id");
         $q->bindValue(':id', $id, \PDO::PARAM_INT);

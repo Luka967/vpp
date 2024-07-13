@@ -42,7 +42,7 @@ class TheaterModel extends Model
     public static function seatingFor(Theater $theater): array
     {
         $q = Db::instance()->prepare("SELECT * FROM `theater_seating` WHERE `theater_id` = :id AND `active` = 1");
-        $q->bindValue(':id', $theater->id, \PDO::PARAM_STR);
+        $q->bindValue(':id', $theater->id, \PDO::PARAM_INT);
         $q->execute();
         return $q->fetchAll(\PDO::FETCH_CLASS, static::SEATING_CLASS_PATH);
     }

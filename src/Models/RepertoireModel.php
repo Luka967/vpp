@@ -69,8 +69,10 @@ class RepertoireModel extends Model
 
         $moviesSeen = [];
         $movies = [];
+        $allMovies = [];
         foreach (MovieModel::all() as $movie)
         {
+            $allMovies[$movie->id] = $movie;
             $movies[$movie->id] = $movie;
             $moviesSeen[$movie->id] = false;
         }
@@ -159,6 +161,7 @@ class RepertoireModel extends Model
                 unset($movies[$movie->id]);
 
         return [
+            'allMovies' => $allMovies,
             'movies' => $movies,
             'theaters' => $theaters,
             'dayTimestamps' => $dayTimestamps,

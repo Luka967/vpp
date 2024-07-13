@@ -11,6 +11,7 @@
         if (outputElem == null)
             return;
 
+        const allSeatTypes = elem.querySelectorAll('.seating-legend > *');
         const isEditable = inputRowsElem != null && inputColsElem != null;
         /** @type {string} */
         let setTypeTo = null;
@@ -49,6 +50,27 @@
                 divSeat.appendChild(divIcon);
                 divSeat.appendChild(divNumber);
             }
+        }
+
+        function updateReservationForm() {
+            const date = new Date(`${document.getElementById('reservation-date').innerText} ${new Date().getFullYear()}`);
+            const dayOfWeek = date.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+            let priceTotal = 0;
+            const pickedSeatIndices = [];
+            elem.querySelectorAll('.seat.picked').forEach(seat => {
+                const type = seat.className.replace('seat', '').replace('picked', '').trim();
+                const seatType = document.querySelector(`.seating-legend > .item.${type}`);
+                const pricesSplit = seatType.getAttribute('data-pricing').split(',').map(x => parseInt(x));
+                priceTotal += isWeekend ? pricesSplit[1] : pricesSplit[0];
+                const row = seat.parentElement.getAttribute('data-row');
+                const col = seat.parentElement.getAttribute('data-col');
+                pickedSeatIndices.push(`${row}-${col}`);
+            });
+
+            document.getElementById('reservation-form-price').innerText = priceTotal.toString();
+            outputElem.value = pickedSeatIndices.join(',');
         }
 
         function updateDom() {
@@ -103,8 +125,10 @@
                         if (isEditable) {
                             data[row][col] = data[row][col] !== setTypeTo ? setTypeTo : null;
                             updateDom();
-                        } else
+                        } else {
                             divSeat.classList.toggle('picked');
+                            updateReservationForm();
+                        }
                     });
                 }
 
@@ -166,7 +190,6 @@
         }
 
         if (isEditable) {
-            const allSeatTypes = elem.querySelectorAll('.seating-legend > *');
             allSeatTypes.forEach(typeElem => {
                 typeElem.classList.add('button', 'secondary', 'pop');
                 typeElem.addEventListener('click', () => {

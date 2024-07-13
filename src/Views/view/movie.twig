@@ -46,12 +46,9 @@
                                         <td class="timetable-date">{{ entry.screening_start|date('M d')|upper }}</td>
                                         <td class="timetable-time">{{ entry.screening_start|date('H:i') }}</td>
                                         <td class="timetable-screen">{{ repertoire.theaters[theaterIdx].name }}</td>
-                                        <td class="timetable-reservation">
-                                            <div class="online pop">
-                                                <i class="fa-solid fa-ticket"></i>
-                                                <span class="hide-m--">Online</span>
-                                            </div>
-                                        </td>
+                                        {% embed '_parts/reserveButton.twig' with {
+                                            screening_start: entry.screening_start
+                                        } %}{% endembed %}
                                     </tr>
                                     {% endif %}
                                 {% endfor %}

@@ -1,0 +1,24 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Rezerviši{% endblock %}
+{% block content %}
+<h1>Uspešna rezervacija</h1>
+<p>
+    Rezervisali ste <b>{{ seats|length }}</b> sedišta za projekciju filma <b>{{ movie.title }}</b>
+    datuma <b>{{ repertoireEntry.screening_start|date('d. M Y H:i') }}</b> u bioskopskoj sali <b>{{ theater.name }}</b>.
+    Cena karte za odrasle je <b>{{ newTicket.price }} din</b>
+    {% if discountClub is not null %}
+        i ostvarujete <b>popust od {{ discountClub.discount }}%</b> jer ste član <b>{{ discountClub.name }}</b> popust kluba.
+    {% endif %}
+</p>
+<p>
+    Vaš kod tiketa je <b>{{ newTicket.ticket_code }}</b>. Prilikom kupovine Vaših tiketa na šalteru molimo Vas da prikažete
+    ovu rezervaciju koja će se nalaziti na stranici sa Vašim korisničkim podacima.
+</p>
+<p>
+    Cena sedišta za decu mlađu od 13 godina će se uračunati na šalteru i ujedno će se cena Vaše rezervacije naknadno
+    promeniti na odgovarajuću vrednost.
+</p>
+<a class="button pop" href="/me">Sve rezervacije</a>
+<a class="button secondary pop" href="/me">Naslovna strana</a>
+{% endblock %}

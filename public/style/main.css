@@ -27,7 +27,11 @@
 }
 
 a {
+    color: var(--text);
     text-decoration: none;
+}
+.a-novisit:visited {
+    color: var(--text);
 }
 
 body {
@@ -79,13 +83,6 @@ a.pop {
 }
 .depress:active {
     background-color: var(--translucent-hard);
-}
-.a-bland {
-    color: inherit;
-    text-decoration: underline;
-}
-.a-bland:visited {
-    color: inherit;
 }
 
 .movie-prop {
@@ -199,9 +196,6 @@ nav > a.current {
     border-left: 1px solid var(--shadow-color);
     border-right: 1px solid var(--shadow-color);
     pointer-events: none;
-}
-nav > a:visited {
-    color: inherit;
 }
 header > .right {
     column-gap: 20px;
@@ -401,9 +395,13 @@ header > .right > a > .icon.large {
     margin-top: 20px;
 }
 .timetable-title > span {
+    font-weight: normal;
+    font-family: var(--font-title);
     border-bottom: none;
 }
 .timetable-title > span > .day {
+    font-weight: bold;
+    font-family: var(--font);
     font-size: 20px;
 }
 
@@ -446,12 +444,7 @@ header > .right > a > .icon.large {
     cursor: pointer;
     transition: transform var(--transition);
 }
-.timetable-movie a {
-    color: var(--text);
-}
-.timetable-movie a:visited {
-    color: var(--text);
-}
+
 .timetable-movie:hover {
     text-decoration: underline;
 }
@@ -471,10 +464,6 @@ header > .right > a > .icon.large {
     font-size: 14px;
     padding: 8px 0px;
     border-radius: 10px;
-}
-.timetable-reservation > a > span,
-.timetable-reservation > a > span:visited {
-    color: var(--text);
 }
 .timetable-reservation > a > i {
     font-size: 24px;
@@ -639,6 +628,7 @@ header > .right > a > .icon.large {
 }
 #movie-trailer {
     width: 100%;
+    border: 1px solid var(--text);
 }
 .movie-show-information .header.reservation-cta {
     display: flex;
@@ -765,12 +755,6 @@ form .submit-row :not(:last-child) {
     margin-right: 10px;
 }
 
-h1 a {
-    color: var(--text);
-}
-h1 a:visited {
-    color: var(--text);
-}
 h1 > .small {
     font-size: 20px;
     margin-left: 10px;

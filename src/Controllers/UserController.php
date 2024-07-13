@@ -5,6 +5,7 @@ use Skop\Core\Controller;
 use Skop\Core\ErrorPageException;
 use Skop\Models\DiscountClubModel;
 use Skop\Models\Domain\User;
+use Skop\Models\TicketModel;
 use Skop\Models\UserModel;
 
 class UserController extends Controller
@@ -63,11 +64,9 @@ class UserController extends Controller
 
     public function showMe()
     {
-        $discountClub = null;
-        if ($this->loggedInUser->discount_club_id != null)
-            $discountClub = DiscountClubModel::fromId($this->loggedInUser->discount_club_id);
         $this->render('user/me.twig', [
-            'discountClub' => $discountClub
+            'discountClub' => $this->loggedInUser->discountClub(),
+            'tickets' => TicketModel::allOfUserUnpaid($this->loggedInUser->id)
         ]);
     }
     public function doLogout()

@@ -8,16 +8,18 @@ table.object-list th {
 table.object-list td {
     font-size: 20px;
 }
-
 .object-list-row {
     display: flex;
     justify-content: space-between;
     margin-top: 25px;
     margin-bottom: 25px;
 }
-
 .object-list-row > .col {
     flex: 1;
+}
+.object-list-actions {
+    display: flex;
+    justify-content: center;
 }
 
 .object-form > h1 {

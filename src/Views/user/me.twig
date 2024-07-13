@@ -14,11 +14,23 @@
         <h2>Klub {{ discountClub.name }}</h2>
         <p>
             Ostvarujete <b>{{ discountClub.discount }}% popusta</b> na sve Vaše rezervacije!
-            Ukoliko prilikom kupovine karata na šalteru zatražuje dokaz prisustvu kluba,
-            molimo Vas da pokažete ovu stranicu na uvid radi.
+            Ukoliko prilikom kupovine karata na šalteru osoblje zatražuje dokaz prisustvu kluba,
+            molimo Vas da pokažete ovu stranicu na uvid.
         </p>
         {% else %}
         <p>Trenutno niste ni u jednom klubu.</p>
         {% endif %}
+        <h2>Vaše rezervacije</h2>
+        {% embed '_parts/domainObjectTable.twig' with {
+            columns: [
+                ['ticket_code', 'Kod'],
+                ['screeningStart', 'Početak'],
+                ['pickedSeatCount', 'Sedišta'],
+                ['movieTitle', 'Film'],
+            ],
+            rows: tickets,
+            notEditable: true,
+            initialPath: '/me/rezervacije'
+        } %} {% endembed %}
     </div>
 {% endblock %}

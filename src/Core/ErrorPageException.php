@@ -21,6 +21,8 @@ define('SKOP_ERROR_UNKNOWN_SCREENINGFEATURE'    , 403);
 define('SKOP_ERROR_UNKNOWN_SEATTYPE'            , 404);
 define('SKOP_ERROR_UNKNOWN_THEATER'             , 405);
 define('SKOP_ERROR_UNKNOWN_REPERTOIRE'          , 406);
+define('SKOP_ERROR_UNKNOWN_TICKET'              , 407);
+define('SKOP_ERROR_EXISTING_TICKET'             , 408);
 define('SKOP_ERROR_CONFLICTING_USER'            , 500);
 define('SKOP_ERROR_CONFLICTING_MOVIE'           , 501);
 define('SKOP_ERROR_CONFLICTING_GENRE'           , 502);
@@ -28,6 +30,9 @@ define('SKOP_ERROR_CONFLICTING_SCREENINGFEATURE', 503);
 define('SKOP_ERROR_CONFLICTING_SEATTYPE'        , 504);
 define('SKOP_ERROR_CONFLICTING_THEATER'         , 505);
 define('SKOP_ERROR_CONFLICTING_REPERTOIRE'      , 506);
+define('SKOP_ERROR_UNREACHABLE_REPERTOIRE'      , 507);
+define('SKOP_ERROR_CONFLICTING_TICKET'          , 508);
+define('SKOP_ERROR_TOOLARGE_TICKET'             , 509);
 
 define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNCAUGHT => [500, 'Internal server error'],
@@ -46,13 +51,18 @@ define('SKOP_ERROR_PAGES', [
     SKOP_ERROR_UNKNOWN_SEATTYPE => [404, 'This theater seat type does not exist'],
     SKOP_ERROR_UNKNOWN_THEATER => [404, 'This theater does not exist'],
     SKOP_ERROR_UNKNOWN_REPERTOIRE => [404, 'This repertoire entry does not exist'],
+    SKOP_ERROR_UNKNOWN_TICKET => [404, 'This ticket does not exist'],
+    SKOP_ERROR_EXISTING_TICKET => [404, 'Ticket already exists'],
     SKOP_ERROR_CONFLICTING_USER => [400, 'User already exists with this email'],
     SKOP_ERROR_CONFLICTING_MOVIE => [400, 'Movie already exists with this title'],
     SKOP_ERROR_CONFLICTING_GENRE => [400, 'Genre already exists with this name'],
     SKOP_ERROR_CONFLICTING_SCREENINGFEATURE => [400, 'Screening feature already exists with this description'],
     SKOP_ERROR_CONFLICTING_SEATTYPE => [400, 'Theater seat type already exists with this name'],
     SKOP_ERROR_CONFLICTING_THEATER => [400, 'Theater already exists with this name'],
-    SKOP_ERROR_CONFLICTING_REPERTOIRE => [400, 'Time span of new repertoire entry is colliding with existing']
+    SKOP_ERROR_CONFLICTING_REPERTOIRE => [400, 'Time span of new repertoire entry is colliding with existing'],
+    SKOP_ERROR_UNREACHABLE_REPERTOIRE => [400, 'Repertoire entry is not taking any more online reservations'],
+    SKOP_ERROR_CONFLICTING_TICKET => [400, 'Reservation has seats that have already been reserved'],
+    SKOP_ERROR_TOOLARGE_TICKET => [400, 'Reservation has too many seats picked']
 ]);
 
 define('SKOP_ERROR_PAGES_LANG', [
@@ -128,6 +138,15 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Stavka repertoara ne postoji',
         'description' => 'Ova stavka repertoara više ne postoji.',
     ],
+    SKOP_ERROR_UNKNOWN_TICKET => [
+        'title' => 'Rezervacija ne postoji',
+        'description' => 'Ova rezervacija više ne postoji.'
+    ],
+    SKOP_ERROR_EXISTING_TICKET => [
+        'title' => 'Već imate rezervaciju',
+        'description' => 'Već ste postavili rezervaciju na ovu stavku repertoara.' .
+            ' Ukoliko želite da je izmenite, morate je prvo otkazati preko Vašeg profila.'
+    ],
     SKOP_ERROR_CONFLICTING_USER => [
         'title' => 'Korisnik već postoji',
         'description' => 'Već postoji korisnik sa ovim e-mailom.',
@@ -156,6 +175,19 @@ define('SKOP_ERROR_PAGES_LANG', [
         'title' => 'Nova stavka repertoara se podudara',
         'description' => 'Ubacivanje nove stavke repertoara je nemoguće jer ' .
             'početak i kraj prikazivanja prelazi u vremenski period nekog već postojećeg prikazivanja.',
+    ],
+    SKOP_ERROR_UNREACHABLE_REPERTOIRE => [
+        'title' => 'Stavka repertoara je nedostupna',
+        'description' => 'Rezervacija na ovo vreme više nije moguće. Molimo Vas da pretražite drugo vreme.'
+    ],
+    SKOP_ERROR_CONFLICTING_TICKET => [
+        'title' => 'Neka sedišta su već rezervisana',
+        'description' => 'Rezervacija ovih sedišta je nemoguće. Molimo Vas da odaberete nova sedišta.'
+    ],
+    SKOP_ERROR_TOOLARGE_TICKET => [
+        'title' => 'Previše sedišta odabrana',
+        'description' => 'Najveći broj sedišta koji možete odabrati je ' . SKOP_CONFIG['reservationMaxSeats'] .
+            '. Molimo pokušajte ponovo sa rezervacijom.'
     ]
 ]);
 

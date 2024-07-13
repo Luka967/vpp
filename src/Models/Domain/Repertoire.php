@@ -2,6 +2,7 @@
 
 namespace Skop\Models\Domain;
 
+use DateTime;
 use Error;
 use Skop\Core\DomainObject;
 use Skop\Models\MovieModel;
@@ -33,6 +34,20 @@ final class Repertoire extends DomainObject
     public function screeningFeatures(): array
     {
         return ScreeningFeatureModel::ofRepertoireEntry($this);
+    }
+
+    public function hasStarted(): bool
+    {
+        $diff = new DateTime();
+        $diff = $diff->diff(new DateTime($this->screening_start));
+        return $diff->invert;
+    }
+    public function hasReservationsOnline(): bool
+    {
+        $diff = new DateTime();
+        $diff = $diff->diff(new DateTime($this->screening_start));
+        $minutes = $diff->d * 60 * 24 + $diff->h * 60 + $diff->i;
+        return !$diff->invert && $minutes >= SKOP_CONFIG['minsReceptionOnly'];
     }
 
     public static array $columnTraits = [

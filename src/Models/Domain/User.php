@@ -3,6 +3,7 @@
 namespace Skop\Models\Domain;
 
 use Skop\Core\DomainObject;
+use Skop\Models\DiscountClubModel;
 
 final class User extends DomainObject
 {
@@ -17,6 +18,13 @@ final class User extends DomainObject
     public ?int $discount_club_id = null;
     public string $first_name;
     public ?string $last_name;
+
+    public function discountClub()
+    {
+        if ($this->discount_club_id == null)
+            return null;
+        return DiscountClubModel::withId($this->discount_club_id);
+    }
 
     public static array $columnTraits = [
         'id'                => ['type' => 'int'               , 'editable' => false, 'partial' => true , 'min' => 1 , 'max' => INT_U_MAX],

@@ -20,12 +20,12 @@
                 </div>
                 <span id="reservation-screen">{{ theater.name }}</span>
             </div>
-            <form id="reservation-form-input" action="#">
+            <form id="reservation-form-input" action="/rezervacija?id={{ repertoireEntry.id }}" method="POST">
                 <div class="row">
                     <label for="name">CENA</label><span id="reservation-form-price">0</span>
                 </div>
                 <div class="row submit-row">
-                    <input type="hidden" id="reservation-form-output" value="{{ theaterSeatingModel }}">
+                    <input type="hidden" id="reservation-form-output" name="seats_picked" value="{{ theaterSeatingModel }}">
                     <input class="pop" value="REZERVIŠI" type="submit">
                 </div>
             </form>

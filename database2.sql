@@ -134,16 +134,21 @@ CREATE TABLE `theater_seating` (
 
 CREATE TABLE `tickets` (
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `ticket_code` VARCHAR(15) NOT NULL,
     `user_id` INT UNSIGNED NOT NULL,
-    `comment` VARCHAR(63) NOT NULL,
+    `repertoire_id` BIGINT UNSIGNED NOT NULL,
+    `ticket_code` VARCHAR(15) NOT NULL,
+    `comment` VARCHAR(63) DEFAULT NULL,
     `discount_club_id` TINYINT UNSIGNED,
     `price` INT UNSIGNED NOT NULL,
     `booked_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `paid_at` DATETIME DEFAULT NULL,
 
     UNIQUE (`ticket_code`),
+    UNIQUE (`user_id`, `repertoire_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT,
+    FOREIGN KEY (`repertoire_id`) REFERENCES `repertoire`(`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT,
     FOREIGN KEY (`discount_club_id`) REFERENCES `discount_clubs`(`id`)

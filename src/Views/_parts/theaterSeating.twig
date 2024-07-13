@@ -33,7 +33,10 @@
     </div>
     <div class="seating-legend">
         {% for type in seatTypes %}
-        <div class="item {{ type.name }}">
+        <div
+            class="item {{ type.name }}"
+            data-pricing="{{ type.price_adult }},{{ type.price_adult_weekend }},{{ type.price_child }},{{ type.price_child_weekend }}"
+        >
             <i class="fa-solid fa-couch"></i>
             <span>{{ type.name }}</span>
         </div>
