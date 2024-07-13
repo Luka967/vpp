@@ -34,11 +34,15 @@ class ManagerTicketsController extends Controller
         $obj = TicketModel::withId($this->req->data['id']);
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_TICKET);
+
         foreach ($obj::$columnTraits as $key => $traits)
             if ($traits['editable'])
                 $obj->$key = $this->req->data[$key];
 
         TicketModel::updateOne($obj);
+        $this->logger->notice("$this->reqId updated ticket", [
+            'object' => $obj
+        ]);
 
         $this->redirect('/manage/tickets');
     }

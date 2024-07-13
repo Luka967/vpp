@@ -1,4 +1,4 @@
-<div class="seating-wrapper" id="{{ id }}">
+<div class="seating-wrapper" id="{{ id }}" data-reserved="{{ reservedSeats }}">
     <div class="seating-overflow">
         <table>
             <colgroup class="seating-table-colgroup"></colgroup>
@@ -9,26 +9,7 @@
                     </td>
                 </tr>
             </thead>
-            <tbody class="seating-table-tbody">
-                {% for rowIdx, row in seating %}
-                <tr>
-                    {% for colIdx, seat in row %}
-                    <td data-row="{{ rowIdx }}" data-col="{{ colIdx }}">
-                        {% if seat.type is not empty %}
-                        <div class="seat {{ seat.type.name }}">
-                            <div class="icon">
-                                <i class="fa-solid fa-couch"></i>
-                            </div>
-                            <div class="number">{{ colIdx + 1 }}</div>
-                        </div>
-                        {% else %}
-                        <div class="seat empty"></div>
-                        {% endif %}
-                    </td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+            <tbody class="seating-table-tbody"></tbody>
         </table>
     </div>
     <div class="seating-legend">

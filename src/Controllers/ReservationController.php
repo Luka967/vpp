@@ -20,10 +20,21 @@ class ReservationController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_REPERTOIRE);
 
         if (!$repertoireEntry->hasReservationsOnline())
+        {
+            $this->logger->warning("$this->reqId tried reaching repertoire whose reservations cannot be taken online anymore", [
+                'repertoireEntry' => $repertoireEntry
+            ]);
             throw new ErrorPageException(SKOP_ERROR_UNREACHABLE_REPERTOIRE);
+        }
 
         if (TicketModel::ofUserForRepertoireEntry($this->loggedInUser->id, $repertoireEntryId) != null)
+        {
+            $this->logger->warning("$this->reqId tried reaching repertoire for which it already has a ticket", [
+                'user' => $this->loggedInUser,
+                'repertoireEntry' => $repertoireEntry
+            ]);
             throw new ErrorPageException(SKOP_ERROR_EXISTING_TICKET);
+        }
 
         return $repertoireEntry;
     }
@@ -32,11 +43,16 @@ class ReservationController extends Controller
         $repertoireEntry = $this->ensureReachable($this->req->query['id']);
         $theater = $repertoireEntry->theater();
 
+        $reservedSeats = [];
+        foreach (RepertoireModel::reservedSeatsOf($repertoireEntry->id) as $seat)
+            $reservedSeats[] = "$seat->row-$seat->column";
+
         $this->render('view/reservation.twig', [
             'repertoireEntry' => $repertoireEntry,
             'theater' => $theater,
             'movie' => $repertoireEntry->movie(),
             'theaterSeatingModel' => TheaterModel::seatingModelFor($theater),
+            'reservedSeats' => join(',', $reservedSeats),
             'seatTypes' => TheaterSeatTypeModel::all()
         ]);
     }
@@ -62,13 +78,14 @@ class ReservationController extends Controller
             ) throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, 'Seats picked not conforming');
             $row = intval($seatStrSplit[0]);
             $col = intval($seatStrSplit[1]);
-            $seats[] = [ 'row' => $row, 'col' => $col ];
+            $seats[] = ['row' => $row, 'col' => $col];
         }
 
         $theater = $repertoireEntry->theater();
         $theaterSeating = TheaterModel::seatingFor($theater);
 
         $seatsFound = [];
+        $seatsFoundById = [];
         foreach ($seats as $seatIdx)
         {
             $row = $seatIdx['row'];
@@ -79,12 +96,35 @@ class ReservationController extends Controller
                 if ($seat->row != $row || $seat->column != $col)
                     continue;
                 $seatsFound[] = $seat;
+                $seatsFoundById[$seat->id] = $seat;
                 $found = true;
                 break;
             }
             if (!$found)
+            {
+                $this->logger->warning("$this->reqId tried placing a reservation on seat indices where there is no seat", [
+                    'seatsPicked' => $seatsPicked,
+                    'theater' => $theater,
+                    'theaterSeating' => $theaterSeating,
+                    'offendingRow' => $row,
+                    'offendingCol' => $col
+                ]);
                 throw new ErrorPageException(SKOP_ERROR_INPUT_INVALID, "Of seats picked $row,$col does not actually exist");
+            }
         }
+
+        $seatsReserved = RepertoireModel::reservedSeatsOf($repertoireEntry->id);
+        foreach ($seatsReserved as $reservedSeat)
+            if (isset($seatsFoundById[$reservedSeat->id]))
+            {
+                $this->logger->notice("$this->reqId tried placing a reservation on seat that was already reserved", [
+                    'seatsPicked' => $seatsPicked,
+                    'theater' => $theater,
+                    'theaterSeating' => $theaterSeating,
+                    'offendingSeat' => $reservedSeat->id
+                ]);
+                throw new ErrorPageException(SKOP_ERROR_CONFLICTING_TICKET);
+            }
 
         // Da li je vikend se odnosi na stavku repertoara, koristi se za cenu karte
         $dayOfWeek = date('w', strtotime($repertoireEntry->screening_start));
@@ -114,6 +154,9 @@ class ReservationController extends Controller
         $newTicket->booked_at = date(DateTime::ATOM);
 
         $newTicket = TicketModel::insertOneWithPickedSeats($newTicket, $seatsFound);
+        $this->logger->info("$this->reqId created new reservation", [
+            'ticket' => $newTicket
+        ]);
 
         $this->render('view/reservationSuccess.twig', [
             'seats' => $seatsFound,
@@ -133,6 +176,9 @@ class ReservationController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNREACHABLE_REPERTOIRE);
 
         TicketModel::deleteOne($ticket->id);
+        $this->logger->info("$this->reqId deleted reservation", [
+            'ticket' => $ticket
+        ]);
 
         $this->render('view/reservationDeleteSuccess.twig', [
             'repertoireEntry' => $ticket->repertoireEntry()

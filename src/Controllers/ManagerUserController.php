@@ -34,15 +34,27 @@ class ManagerUserController extends Controller
         $obj = UserModel::withId($this->req->data['id']);
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_USER);
+
         if (!$this->loggedInUser->isAdmin() && $obj->permissions !== $this->req->data['permissions'])
+        {
+            $this->logger->warning("$this->reqId tried changing permissions of an user when not permitted");
             throw new ErrorPageException(SKOP_ERROR_AUTH_NOPERMS, 'Cannot change permissions of users');
+        }
         else if ($this->loggedInUser->isAdmin() && $obj->permissions !== $this->req->data['permissions'] && $obj->id == $this->loggedInUser->id)
+        {
+            $this->logger->notice("$this->reqId tried changing permissions of self");
             throw new ErrorPageException(SKOP_ERROR_AUTH_NOPERMS, 'Cannot change permissions of yourself');
+        }
+
         foreach ($obj::$columnTraits as $key => $traits)
             if ($traits['editable'])
                 $obj->$key = $this->req->data[$key];
 
         UserModel::updateOne($obj);
+        $this->logger->info("$this->reqId updated user", [
+            'object' => $obj
+        ]);
+
 
         $this->redirect('/manage/users');
     }

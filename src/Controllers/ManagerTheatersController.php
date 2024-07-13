@@ -39,7 +39,12 @@ class ManagerTheatersController extends Controller
             if (empty($type))
                 $selectedSeatTypeObjects[] = null;
             else if (!isset($availableSeatTypes[$type]))
+            {
+                $this->logger->warning("$this->reqId had unknown seat type name in request while inserting/updating", [
+                    'name' => $type
+                ]);
                 throw new ErrorPageException(SKOP_ERROR_UNKNOWN_SEATTYPE, "Selected seating includes unknown seat type '$type'");
+            }
             else
                 $selectedSeatTypeObjects[] = $availableSeatTypes[$type];
 
@@ -86,6 +91,12 @@ class ManagerTheatersController extends Controller
         $createdObj = TheaterModel::withName($obj->name);
         TheaterModel::updateSeatingFor($createdObj, $seating['rows'], $seating['cols'], $seating['objects']);
 
+        $this->logger->info("$this->reqId inserted new theater", [
+            'object' => $obj,
+            'createdObject' => $createdObj,
+            'seating' => $seating
+        ]);
+
         $this->redirect('/manage/theaters');
     }
 
@@ -101,8 +112,19 @@ class ManagerTheatersController extends Controller
         $newSeating = $this->fetchSeatingValue($this->req->data['seating']);
 
         TheaterModel::updateOne($obj);
+        $this->logger->info("$this->reqId updated theater", [
+            'object' => $obj
+        ]);
+
         if ($oldSeating != $newSeating)
+        {
+            $this->logger->info("$this->reqId modified theater seating", [
+                'object' => $obj,
+                'createdObject' => $oldSeating,
+                'seating' => $newSeating
+            ]);
             TheaterModel::updateSeatingFor($obj, $newSeating['rows'], $newSeating['cols'], $newSeating['objects']);
+        }
 
         $this->redirect('/manage/theaters');
     }
@@ -120,9 +142,18 @@ class ManagerTheatersController extends Controller
             // Nemoguće je obrisati objekat jer deaktivirana sedišta moraju imati referencu, sakrij ga
             $obj->active = false;
             TheaterModel::updateOne($obj);
+
+            $this->logger->notice("$this->reqId marked theater as inactive", [
+                'object' => $obj
+            ]);
         }
         else
+        {
             TheaterModel::deleteOne($obj->id);
+            $this->logger->notice("$this->reqId deleted theater", [
+                'object' => $obj
+            ]);
+        }
 
         $this->redirect('/manage/theaters');
     }

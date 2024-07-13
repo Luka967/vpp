@@ -43,10 +43,15 @@ class ManagerRepertoireController extends Controller
         $res = [];
         foreach ($source as $key => $featureName)
         {
-            $fetchedGenre = ScreeningFeatureModel::withDescription($featureName);
-            if ($fetchedGenre == null)
+            $fetched = ScreeningFeatureModel::withDescription($featureName);
+            if ($fetched == null)
+            {
+                $this->logger->warning("$this->reqId had unknown feature name in request while inserting/updating", [
+                    'name' => $featureName
+                ]);
                 throw new ErrorPageException(SKOP_ERROR_UNKNOWN_GENRE, "Feature idx $key ('$featureName') could not be found");
-            $res[] = $fetchedGenre;
+            }
+            $res[] = $fetched;
         }
         return $res;
     }
@@ -63,6 +68,11 @@ class ManagerRepertoireController extends Controller
         $obj = RepertoireModel::exact($obj->movie_id, $obj->theater_id, $obj->screening_start);
         ScreeningFeatureModel::setForRepertoireEntry($obj, $features);
 
+        $this->logger->info("$this->reqId inserted new repertoire entry", [
+            'object' => $obj,
+            'features' => $features
+        ]);
+
         $this->redirect('/manage/repertoire');
     }
     public function doUpdateEntry()
@@ -71,7 +81,13 @@ class ManagerRepertoireController extends Controller
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_REPERTOIRE);
 
-        ScreeningFeatureModel::setForRepertoireEntry($obj, $this->fetchAllFeaturesByName($this->req->data['features']));
+        $features = $this->fetchAllFeaturesByName($this->req->data['features']);
+        ScreeningFeatureModel::setForRepertoireEntry($obj, $features);
+
+        $this->logger->info("$this->reqId updated repertoire entry", [
+            'object' => $obj,
+            'features' => $features
+        ]);
 
         $this->redirect('/manage/repertoire');
     }
@@ -85,6 +101,10 @@ class ManagerRepertoireController extends Controller
         TicketModel::deleteOfRepertoire($obj->id);
         ScreeningFeatureModel::setForRepertoireEntry($obj, []);
         RepertoireModel::deleteOne($obj->id);
+
+        $this->logger->info("$this->reqId deleted repertoire entry", [
+            'object' => $obj
+        ]);
 
         $this->redirect('/manage/repertoire');
     }

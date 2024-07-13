@@ -30,6 +30,7 @@ function validateOneArray(string $key, array &$sourceArray, array $restrictions)
 
 function validateOneValue(array &$source, string $key, array $restrictions)
 {
+    // Da li vrednost treba da bude ignorisana
     if ($restrictions['type'] == 'ignore')
     {
         if (isset($restrictions['setToNull']))
@@ -38,18 +39,20 @@ function validateOneValue(array &$source, string $key, array $restrictions)
             unset($source[$key]);
         return;
     }
+    // Da li vrednost može da bude null ako je prazan string
     if (array_key_exists('partial', $restrictions) && $restrictions['partial'] === null && empty($source[$key]))
     {
         $source[$key] = null;
         return;
     }
+    // Da li treba da postoji vrednost
     if (!isset($source[$key]) || $source[$key] == null)
         if (!isset($restrictions['optional']))
             throw new ErrorPageException(SKOP_ERROR_INPUT_MISSING, "Source missing key '$key' or value was null");
 
+    // Da li je input niz
     if (str_starts_with($restrictions['type'], 'array|'))
     {
-        // Ovaj input je niz
         validateOneArray($key, $source[$key], $restrictions);
         return;
     }
@@ -109,7 +112,6 @@ function validateOneValue(array &$source, string $key, array $restrictions)
         'int', 'int|permissions', 'float' => $value,
         default => -INF
     };
-
     switch ($restrictions['type'])
     {
     case 'string':
@@ -160,6 +162,8 @@ function validateOneFile(array &$source, string $key, array $restrictions)
 
 final class Request
 {
+    public readonly string $id;
+
     public readonly string $method;
     public readonly string $path;
     public mixed $query = [];
@@ -168,6 +172,8 @@ final class Request
 
     public function __construct()
     {
+        $this->id = uniqid();
+
         $pathSplit = explode('?', $_SERVER['REQUEST_URI'], 2);
         $path = $pathSplit[0];
         if ($path[strlen($path) - 1] == '/')

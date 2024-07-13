@@ -57,7 +57,7 @@ return [
             'id' => Repertoire::$columnTraits['id']
         ],
         'dataPost' => [
-            'seats_picked' => [ 'type' => 'string', 'min' => 3, 'max' => 63 ]
+            'seats_picked' => ['type' => 'string', 'min' => 3, 'max' => 63]
         ]
     ],
     'GET /me/rezervacije/delete' => [
@@ -79,8 +79,8 @@ return [
         'action' => 'doLogin',
         'forceLoggedOut' => true,
         'dataPost' => [
-            'email' => [ 'type' => 'string|email', 'min' => 8, 'max' => 63],
-            'password' => [ 'type' => 'string|password', 'min' => 8, 'max' => 63]
+            'email' => User::$columnTraits['email'],
+            'password' => User::$columnTraits['password']
         ]
     ],
     'GET /register' => [
@@ -93,7 +93,10 @@ return [
         'action' => 'doRegister',
         'forceLoggedOut' => true,
         'dataPost' => [
-            ...filterDomainObjectColumns(User::$columnTraits, false, true),
+            'first_name' => User::$columnTraits['first_name'],
+            'last_name' => User::$columnTraits['last_name'],
+            'email' => User::$columnTraits['email'],
+            'password' => User::$columnTraits['password'],
             'password_repeat' => User::$columnTraits['password']
         ]
     ],
@@ -136,7 +139,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(Movie::$columnTraits, false, true),
             'genres' => [
                 ...Genre::$columnTraits['name'],
@@ -202,7 +205,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(Genre::$columnTraits, false, true)
         ],
     ],
@@ -228,7 +231,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(ScreeningFeature::$columnTraits, false, true)
         ],
     ],
@@ -254,7 +257,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(TheaterSeatType::$columnTraits, false, true)
         ],
     ],
@@ -299,9 +302,9 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(Theater::$columnTraits, false, true),
-            'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
+            'seating' => ['type' => 'string', 'min' => 4, 'max' => 5000]
         ]
     ],
     'GET /manage/theaters/edit' => [
@@ -321,7 +324,7 @@ return [
         'dataPost' => [
             ...filterDomainObjectColumns(Theater::$columnTraits, true, false),
             ...filterDomainObjectColumns(Theater::$columnTraits, false, true),
-            'seating' => [ 'type' => 'string', 'min' => 4, 'max' => 5000 ]
+            'seating' => ['type' => 'string', 'min' => 4, 'max' => 5000]
         ]
     ],
     'GET /manage/theaters/delete' => [
@@ -346,7 +349,7 @@ return [
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
-            'id' => [ 'type' => 'ignore', 'setToNull' => true ],
+            'id' => ['type' => 'ignore', 'setToNull' => true],
             ...filterDomainObjectColumns(Repertoire::$columnTraits, false, false),
             'features' => [
                 ...ScreeningFeature::$columnTraits['description'],
@@ -370,9 +373,9 @@ return [
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,
         'dataPost' => [
             'id' => Repertoire::$columnTraits['id'],
-            'movie_id' => [ 'type' => 'ignore' ],
-            'theater_id' => [ 'type' => 'ignore' ],
-            'screening_start' => [ 'type' => 'ignore' ],
+            'movie_id' => ['type' => 'ignore' ],
+            'theater_id' => ['type' => 'ignore' ],
+            'screening_start' => ['type' => 'ignore' ],
             'features' => [
                 ...ScreeningFeature::$columnTraits['description'],
                 'type' => 'array|' . ScreeningFeature::$columnTraits['description']['type'], 'minArray' => 1, 'maxArray' => 3

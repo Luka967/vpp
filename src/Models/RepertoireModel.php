@@ -20,6 +20,7 @@ class RepertoireModel extends Model
 {
     protected static string $tableName = '`repertoire`';
     const CLASS_PATH = 'Skop\\Models\\Domain\\Repertoire';
+    const SEATING_PATH = 'Skop\\Models\\Domain\\TheaterSeating';
 
     public static function all(): array
     {
@@ -50,6 +51,19 @@ class RepertoireModel extends Model
         if ($q->rowCount() == 0)
             return null;
         return $q->fetchAll(\PDO::FETCH_CLASS, static::CLASS_PATH)[0];
+    }
+
+    public static function reservedSeatsOf(int $entryId): array
+    {
+        $q = Db::instance()->prepare(
+            "SELECT `theater_seating`.* FROM `tickets`
+                INNER JOIN `ticket_seats` ON `ticket_seats`.`ticket_id` = `tickets`.`id`
+                INNER JOIN `theater_seating` ON `theater_seating`.`id` = `ticket_seats`.`seat_id`
+            WHERE `tickets`.`repertoire_id` = :id"
+        );
+        $q->bindValue(':id', $entryId, \PDO::PARAM_INT);
+        $q->execute();
+        return $q->fetchAll(\PDO::FETCH_CLASS, static::SEATING_PATH);
     }
 
     public static function tryGenerate(?Repertoire $adding = null, bool $showNextCycle = false)

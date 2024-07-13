@@ -27,13 +27,13 @@ final class User extends DomainObject
     }
 
     public static array $columnTraits = [
-        'id'                => ['type' => 'int'               , 'editable' => false, 'partial' => true , 'min' => 1 , 'max' => INT_U_MAX],
-        'email'             => ['type' => 'string|email'      , 'editable' => false, 'partial' => false, 'min' => 8 , 'max' => 127],
-        'password'          => ['type' => 'string|password'   , 'editable' => false, 'partial' => false, 'min' => 60, 'max' => 60],
+        'id'                => ['type' => 'int'               , 'editable' => false, 'partial' => true , 'min' => 1, 'max' => INT_U_MAX],
+        'email'             => ['type' => 'string|email'      , 'editable' => false, 'partial' => false, 'min' => 8, 'max' => 127],
+        'password'          => ['type' => 'string|password'   , 'editable' => false, 'partial' => false, 'min' => 8, 'max' => 63],
         'permissions'       => ['type' => 'int|permissions'   , 'editable' => true , 'partial' => false],
         'discount_club_id'  => ['type' => 'id|discountClub'   , 'editable' => true , 'partial' => null],
-        'first_name'        => ['type' => 'string|alphabetic' , 'editable' => false, 'partial' => false, 'min' => 2 , 'max' => 127],
-        'last_name'         => ['type' => 'string|alphabetic' , 'editable' => false, 'partial' => false, 'min' => 2 , 'max' => 31],
+        'first_name'        => ['type' => 'string|alphabetic' , 'editable' => false, 'partial' => false, 'min' => 2, 'max' => 127],
+        'last_name'         => ['type' => 'string|alphabetic' , 'editable' => false, 'partial' => false, 'min' => 2, 'max' => 31],
     ];
 
     public function isRestricted(): bool

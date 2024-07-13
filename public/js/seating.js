@@ -11,6 +11,9 @@
         if (outputElem == null)
             return;
 
+        const reservedSeats = elem.getAttribute('data-reserved').split(',');
+        console.log(reservedSeats);
+
         const allSeatTypes = elem.querySelectorAll('.seating-legend > *');
         const isEditable = inputRowsElem != null && inputColsElem != null;
         /** @type {string} */
@@ -32,6 +35,9 @@
             divSeat.className = 'seat';
             const seatType = data[row][col];
             divSeat.classList.add(seatType == null ? 'empty' : seatType);
+
+            if (reservedSeats.indexOf(`${row}-${col}`) !== -1)
+                divSeat.classList.add('reserved');
 
             if (divSeat.children.length > 0 && seatType == null)
                 while (divSeat.children.length > 0)
@@ -116,8 +122,11 @@
                     td.appendChild(divSeat);
 
                     rowElem.insertBefore(td, rowElem.lastElementChild);
+                    const col = rowElem.children.length - 2;
 
-                    if (isEditable || data[row][rowElem.children.length - 2] != null)
+                    if (reservedSeats.indexOf(`${row}-${col}`) !== -1)
+                        continue;
+                    if (isEditable || data[row][col] != null)
                         td.style.cursor = 'pointer';
                     td.addEventListener('click', () => {
                         const row = parseInt(td.getAttribute('data-row'));

@@ -34,7 +34,6 @@
 
 .seating-wrapper .seat {
     position: relative;
-    cursor: pointer;
     transform-origin: center;
     transition: transform var(--transition);
 }
@@ -42,10 +41,10 @@
     cursor: default;
     pointer-events: none;
 }
-.seating-wrapper .seat:hover {
+.seating-wrapper .seat:not(.reserved):hover {
     transform: scale(105%);
 }
-.seating-wrapper .seat:active {
+.seating-wrapper .seat:not(.reserved):active {
     transform: scale(90%);
 }
 .seating-wrapper .seat > * {
@@ -67,6 +66,12 @@
 }
 .seating-wrapper .seat.Ljubavno i, .seating-legend > .item.Ljubavno > i {
     color: pink;
+}
+.seating-wrapper .seat.reserved i {
+    color: gray;
+}
+.seating-wrapper .seat.reserved .number {
+    opacity: 0;
 }
 .seating-wrapper .seat > .number {
     font-family: var(--font-mono);

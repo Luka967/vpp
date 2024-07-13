@@ -3,6 +3,8 @@
 namespace Skop\Core;
 
 use Exception;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Skop\Controllers\ErrorController;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -28,13 +30,20 @@ final class Router
 
     public function dispatch()
     {
-        $req = new Request();
+        $logger = new Logger('router');
+        $logger->pushHandler(new StreamHandler(SKOP_CONFIG['logFile'], Logger::INFO));
+
+        $req = new Request($logger);
         $controller = null;
 
-        // var_dump($_SERVER);
-        // echo '<br><br>';
-        // var_dump($req);
-        // echo '<br><br>';
+        $logger->debug("$req->id request started", [
+            'date' => date(DATE_ATOM),
+            'method' => $req->method,
+            'path' => $req->path,
+            'query' => $req->query,
+            'data' => $req->data,
+            'files' => $req->files
+        ]);
 
         try
         {
@@ -54,7 +63,7 @@ final class Router
             if (!class_exists($controllerClass, true))
                 throw new ErrorPageException(SKOP_ERROR_NO_CONTROLLER);
 
-            $controller = new $controllerClass($this->twigInstance, $req);
+            $controller = new $controllerClass($this->twigInstance, $req, $logger);
 
             if (!method_exists($controller, $action))
                 throw new ErrorPageException(SKOP_ERROR_NO_CALLABLE);
@@ -62,6 +71,12 @@ final class Router
             $req->validateQueryInput($route);
             $req->validatePostInput($route);
             $req->validatePostFiles($route);
+
+            $logger->debug("$req->id request passed validation & sanitization", [
+                'query' => $req->query,
+                'data' => $req->data,
+                'files' => $req->files
+            ]);
 
             $controller->getLoggedInUser();
 
@@ -80,14 +95,27 @@ final class Router
         }
         catch (ErrorPageException $ex)
         {
+            if ($ex->errorPageCode == 0)
+                $logger->critical("$req->id request failed unexpectedly", ['exception' => $ex]);
+            else
+                $logger->info("$req->id request failed with error page", ['exception' => $ex]);
+
             if ($controller != null)
-                $controller = ErrorController::morph($controller);
+                $errorController = ErrorController::morph($controller);
             else
             {
-                $controller = new ErrorController($this->twigInstance, $req);
-                $controller->getLoggedInUser();
+                $errorController = new ErrorController($this->twigInstance, $req, $logger);
+                $errorController->getLoggedInUser();
             }
-            $controller->showPage($ex);
+            $errorController->showPage($ex);
+        }
+        catch (Exception $ex)
+        {
+            $logger->error('Request failed with unhandled exception', [
+                'exception' => $ex,
+                'request' => $req,
+                'controller' => $controller
+            ]);
         }
     }
 }

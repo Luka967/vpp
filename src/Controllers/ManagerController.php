@@ -43,6 +43,7 @@ class ManagerController extends Controller
             $newGenre->$key = $value;
 
         GenreModel::insertOne($newGenre);
+        $this->logger->info("$this->reqId inserted new genre", ['object' => $newGenre]);
 
         $this->redirect('/manage/genres');
     }
@@ -53,6 +54,7 @@ class ManagerController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_GENRE);
 
         GenreModel::deleteOne($existing->id);
+        $this->logger->info("$this->reqId deleted genre", ['object' => $existing]);
 
         $this->redirect('/manage/genres');
     }
@@ -82,6 +84,7 @@ class ManagerController extends Controller
             $obj->$key = $value;
 
         ScreeningFeatureModel::insertOne($obj);
+        $this->logger->info("$this->reqId inserted new screening feature", ['object' => $obj]);
 
         $this->redirect('/manage/repertoire/features');
     }
@@ -92,6 +95,7 @@ class ManagerController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_SCREENINGFEATURE);
 
         ScreeningFeatureModel::deleteOne($existing->id);
+        $this->logger->info("$this->reqId deleted screening feature", ['object' => $existing]);
 
         $this->redirect('/manage/repertoire/features');
     }
@@ -119,6 +123,7 @@ class ManagerController extends Controller
         $obj = new TheaterSeatType();
         foreach ($this->req->data as $key => $value)
             $obj->$key = $value;
+        $this->logger->info("$this->reqId inserted new theater seat type", ['object' => $obj]);
 
         TheaterSeatTypeModel::insertOne($obj);
 
@@ -134,6 +139,7 @@ class ManagerController extends Controller
             $existing->$key = $value;
 
         TheaterSeatTypeModel::updateOne($existing);
+        $this->logger->info("$this->reqId updated theater seat type", ['object' => $existing]);
 
         $this->redirect('/manage/theaters/seats');
     }
@@ -144,6 +150,7 @@ class ManagerController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_SEATTYPE);
 
         TheaterSeatTypeModel::deleteOne($existing->id);
+        $this->logger->info("$this->reqId deleted theater seat type", ['object' => $existing]);
 
         $this->redirect('/manage/theaters/seats');
     }
