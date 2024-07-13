@@ -459,7 +459,7 @@ header > .right > a > .icon.large {
     text-decoration: underline;
     transform: translateY(2px);
 }
-.timetable-reservation > div {
+.timetable-reservation > a {
     height: 100%;
     display: flex;
     flex-direction: row;
@@ -472,25 +472,29 @@ header > .right > a > .icon.large {
     padding: 8px 0px;
     border-radius: 10px;
 }
-.timetable-reservation > div > i {
+.timetable-reservation > a > span,
+.timetable-reservation > a > span:visited {
+    color: var(--text);
+}
+.timetable-reservation > a > i {
     font-size: 24px;
     margin-right: 5px;
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
 }
-.timetable-reservation > div.online > i {
+.timetable-reservation > a.online > i {
     color: var(--success);
 }
-.timetable-reservation > div.reception > i {
+.timetable-reservation > a.reception > i {
     color: var(--danger);
 }
-.timetable-reservation > div.closed > i {
+.timetable-reservation > a.closed > i {
     color: var(--problem);
 }
-.timetable-reservation > div.planned > i,
-.timetable-reservation > div.locked > i {
+.timetable-reservation > a.planned > i,
+.timetable-reservation > a.locked > i {
     color: gray;
 }
-.timetable-reservation > div.online {
+.timetable-reservation > a.online {
     pointer-events: initial;
 }
 
@@ -745,7 +749,6 @@ input[type="submit"][disabled]:hover {
 }
 #reservation-form-price {
     width: 150px;
-    height: 25px;
     font-size: 28px;
     font-family: var(--font-mono);
     transform: translateY(-5px);
@@ -756,7 +759,7 @@ input[type="submit"][disabled]:hover {
     font-family: var(--font);
 }
 form .submit-row {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 form .submit-row :not(:last-child) {
     margin-right: 10px;
@@ -826,7 +829,7 @@ h1 > .small {
         width: 60px;
     }
     .pricing > colgroup > .format {
-        width: 60px;
+        width: 130px;
     }
     .pricing th {
         font-size: 20px;
@@ -953,7 +956,7 @@ h1 > .small {
         width: 60px;
     }
     .pricing > colgroup > .format {
-        width: 80px;
+        width: 150px;
     }
     .pricing th {
         font-size: 24px;
@@ -1077,7 +1080,7 @@ h1 > .small {
     }
 
     .pricing > colgroup > .format {
-        width: 100px;
+        width: 150px;
     }
     .pricing th {
         font-size: 28px;
@@ -1156,7 +1159,7 @@ h1 > .small {
     }
 
     .pricing > colgroup > .format {
-        width: 100px;
+        width: 150px;
     }
     .pricing th {
         font-size: 32px;

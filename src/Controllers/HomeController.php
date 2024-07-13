@@ -6,6 +6,7 @@ use Skop\Core\Controller;
 use Skop\Core\ErrorPageException;
 use Skop\Models\MovieModel;
 use Skop\Models\RepertoireModel;
+use Skop\Models\TheaterSeatTypeModel;
 
 class HomeController extends Controller
 {
@@ -39,6 +40,13 @@ class HomeController extends Controller
         $this->render('view/repertoire.twig', [
             'repertoire' => RepertoireModel::tryGenerate(),
             'minsReceptionOnly' => SKOP_CONFIG['minsReceptionOnly']
+        ]);
+    }
+
+    public function showPricing()
+    {
+        $this->render('view/pricing.twig', [
+            'seatTypes' => TheaterSeatTypeModel::all()
         ]);
     }
 }

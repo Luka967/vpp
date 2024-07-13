@@ -35,6 +35,19 @@ return [
         'controller' => 'HomeController',
         'action' => 'showRepertoire'
     ],
+    'GET /cenovnik' => [
+        'controller' => 'HomeController',
+        'action' => 'showPricing'
+    ],
+
+    'GET /rezervacija' => [
+        'controller' => 'ReservationController',
+        'action' => 'showPage',
+        'forceLoggedIn' => true,
+        'dataQuery' => [
+            'id' => Repertoire::$columnTraits['id']
+        ]
+    ],
 
     'GET /login' => [
         'controller' => 'UserController',
@@ -235,7 +248,7 @@ return [
         ]
     ],
     'POST /manage/theaters/seats/edit' => [
-        'controller' => 'ManagerMoviesController',
+        'controller' => 'ManagerController',
         'action' => 'doUpdateTheaterSeatType',
         'forceLoggedIn' => true,
         'forceUserPermissions' => User::PERMISSIONS_MANAGER,

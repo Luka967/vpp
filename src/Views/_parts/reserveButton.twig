@@ -3,19 +3,19 @@
     {% set minutesUntil = timeUntil.d * 60 * 24 + timeUntil.h * 60 + timeUntil.i %}
 
     {% if timeUntil.invert %}
-    <div class="locked pop">
+    <a class="locked pop">
         <i class="fa-solid fa-ticket"></i>
         <span class="hide-m--">N/A</span>
-    </div>
+    </a>
     {% elseif minutesUntil < minsReceptionOnly %}
-    <div class="reception pop">
+    <a class="reception pop">
         <i class="fa-solid fa-ticket"></i>
         <span class="hide-m--">Na šalteru</span>
-    </div>
+    </a>
     {% else %}
-    <div class="online pop">
+    <a class="online pop" href="/rezervacija?id={{ entry.id }}">
         <i class="fa-solid fa-ticket"></i>
         <span class="hide-m--">Online</span>
-    </div>
+    </a>
     {% endif %}
 </td>

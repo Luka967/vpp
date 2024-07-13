@@ -6,7 +6,6 @@ use Skop\Core\Db;
 use Skop\Core\Model;
 use Skop\Models\Domain\Theater;
 use Skop\Models\Domain\TheaterSeating;
-use Skop\Models\Domain\TheaterSeatType;
 
 class TheaterModel extends Model
 {
@@ -46,6 +45,31 @@ class TheaterModel extends Model
         $q->bindValue(':id', $theater->id, \PDO::PARAM_STR);
         $q->execute();
         return $q->fetchAll(\PDO::FETCH_CLASS, static::SEATING_CLASS_PATH);
+    }
+    public static function seatingModelFor(Theater $theater): string
+    {
+        $seating = static::seatingFor($theater);
+
+        $seatTypes = [];
+        foreach (TheaterSeatTypeModel::all() as $type)
+            $seatTypes[$type->id] = $type;
+
+        $seating = TheaterModel::seatingFor($theater);
+        $rowCount = 0;
+        $colCount = 0;
+        foreach ($seating as $seat)
+        {
+            $rowCount = max($rowCount, 1 + $seat->row);
+            $colCount = max($colCount, 1 + $seat->column);
+        }
+
+        $seatObjects = [];
+        for ($i = 0; $i < $rowCount * $colCount; $i++)
+            $seatObjects[] = '';
+        foreach ($seating as $seat)
+            $seatObjects[$seat->row * $colCount + $seat->column] = $seatTypes[$seat->seat_type_id]->name;
+
+        return "$rowCount;$colCount;" . join(';', $seatObjects);
     }
 
     private static function insertOneSeating(TheaterSeating $partial)

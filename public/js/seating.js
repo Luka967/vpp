@@ -95,19 +95,16 @@
 
                     rowElem.insertBefore(td, rowElem.lastElementChild);
 
-                    if (!isEditable)
-                        continue;
-                    td.style.cursor = 'pointer';
+                    if (isEditable || data[row][rowElem.children.length - 2] != null)
+                        td.style.cursor = 'pointer';
                     td.addEventListener('click', () => {
                         const row = parseInt(td.getAttribute('data-row'));
                         const col = parseInt(td.getAttribute('data-col'));
                         if (isEditable) {
                             data[row][col] = data[row][col] !== setTypeTo ? setTypeTo : null;
                             updateDom();
-                        } else {
+                        } else
                             divSeat.classList.toggle('picked');
-                            console.log('pick row', row, 'col', col);
-                        }
                     });
                 }
 
@@ -127,7 +124,10 @@
             for (let row = 0; row < rowCount; row++)
                 for (let col = 0; col < oneRowColCount; col++)
                     outputSegments.push(data[row][col] ?? '');
-            outputElem.value = `${rowCount};${oneRowColCount};${outputSegments.join(';')}`;
+            if (isEditable)
+                outputElem.value = `${rowCount};${oneRowColCount};${outputSegments.join(';')}`;
+            else
+                outputElem.value = '';
         }
         /**
          * @param {number} rowCount
@@ -144,6 +144,24 @@
                     data[row].pop();
                 while (data[row].length < colCount)
                     data[row].push(firstSeatType);
+            }
+        }
+
+        if (outputElem.value.length > 0) {
+            const split = outputElem.value.split(';');
+            const rows = parseInt(split[0]);
+            const cols = parseInt(split[1]);
+            updateDataSize(rows, cols);
+            for (let i = 0; i < rows * cols; i++) {
+                const seatType = split[i + 2];
+                const col = i % cols;
+                const row = Math.floor((i - col) / cols);
+                data[row][col] = seatType === '' ? null : seatType;
+            }
+            updateDom();
+            if (isEditable) {
+                inputRowsElem.valueAsNumber = rows;
+                inputColsElem.valueAsNumber = cols;
             }
         }
 
@@ -167,20 +185,6 @@
                 updateDom();
             }
 
-            if (outputElem.value.length > 0) {
-                const split = outputElem.value.split(';');
-                const rows = inputRowsElem.valueAsNumber = parseInt(split[0]);
-                const cols = inputColsElem.valueAsNumber = parseInt(split[1]);
-                updateDataSize(rows, cols);
-                for (let i = 0; i < rows * cols; i++) {
-                    const seatType = split[i + 2];
-                    const col = i % cols;
-                    const row = Math.floor((i - col) / cols);
-                    data[row][col] = seatType === '' ? null : seatType;
-                }
-                updateDom();
-            }
-
             inputRowsElem.addEventListener('change', onChange);
             inputColsElem.addEventListener('change', onChange);
             onChange();
@@ -191,7 +195,8 @@
 
     window.addEventListener('load', () => {
         const divs = loadIds(
-            'theater-seating', 'theater-seating-rowcount', 'theater-seating-colcount', 'theater-seating-output'
+            'theater-seating', 'theater-seating-rowcount', 'theater-seating-colcount', 'theater-seating-output',
+            'theater-reservation-seating', 'reservation-form-output'
         );
         makeInteractive(
             divs['theater-seating'],
@@ -199,5 +204,11 @@
             divs['theater-seating-colcount'],
             divs['theater-seating-output']
         );
+        makeInteractive(
+            divs['theater-reservation-seating'],
+            null,
+            null,
+            divs['reservation-form-output']
+        )
     });
 })();

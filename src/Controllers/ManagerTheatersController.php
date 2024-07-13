@@ -10,29 +10,6 @@ use Skop\Models\TheaterSeatTypeModel;
 
 class ManagerTheatersController extends Controller
 {
-    protected function fetchSeatingModel(Theater $theater)
-    {
-        $seatTypes = [];
-        foreach (TheaterSeatTypeModel::all() as $type)
-            $seatTypes[$type->id] = $type;
-
-        $seating = TheaterModel::seatingFor($theater);
-        $rowCount = 0;
-        $colCount = 0;
-        foreach ($seating as $seat)
-        {
-            $rowCount = max($rowCount, 1 + $seat->row);
-            $colCount = max($colCount, 1 + $seat->column);
-        }
-
-        $seatObjects = [];
-        for ($i = 0; $i < $rowCount * $colCount; $i++)
-            $seatObjects[] = '';
-        foreach ($seating as $seat)
-            $seatObjects[$seat->row * $colCount + $seat->column] = $seatTypes[$seat->seat_type_id]->name;
-
-        return "$rowCount;$colCount;" . join(';', $seatObjects);
-    }
     protected function fetchSeatingValue(string $value): array
     {
         // Validacija stringa za postavu bioskopske sale ne može biti potpuna u Request-u
@@ -89,7 +66,7 @@ class ManagerTheatersController extends Controller
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_THEATER);
 
         $this->persistentFormData = (array)$obj;
-        $this->persistentFormData['seating'] = $this->fetchSeatingModel($obj);
+        $this->persistentFormData['seating'] = TheaterModel::seatingModelFor($obj);
 
         $this->showTheaters();
     }
@@ -118,7 +95,7 @@ class ManagerTheatersController extends Controller
         if ($obj == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_THEATER);
 
-        $oldSeating = $this->fetchSeatingModel($obj);
+        $oldSeating = TheaterModel::seatingModelFor($obj);
         $newSeating = $this->fetchSeatingValue($this->req->data['seating']);
 
         TheaterModel::updateOne($obj);

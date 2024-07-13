@@ -1,0 +1,35 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Rezerviši{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ publicRoot }}style/seating.css">
+    <script src="{{ publicRoot }}js/seating.js"></script>
+{% endblock %}
+{% block content %}
+<div class="reservation-form">
+    <div class="left">
+        {% embed '_parts/theaterSeating.twig' with {id: 'theater-reservation-seating'} %}{% endembed %}
+    </div>
+    <div class="right">
+        <div>
+            <div id="reservation-movie">{{ movie.title|upper }}</div>
+            <div class="reservation-slot">
+                <div>
+                    <span id="reservation-date">{{ repertoireEntry.screening_start|date('M d')|upper }}</span>
+                    <span id="reservation-time">{{ repertoireEntry.screening_start|date('H:i') }}</span>
+                </div>
+                <span id="reservation-screen">{{ theater.name }}</span>
+            </div>
+            <form id="reservation-form-input" action="#">
+                <div class="row">
+                    <label for="name">CENA</label><span id="reservation-form-price">0</span>
+                </div>
+                <div class="row submit-row">
+                    <input type="hidden" id="reservation-form-output" value="{{ theaterSeatingModel }}">
+                    <input class="pop" value="REZERVIŠI" type="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

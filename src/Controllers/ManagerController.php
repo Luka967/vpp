@@ -126,7 +126,7 @@ class ManagerController extends Controller
     }
     public function doUpdateTheaterSeatType()
     {
-        $existing = TheaterSeatTypeModel::withId($this->req->query['id']);
+        $existing = TheaterSeatTypeModel::withId($this->req->data['id']);
         if ($existing == null)
             throw new ErrorPageException(SKOP_ERROR_UNKNOWN_SEATTYPE);
 

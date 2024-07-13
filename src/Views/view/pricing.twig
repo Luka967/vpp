@@ -1,0 +1,85 @@
+{% extends 'layout.twig' %}
+
+{% block title %}SKOP - Repertoar{% endblock %}
+{% block content %}
+<table class="pricing ticket-pricing content">
+    <colgroup>
+        <col class="name">
+        <col class="format">
+        <col class="format">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>KARTA</th>
+            <th>Radni dan</th>
+            <th>Vikend</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for seatType in seatTypes %}
+        <tr>
+            <td class="name">
+                {{ seatType.name }}
+                {% if seatType.extra is not null %}
+                <div class="small">{{ seatType.extra }}</div>
+                {% elseif seatType.price_child is not null %}
+                <div class="small">odrasli</div>
+                {% endif %}
+            </td>
+            <td class="price">{{ seatType.price_adult }}</td>
+            <td class="price">{{ seatType.price_adult_weekend ?? seatType.price_adult }}</td>
+        </tr>
+        {% if seatType.price_child is not null %}
+        <tr>
+            <td class="name">{{ seatType.name }} <div class="small">deca do 13 godina</div></td>
+            <td class="price">{{ seatType.price_child }}</td>
+            <td class="price">{{ seatType.price_child_weekend ?? seatType.price_child }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<div class="pricing-grid content-m--">
+    <table class="pricing">
+        <colgroup>
+            <col class="name">
+            <col class="format">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>DODATAK</th>
+                <th>CENA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="name">Rezervacija na šalteru<div class="small">online je besplatno</div></td><td class="price">50</td></tr>
+            <tr><td class="name">Dolby Atmos</td><td class="price">50</td></tr>
+        </tbody>
+    </table>
+    <table class="pricing">
+        <colgroup>
+            <col class="name">
+            <col class="format">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>SNACK</th>
+                <th>CENA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="name">Kokice M</td><td class="price">200</td></tr>
+            <tr><td class="name">Kokice L</td><td class="price">280</td></tr>
+            <tr><td class="name">Kokice XL</td><td class="price">400</td></tr>
+            <tr><td class="name">Voda 250ml <div class="small">Rosa, Jana</div></td><td class="price">250</td></tr>
+            <tr><td class="name">Sok 250ml <div class="small">detaljno na šalteru</div></td><td class="price">270</td></tr>
+            <tr><td class="name">Gazirano 250ml <div class="small">Pepsi, Coca Cola</div></td><td class="price">290</td></tr>
+            <tr><td class="name">Gricke i čokolade <div class="small">detaljno na šalteru</div><td class="price-custom">na šalteru</td></tr>
+            <tr><td class="name">Pizza parče <td class="price">400</td></tr>
+            <tr><td class="name">Nachos M</td><td class="price">350</td></tr>
+            <tr><td class="name">Nachos L</td><td class="price">450</td></tr>
+            <tr><td class="name">Nachos XL</td><td class="price">580</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -38,7 +38,7 @@ function validateOneValue(array &$source, string $key, array $restrictions)
             unset($source[$key]);
         return;
     }
-    if (isset($restrictions['partial']) && $restrictions['partial'] === null && empty($source[$key]))
+    if (array_key_exists('partial', $restrictions) && $restrictions['partial'] === null && empty($source[$key]))
     {
         $source[$key] = null;
         return;
